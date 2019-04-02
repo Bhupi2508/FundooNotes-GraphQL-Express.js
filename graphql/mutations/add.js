@@ -15,11 +15,35 @@
 /*
 required files
 */
-const { GraphQLNonNull, GraphQLObjectType} = require('graphql')
+const { GraphQLNonNull, GraphQLString } = require('graphql')
 var typeUser = require('../types/users')
 var modelUser = require('../../model/schema')
 
 /*
 create a add function
 */
-exports
+exports.add = {
+    type: typeUser.userType,
+    args: {
+        firstname: {
+            type: new GraphQLNonNull(GraphQLString),
+        },
+        lastname: {
+            type: new GraphQLNonNull(GraphQLString),
+        },
+        email: {
+            type: new GraphQLNonNull(GraphQLString),
+        },
+        password: {
+            type: new GraphQLNonNull(GraphQLString),
+        }
+    },
+    resolve(root, params){
+        const usersMdl = new modelUser(params)
+        const uModel = usersMdl.save();
+        if (!uModel) {
+            throw new Error('Error');
+          }
+          return uModel
+        }
+    }

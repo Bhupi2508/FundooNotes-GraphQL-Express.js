@@ -25,10 +25,6 @@ const { makeExecutableSchema } = require('graphql-tools')
 const app = express()
 // const dataBase = mongoose();
 
-const makeSchema =  makeExecutableSchema({
-     typeDefs, 
-     //resolver
-    })
 app.use('*', cors());
 server.listen().then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
