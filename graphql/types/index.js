@@ -15,6 +15,18 @@
 /*
 required files
 */
-const { GraphQLSchema, GraphQLObjectType } = require('graphql')
-var queryUser = require('./queries/users')
-var mutation = require('./mutations/mutation');
+var GraphQLSchema = require('graphql').GraphQLSchema;
+var GraphQLObjectType = require('graphql').GraphQLObjectType;
+var queryType = require('../queries/users').queryType
+var mutation = require('../mutations/mutation');
+
+/*
+Create a mutation for schema
+*/
+exports.userSchema = new GraphQLSchema({
+    query : queryType,
+    mutation : new GraphQLObjectType({
+        name : 'Mutation',
+        fields : mutation
+    })
+})

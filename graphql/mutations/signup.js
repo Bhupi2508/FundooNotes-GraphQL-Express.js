@@ -15,14 +15,17 @@
 /*
 required files
 */
-const { GraphQLNonNull, GraphQLString } = require('graphql')
+var GraphQLNonNull = require('graphql').GraphQLNonNull;
+var GraphQLString = require('graphql').GraphQLString;
 var typeUser = require('../types/users')
 var modelUser = require('../../model/schema')
+var bcrypt = require('bcrypt')
+var saltRounds = 10;
 
 /*
-create a add function
+create a signup function
 */
-exports.add = {
+exports.signup = {
     type: typeUser.userType,
     args: {
         firstname: {
@@ -38,12 +41,18 @@ exports.add = {
             type: new GraphQLNonNull(GraphQLString),
         }
     },
-    resolve(root, params){
+    resolve(root, params) {
+        /*
+        for bcrypt password
+        */
+        params.password = bcrypt.hashSync(params.password, saltRounds)
         const usersMdl = new modelUser(params)
         const uModel = usersMdl.save();
         if (!uModel) {
-            throw new Error('Error');
-          }
-          return uModel
+            throw new Error('!Error, please check it again');
         }
+        return uModel
     }
+
+
+}

@@ -19,27 +19,27 @@ required files
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull } = require('graphql')
 
 /*
-user type for 
+Design a schema 
 */
 exports.userType = new GraphQLObjectType({
     name: 'users',
-    description: 'registration',
+    description: 'GraphQL',
     fields: function () {
         return {
             id: {
                 type: new GraphQLNonNull(GraphQLID)
             },
             firstname: {
-                type: GraphQLString
+                type: new GraphQLNonNull(GraphQLString)
             },
             lastname: {
-                type: GraphQLString
+                type: new GraphQLNonNull(GraphQLString)
             },
             email: {
-                type: GraphQLString
+                type: new GraphQLNonNull(GraphQLString)
             },
             password: {
-                type: GraphQLString
+                type: new GraphQLNonNull(GraphQLString)
             }
         }
     }

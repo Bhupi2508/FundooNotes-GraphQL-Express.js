@@ -16,18 +16,21 @@
 required files
 */
 const express = require('express')
-const mongoose = require('mongoose')
 const cors = require('cors')
 const graphqlExpress = require('express-graphql')
-const configDB = require('./config/config')
-const typeDefs = require('./model/schema')
-const { makeExecutableSchema } = require('graphql-tools')
+const userSchema = require('./graphql/types/index').userSchema;
+const mongoose = require('./config/mongoose')
+const db = mongoose();
 const app = express()
-// const dataBase = mongoose();
+app.use('/graphql', cors(), graphqlExpress({
+    schema: userSchema,
+    rootValue: global,
+    graphiql: true
+}))
 
 app.use('*', cors());
-server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
+app.listen(4000, () => {
+    console.log("This GraphQL API running at port 4000");
 });
 
  

@@ -27,7 +27,7 @@ create schema for registration
 var schemaData = new mongoSchema({
     firstname: {
         type: String,
-        required: true
+        required: true,
     },
     lastname: {
         type: String,
@@ -35,7 +35,9 @@ var schemaData = new mongoSchema({
     },
     email: {
         type: String,
-        required: true
+        unique: true,
+        required: true,
+       
     },
     password: {
         type: String,
