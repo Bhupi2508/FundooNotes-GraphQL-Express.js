@@ -22,7 +22,7 @@ create instance of Schema
 var mongoSchema = mongoose.Schema;
 
 /*
-create schema for registration
+create schema for users
 */
 var schemaData = new mongoSchema({
     firstname: {
@@ -36,13 +36,16 @@ var schemaData = new mongoSchema({
     email: {
         type: String,
         unique: true,
-        required: true,
-       
+        required: true
     },
     password: {
         type: String,
         required: true
     }
 })
+
+/*
+connect database using mongoose
+*/
 var user = mongoose.model('user', schemaData);
 module.exports = user

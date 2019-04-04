@@ -15,12 +15,14 @@
 /*
 required files
 */
-var addUser = require('./signup').signup;
-var removeUser = require('./remove').remove;
-var updateUser = require('./updated').update;
+var signupUser = require('./usersMutation').signup;
+var removeUser = require('./usersMutation').remove;
+var updateUser = require('./usersMutation').update;
+var loginUser = require('./usersMutation').login
 
 module.exports = {
-  addUser,
+  signupUser,
   removeUser,
-  updateUser
+  updateUser,
+  loginUser
 }
