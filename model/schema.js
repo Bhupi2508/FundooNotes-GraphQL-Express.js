@@ -42,7 +42,9 @@ var schemaData = new mongoSchema({
         type: String,
         required: true
     }
-})
+}, {
+        timestamps: true
+    })
 
 /*
 connect database using mongoose

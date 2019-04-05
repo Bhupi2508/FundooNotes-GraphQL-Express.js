@@ -17,19 +17,20 @@ required files
 */
 var GraphQLNonNull = require('graphql').GraphQLNonNull;
 var GraphQLString = require('graphql').GraphQLString;
-var typeUser = require('../types/users')
-var modelUser = require('../../model/schema')
+var typeUser = require('../types/users').userType
+var authUser = require('../types/users').authType
+var userModel = require('../../model/schema')
 const jsonwebtoken = require('jsonwebtoken')
 var bcrypt = require('bcrypt')
 var yup = require('yup')
 var saltRounds = 10;
 
-
+/*******************************************************************************************************************/
 /*
 create a signup APIs for using graphql
 */
 exports.signup = {
-    type: typeUser.userType,
+    type: authUser,
     args: {
         firstname: {
             type: new GraphQLNonNull(GraphQLString),
@@ -44,29 +45,57 @@ exports.signup = {
             type: new GraphQLNonNull(GraphQLString),
         }
     },
-    resolve(root, params) {
+    async resolve(root, params) {
         /*
-        for bcrypt password
+        for email validation
         */
-        params.password = bcrypt.hashSync(params.password, saltRounds)
-        const usersMdl = new modelUser(params)
+        var emailformat = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+
+        if (!emailformat.test(params.email)) {
+            return { "message": "not valid email", }
+        }
+
+        /*
+        password validation
+        */
+        if (params.password.length < 6) {
+            return { "message": "Enter pasword more than 6 letters " }
+        }
+
+        /*
+        for email id cheking
+        */
+        verify = await userModel.find({ "email": params.email })
+        console.log("verify", verify.length);
+        if (verify.length > 0) {
+            return { "message": "email already exists" }
+        }
+
+        /*
+       for bcrypt password
+       */
+        params.password = await bcrypt.hashSync(params.password, saltRounds)
+        const usersMdl = new userModel(params)
+
         /*
         save in database
         */
         const uModel = usersMdl.save();
         if (!uModel) {
-            throw new Error('!Error, please check it again');
+            return { "message": "Register unsuccessfull" }
+        } else {
+            return { "message": "Register successfull" }
         }
-        return uModel
     }
+
 }
 
-
+/*******************************************************************************************************************/
 /*
 updated data APIs for using graphql
 */
 exports.update = {
-    type: typeUser.userType,
+    type: typeUser,
     args: {
         id: {
             type: new GraphQLNonNull(GraphQLString)
@@ -78,8 +107,8 @@ exports.update = {
     /*
     passed argument in resolve
     */
-    resolve(root, params) {
-        return modelUser.findByIdAndUpdate(
+    async resolve(root, params) {
+        return await userModel.findByIdAndUpdate(
             params.id,
             { $set: { firstname: params.firstname } },
             { new: true }
@@ -88,12 +117,12 @@ exports.update = {
     }
 }
 
-
+/*******************************************************************************************************************/
 /*
 remove data APIs for using graphql
 */
 exports.remove = {
-    type: typeUser.userType,
+    type: typeUser,
     args: {
         id: {
             type: new GraphQLNonNull(GraphQLString)
@@ -102,8 +131,8 @@ exports.remove = {
     /*
     params means arguments which we provided
     */
-    resolve(root, params) {
-        const removeduser = modelUser.findByIdAndRemove(params.id).exec();
+    async resolve(root, params) {
+        const removeduser = await userModel.findByIdAndRemove(params.id).exec();
         if (!removeduser) {
             throw new Error('Error')
         }
@@ -111,11 +140,12 @@ exports.remove = {
     }
 }
 
+/*******************************************************************************************************************/
 /*
 login APIs using graphql 
 */
 exports.login = {
-    type: typeUser.userType,
+    type: authUser,
     args: {
         email: {
             type: new GraphQLNonNull(GraphQLString),
@@ -126,22 +156,42 @@ exports.login = {
             required: true
         }
     },
-    resolve(root, params) {
-        const usersMdl = new modelUser(params)
-        const user = usersMdl.find({ params.email : args.email })
+    async resolve(root, params) {
+        var emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-        if (!user) {
-            throw new Error('No user with that email')
-        }
-        const valid =  bcrypt.compare(params.password : args.password)
-        if (!valid) {
-            throw new Error('Incorrect password')
-        }
         /*
-         return json web token
+        email validations
         */
-        return jsonwebtoken.sign({ email: params.email }, 'somesecret', { expiresIn: '2h' })
+        if (!emailformat.test(params.email)) {
+            return { "message": "not valid email" }
+        }
+
+        /*
+        find email that is present in database or not
+        */
+        user = await userModel.find({ "email": params.email })
+        if (!user) {
+            return { "message": "unauthonticate email" }
+        }
+
+        /*
+        compare password that is present in database or not
+        */
+        const valid = await bcrypt.compare(params.password, user[0].password)
+        if (!valid) {
+            return { "message": "unauthonticate password" }
+        }
+
+        /*
+        generate a token with expire time and provide a secret key
+        */
+        var secret = "sfdaag645654rfgfgds"
+        var token = jsonwebtoken.sign({ email: params.email }, secret, { expiresIn: 86400000 })
+
+        return {
+            "token": token,
+            "message": "!Login....Successfully"
+        }
+
     }
-
 }
-

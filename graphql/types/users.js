@@ -44,3 +44,17 @@ exports.userType = new GraphQLObjectType({
         }
     }
 });
+exports.authType = new GraphQLObjectType({
+    name: 'Auth',
+    description: 'GraphQL',
+    fields: function () {
+        return {
+            token: {
+                type: new GraphQLNonNull(GraphQLID)
+            } ,
+            message: {
+                type: GraphQLString
+            }
+        }
+    }
+});
