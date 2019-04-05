@@ -46,48 +46,51 @@ exports.signup = {
         }
     },
     async resolve(root, params) {
-        /*
-        for email validation
-        */
-        var emailformat = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+        try {
+            /*
+            for email validation
+            */
+            var emailformat = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
 
-        if (!emailformat.test(params.email)) {
-            return { "message": "not valid email", }
-        }
+            if (!emailformat.test(params.email)) {
+                return { "message": "not valid email", }
+            }
 
-        /*
-        password validation
-        */
-        if (params.password.length < 6) {
-            return { "message": "Enter pasword more than 6 letters " }
-        }
+            /*
+            password validation
+            */
+            if (params.password.length < 6) {
+                return { "message": "Enter pasword more than 6 letters " }
+            }
 
-        /*
-        for email id cheking
-        */
-        verify = await userModel.find({ "email": params.email })
-        console.log("verify", verify.length);
-        if (verify.length > 0) {
-            return { "message": "email already exists" }
-        }
+            /*
+            for email id cheking
+            */
+            verify = await userModel.find({ "email": params.email })
+            console.log("verify", verify.length);
+            if (verify.length > 0) {
+                return { "message": "email already exists" }
+            }
 
-        /*
-       for bcrypt password
-       */
-        params.password = await bcrypt.hashSync(params.password, saltRounds)
-        const usersMdl = new userModel(params)
+            /*
+           for bcrypt password
+           */
+            params.password = await bcrypt.hashSync(params.password, saltRounds)
+            const usersMdl = new userModel(params)
 
-        /*
-        save in database
-        */
-        const uModel = usersMdl.save();
-        if (!uModel) {
-            return { "message": "Register unsuccessfull" }
-        } else {
-            return { "message": "Register successfull" }
+            /*
+            save in database
+            */
+            const uModel = usersMdl.save();
+            if (!uModel) {
+                return { "message": "Register unsuccessfull" }
+            } else {
+                return { "message": "Register successfull" }
+            }
+        } catch (err) {
+            console.log("!Error")
         }
     }
-
 }
 
 /*******************************************************************************************************************/
@@ -108,12 +111,16 @@ exports.update = {
     passed argument in resolve
     */
     async resolve(root, params) {
-        return await userModel.findByIdAndUpdate(
-            params.id,
-            { $set: { firstname: params.firstname } },
-            { new: true }
-        )
-            .catch(err => new Error(err));
+        try {
+            return await userModel.findByIdAndUpdate(
+                params.id,
+                { $set: { firstname: params.firstname } },
+                { new: true }
+            )
+                .catch(err => new Error(err));
+        } catch (err) {
+            console.log("!Error")
+        }
     }
 }
 
@@ -132,11 +139,15 @@ exports.remove = {
     params means arguments which we provided
     */
     async resolve(root, params) {
-        const removeduser = await userModel.findByIdAndRemove(params.id).exec();
-        if (!removeduser) {
-            throw new Error('Error')
+        try {
+            const removeduser = await userModel.findByIdAndRemove(params.id).exec();
+            if (!removeduser) {
+                throw new Error('Error')
+            }
+            return removeduser;
+        } catch (err) {
+            console.log("!Error")
         }
-        return removeduser;
     }
 }
 
@@ -156,41 +167,79 @@ exports.login = {
             required: true
         }
     },
+
     async resolve(root, params) {
-        var emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        try {
+            var emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-        /*
-        email validations
-        */
-        if (!emailformat.test(params.email)) {
-            return { "message": "not valid email" }
+            /*
+            email validations
+            */
+            if (!emailformat.test(params.email)) {
+                return { "message": "not valid email" }
+            }
+
+            /*
+            find email that is present in database or not
+            */
+            user = await userModel.find({ "email": params.email })
+            if (!user) {
+                return { "message": "unauthonticate email" }
+            }
+
+            /*
+            compare password that is present in database or not
+            */
+            const valid = await bcrypt.compare(params.password, user[0].password)
+            if (!valid) {
+                return { "message": "unauthonticate password" }
+            }
+
+            /*
+            generate a token with expire time and provide a secret key
+            */
+            var secret = "sfdaag645654rfgfgds"
+            var token = jsonwebtoken.sign({ email: params.email }, secret, { expiresIn: 86400000 })
+
+            return {
+                "token": token,
+                "message": "!Login....Successfully"
+            }
+
+        } catch (err) {
+            console.log("!Error")
         }
+    }
+}
 
-        /*
-        find email that is present in database or not
-        */
-        user = await userModel.find({ "email": params.email })
-        if (!user) {
-            return { "message": "unauthonticate email" }
+
+/*******************************************************************************************************************/
+/*
+forgotPassword APIs using graphql
+*/
+exports.forgotPassword = {
+    type: authUser,
+    args: {
+        email: {
+            type: new GraphQLNonNull(GraphQLString),
+            required: true
         }
+    },
 
-        /*
-        compare password that is present in database or not
-        */
-        const valid = await bcrypt.compare(params.password, user[0].password)
-        if (!valid) {
-            return { "message": "unauthonticate password" }
-        }
+    async resolve(root, params) {
+        try {
+            var emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-        /*
-        generate a token with expire time and provide a secret key
-        */
-        var secret = "sfdaag645654rfgfgds"
-        var token = jsonwebtoken.sign({ email: params.email }, secret, { expiresIn: 86400000 })
-
-        return {
-            "token": token,
-            "message": "!Login....Successfully"
+            /*
+            email validations
+            */
+            if (!emailformat.test(params.email)) {
+                return { "message": "not valid email" }
+            }
+            var token = jwt.sign({ _id: data[0]._id }, secret, { expiresIn: 86400000 });
+            
+        } catch (err) {
+            console.log("!Error")
         }
 
     }
