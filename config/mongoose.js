@@ -16,11 +16,14 @@ var config = require('./config')
 var mongoose = require('mongoose')
 module.exports = function () {
     mongoose.Promise = global.Promise;
+    mongoose.set('useCreateIndex', true)
     var db = mongoose.connect(config.db, { useNewUrlParser: true });
     mongoose.connection.on('error', function (err) {
         console.log('Error: Could not connect to MongoDB. Did you forget to run `mongod`?'.err);
     }).on('open', function () {
-        console.log('Connection extablised with MongoDB')
+        console.log('#####################################################################################');
+    console.log('##############                connected with MongoDb                   ##############');      
+    console.log('#####################################################################################\n');
     })
     return db;
 };

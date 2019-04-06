@@ -44,4 +44,5 @@ exports.sendEmailFunction = (url) => {
         return { "message": "is it is invalid, error on sending mail--" }
     }
     return { "message": "Messsage sent successfully" }
+
 }

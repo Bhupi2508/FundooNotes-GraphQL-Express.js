@@ -23,8 +23,8 @@ var userModel = require('../../model/schema')
 const jsonwebtoken = require('jsonwebtoken')
 var bcrypt = require('bcrypt')
 var sendMail = require('../../sendMailer/sendMail')
+var tokenVerify = require('../../Authentication/authenticationUser')
 var saltRounds = 10;
-var secret = "process.env.secretKey"
 
 /*******************************************************************************************************************/
 /*
@@ -183,7 +183,7 @@ exports.login = {
             /*
             generate a token with expire time and provide a secret key
             */
-            var token = jsonwebtoken.sign({ email: params.email }, secret, { expiresIn: 86400000 })
+            var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 })
 
             /*
             find email that is present in database or not
@@ -247,17 +247,19 @@ exports.forgotPassword = {
             /*
             generate a token for send a mail
             */
-            var token = jsonwebtoken.sign({ email: params.email }, secret, { expiresIn: 86400000 });
-            
+            var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 });
+
             /*
             send token to sendmail function, which is send to the link(token)
             */
-           var url = `${token}`
+            var url = `http://localhost:4000/#!/resetPassword/${token}`
+            
             var mail = sendMail.sendEmailFunction(url)
+            
             if (!mail > 0) {
                 return { "mesage": "!Error, mail not send " }
             }
-            return mail
+            return { "message": "Mail sent to your given email id" }
 
         } catch (err) {
             console.log("!Error")
@@ -274,10 +276,49 @@ resetPassword APIs using graphql
 exports.resetPassword = {
     type: authUser,
     args: {
-        email: {
+        newPassword: {
+            type: new GraphQLNonNull(GraphQLString),
+            required: true
+        },
+        confirmPassword: {
             type: new GraphQLNonNull(GraphQLString),
             required: true
         }
     },
 
-    async resolve(root, params) {
+    async resolve(root, params, context) {
+        try {
+
+            /*
+            find email that is present in database or not
+            */
+            user = await userModel.find({ "email": params.email })
+            if (!user.length > 0) {
+                return { "message": "email is not present in database" }
+            }
+
+            var afterVerify = tokenVerify.verification()
+            /*
+            password matching
+            */
+            if (params.newPassword!= params.confirmPassword) {
+               return { "message": "password and confirm password are not match" }
+            }
+             /*
+                bcrypt new password
+                */
+               params.newPassword = await bcrypt.hashSync(params.newPassword, saltRounds)
+
+               /*
+               update new password
+               */
+               var update = await userModel.updateOne({ email: params.email }, { password: params.newPassword })
+               if(!update.length>0){
+                   return { "message": "Password not match" }
+               }
+
+        } catch (err) {
+            console.log("!Error")
+        }
+    }
+}
