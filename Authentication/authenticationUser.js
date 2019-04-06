@@ -20,25 +20,15 @@ required files
 var jwt = require('jsonwebtoken');
 try {
 
-    exports.verification = () => {
-        var token = .headers["token"];
+    exports.verification = (token) => {
         console.log(" token is in auth, ====>", token);
-        var response = {
-            'message': "Unauthorised user here "
-        };
         /*
         verify the token and then send response to sendMail
         */
-        var value = jwt.verify(token, process.env.secretKey, function (err, decoded) {
-            if (err) {
-                return { "message": "!Error during token verify" }
-            }
-            else {
-                console.log("Decoded Data ===== > ", decoded);
-                req.decoded = decoded;
-                next();
-            }
-        });
+        var value = jwt.verify(token, process.env.secretKey)
+        if (!value) {
+            return value
+        }
     }
 }
 catch (err) {

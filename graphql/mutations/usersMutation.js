@@ -297,7 +297,8 @@ exports.resetPassword = {
                 return { "message": "email is not present in database" }
             }
 
-            var afterVerify = tokenVerify.verification()
+            var afterVerify = tokenVerify.verification(context.token)
+            console.log("context", context)
             /*
             password matching
             */

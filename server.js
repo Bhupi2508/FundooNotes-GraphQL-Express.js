@@ -32,10 +32,10 @@ require('dotenv').config();
 app.use(bodyParser.json())
 app.use(expressValidator());
 
-app.use('/graphql', cors(), graphqlExpress({ request => 
+app.use('/graphql', cors(), graphqlExpress({ req => 
     schema: userSchema,
     rootValue: global,
-    context: { token: req.Headers.Authorization },
+    context: { token: req.headers.authorization },
     graphiql: true
 }))
 
@@ -43,7 +43,7 @@ var userPort = (process.env.port)
 app.use('*', cors());
 app.listen(userPort, () => {
     console.log('#####################################################################################');
-    console.log('##############          STARTING SERVER at port : ',userPort,'               ##############');      
+    console.log('##############          STARTING SERVER at port : ', userPort, '               ##############');
     console.log('#####################################################################################\n');
 });
 
