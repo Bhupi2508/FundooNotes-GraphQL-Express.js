@@ -18,11 +18,15 @@ required files
 var signupUser = require('./usersMutation').signup;
 var removeUser = require('./usersMutation').remove;
 var updateUser = require('./usersMutation').update;
-var loginUser = require('./usersMutation').login
+var loginUser = require('./usersMutation').login;
+var forgotPasswordUser = require('./usersMutation').forgotPassword;
+var resetPasswordUser = require('./usersMutation').resetPassword
 
 module.exports = {
   signupUser,
   removeUser,
   updateUser,
-  loginUser
+  loginUser,
+  forgotPasswordUser,
+  resetPasswordUser
 }

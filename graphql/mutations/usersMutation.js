@@ -22,8 +22,9 @@ var authUser = require('../types/users').authType
 var userModel = require('../../model/schema')
 const jsonwebtoken = require('jsonwebtoken')
 var bcrypt = require('bcrypt')
-var yup = require('yup')
+var sendMail = require('../../sendMailer/sendMail')
 var saltRounds = 10;
+var secret = "process.env.secretKey"
 
 /*******************************************************************************************************************/
 /*
@@ -180,27 +181,25 @@ exports.login = {
             }
 
             /*
+            generate a token with expire time and provide a secret key
+            */
+            var token = jsonwebtoken.sign({ email: params.email }, secret, { expiresIn: 86400000 })
+
+            /*
             find email that is present in database or not
             */
             user = await userModel.find({ "email": params.email })
-            if (!user) {
-                return { "message": "unauthonticate email" }
+            if (!user.length > 0) {
+                return { "message": "email is not present" }
             }
 
             /*
             compare password that is present in database or not
             */
             const valid = await bcrypt.compare(params.password, user[0].password)
-            if (!valid) {
+            if (!valid.length > 0) {
                 return { "message": "unauthonticate password" }
             }
-
-            /*
-            generate a token with expire time and provide a secret key
-            */
-            var secret = "sfdaag645654rfgfgds"
-            var token = jsonwebtoken.sign({ email: params.email }, secret, { expiresIn: 86400000 })
-
             return {
                 "token": token,
                 "message": "!Login....Successfully"
@@ -236,11 +235,49 @@ exports.forgotPassword = {
             if (!emailformat.test(params.email)) {
                 return { "message": "not valid email" }
             }
-            var token = jwt.sign({ _id: data[0]._id }, secret, { expiresIn: 86400000 });
+
+            /*
+            find email that is present in database or not
+            */
+            user = await userModel.find({ "email": params.email })
+            if (!user.length > 0) {
+                return { "message": "email is not present in database" }
+            }
+
+            /*
+            generate a token for send a mail
+            */
+            var token = jsonwebtoken.sign({ email: params.email }, secret, { expiresIn: 86400000 });
             
+            /*
+            send token to sendmail function, which is send to the link(token)
+            */
+           var url = `${token}`
+            var mail = sendMail.sendEmailFunction(url)
+            if (!mail > 0) {
+                return { "mesage": "!Error, mail not send " }
+            }
+            return mail
+
         } catch (err) {
             console.log("!Error")
         }
 
     }
 }
+
+
+/*******************************************************************************************************************/
+/*
+resetPassword APIs using graphql
+*/
+exports.resetPassword = {
+    type: authUser,
+    args: {
+        email: {
+            type: new GraphQLNonNull(GraphQLString),
+            required: true
+        }
+    },
+
+    async resolve(root, params) {
