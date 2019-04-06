@@ -32,12 +32,12 @@ require('dotenv').config();
 app.use(bodyParser.json())
 app.use(expressValidator());
 
-app.use('/graphql', cors(), graphqlExpress({ req => 
+app.use('/graphql', cors(), graphqlExpress((req) => ({
     schema: userSchema,
     rootValue: global,
     context: { token: req.headers.authorization },
     graphiql: true
-}))
+})))
 
 var userPort = (process.env.port)
 app.use('*', cors());

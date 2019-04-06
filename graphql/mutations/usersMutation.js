@@ -252,10 +252,10 @@ exports.forgotPassword = {
             /*
             send token to sendmail function, which is send to the link(token)
             */
-            var url = `http://localhost:4000/#!/resetPassword/${token}`
-            
+            var url = `${token}`
+
             var mail = sendMail.sendEmailFunction(url)
-            
+
             if (!mail > 0) {
                 return { "mesage": "!Error, mail not send " }
             }
@@ -292,31 +292,43 @@ exports.resetPassword = {
             /*
             find email that is present in database or not
             */
-            user = await userModel.find({ "email": params.email })
-            if (!user.length > 0) {
-                return { "message": "email is not present in database" }
-            }
+            // user = await userModel.find({ "email": params.email })
+            // if (!user.length > 0) {
+            //     return { "message": "email is not present in database" }
+            // }
 
+            console.log("context", context.token)
             var afterVerify = tokenVerify.verification(context.token)
             console.log("context", context)
+            console.log("cverify", afterVerify)
+            if (!afterVerify>0) {
+                return { "message": "token is not verify" }
+            }
             /*
             password matching
             */
-            if (params.newPassword!= params.confirmPassword) {
-               return { "message": "password and confirm password are not match" }
+           console.log("password", params.newPassword)
+           console.log("confirmpassword", params.confirmPassword)
+            if (params.newPassword != params.confirmPassword) {
+                return { "message": "password and confirm password are not match" }
             }
-             /*
-                bcrypt new password
-                */
-               params.newPassword = await bcrypt.hashSync(params.newPassword, saltRounds)
-
-               /*
-               update new password
+            /*
+               bcrypt new password
                */
-               var update = await userModel.updateOne({ email: params.email }, { password: params.newPassword })
-               if(!update.length>0){
-                   return { "message": "Password not match" }
-               }
+            params.newPassword = await bcrypt.hashSync(params.newPassword, saltRounds)
+            console.log("newpassword", params.newPassword)
+            /*
+            update new password
+            */
+            var update = await userModel.updateOne(params.email ,
+                { $set: { password: params.newPassword } },
+                { new: true })
+                // console.log("pass", password)
+                console.log("update", update)
+            if (!update.length > 0) {
+                return { "message": "Password not reset" }
+            }
+            return { "message": "resetPassword Successfully" }
 
         } catch (err) {
             console.log("!Error")

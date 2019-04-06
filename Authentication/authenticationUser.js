@@ -18,20 +18,16 @@ required files
 */
 
 var jwt = require('jsonwebtoken');
-try {
-
-    exports.verification = (token) => {
+exports.verification = (token) => {
+    try {
         console.log(" token is in auth, ====>", token);
         /*
         verify the token and then send response to sendMail
         */
         var value = jwt.verify(token, process.env.secretKey)
-        if (!value) {
-            return value
-        }
+        return value
+    }
+    catch (err) {
+        console.log("found error in generating token")
     }
 }
-catch (err) {
-    console.log("found error in generating token")
-}
-module.exports = { auth };
