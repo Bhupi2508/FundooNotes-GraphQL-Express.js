@@ -252,7 +252,7 @@ exports.forgotPassword = {
             /*
             send token to sendmail function, which is send to the link(token)
             */
-            var url = `${token}`
+            var url = `http://localhost:4000/#!/resetPassword/${token}`
 
             var mail = sendMail.sendEmailFunction(url)
 
