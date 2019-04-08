@@ -307,11 +307,11 @@ exports.resetPassword = {
             /*
             update new password
             */
-            var update = await userModel.updateOne(params.email,
+            var update = await userModel.updateOne({"email":afterVerify.email},
                 { $set: { password: params.newPassword } },
                 { new: true })
 
-            if (!update.length > 0) {
+            if (!update) {
                 return { "message": "Password not reset" }
             }
             return { "message": "resetPassword Successfully" }
