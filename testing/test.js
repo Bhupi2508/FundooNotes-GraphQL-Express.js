@@ -25,7 +25,7 @@ const request = require('supertest')(url);
 describe('GraphQL', () => {
     it('Returns user with login', (done) => {
         request.post('/graphql')
-            .send({ mutation: '{login (email:akash@gmail.com, password:akash1),messgae }' })
+            .send({ mutation: '{login (email:akash@gmail.com, password:akash1),message }' })
             .expect(200)
             .end((err, res) => {
                 /*
@@ -40,7 +40,7 @@ describe('GraphQL', () => {
 
     it('Returns all users', (done) => {
         request.post('/graphql')
-            .send({ query: '{ user { id name username email } }' })
+            .send({ mutation: '{login (email:akash@gmail.com, password:akash1),token }' })
             .expect(200)
             .end((err, res) => {
                 /*
@@ -49,8 +49,8 @@ describe('GraphQL', () => {
                 if (err) return done(err);
                 /*
                  assume there are a 100 users in the database
-                */r
-                es.body.user.should.have.lengthOf(100);
+                */
+               res.body.user.should.have.lengthOf(100);
             })
     })
 });
