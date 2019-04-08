@@ -20,7 +20,7 @@ required files
 var jwt = require('jsonwebtoken');
 exports.verification = (token) => {
     try {
-        console.log(" token is in auth, ====>", token);
+        console.log("\ntoken is in authentication, ====>", token);
         /*
         verify the token and then send response to sendMail
         */

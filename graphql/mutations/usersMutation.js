@@ -68,7 +68,6 @@ exports.signup = {
             for email id cheking
             */
             verify = await userModel.find({ "email": params.email })
-            console.log("verify", verify.length);
             if (verify.length > 0) {
                 return { "message": "email already exists" }
             }
@@ -197,7 +196,8 @@ exports.login = {
             compare password that is present in database or not
             */
             const valid = await bcrypt.compare(params.password, user[0].password)
-            if (!valid.length > 0) {
+
+            if (!valid) {
                 return { "message": "unauthonticate password" }
             }
             return {
@@ -289,26 +289,14 @@ exports.resetPassword = {
     async resolve(root, params, context) {
         try {
 
-            /*
-            find email that is present in database or not
-            */
-            // user = await userModel.find({ "email": params.email })
-            // if (!user.length > 0) {
-            //     return { "message": "email is not present in database" }
-            // }
-
-            console.log("context", context.token)
             var afterVerify = tokenVerify.verification(context.token)
-            console.log("context", context)
-            console.log("cverify", afterVerify)
-            if (!afterVerify>0) {
+            if (!afterVerify > 0) {
                 return { "message": "token is not verify" }
             }
             /*
             password matching
             */
-           console.log("password", params.newPassword)
-           console.log("confirmpassword", params.confirmPassword)
+
             if (params.newPassword != params.confirmPassword) {
                 return { "message": "password and confirm password are not match" }
             }
@@ -316,15 +304,13 @@ exports.resetPassword = {
                bcrypt new password
                */
             params.newPassword = await bcrypt.hashSync(params.newPassword, saltRounds)
-            console.log("newpassword", params.newPassword)
             /*
             update new password
             */
-            var update = await userModel.updateOne(params.email ,
+            var update = await userModel.updateOne(params.email,
                 { $set: { password: params.newPassword } },
                 { new: true })
-                // console.log("pass", password)
-                console.log("update", update)
+
             if (!update.length > 0) {
                 return { "message": "Password not reset" }
             }
