@@ -1,10 +1,10 @@
 /******************************************************************************
- *  Execution       : default node          : cmd> testMocha.js
+ *  Execution       : default node          : cmd> test.js
  *                      
  * 
- *  Purpose         : test code from Mocha
+ *  Purpose         : Mocha testing in graphql
  * 
- *  @description    : check code which is wriiten in your program by using mocha
+ *  @description    : test code with the help of mocha, chai, supertest
  * 
  *  @overview       : Create APIs using graphql 
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
@@ -15,42 +15,81 @@
 /*
 required files
 */
-const chai = require('chai')
-const expect = chai.expect;
+const { describe, it } = require('mocha')
+const { expect } = require('chai')
+const request = require('supertest')
+var server = require('../server')
 
-const url = `http://localhost:4000/`;
+describe('GraphQL API', () => {
 
-const request = require('supertest')(url);
-
-describe('GraphQL', () => {
-    it('Returns user with login', (done) => {
-        request.post('/graphql')
-            .send({ mutation: '{login (email:akash@gmail.com, password:akash1),message }' })
+    /***************************************************************************************************************/
+    /*
+    for Register purpose Mocha testing
+    */
+    it('Check user list data', done => {
+        request(server)
+            .post('/graphql ')
+            /*
+            write your data for checking by giving mutation
+            */
+            .send({ mutation: '{ signupUser( firstname:"akashji", lastname:"Rathore", email:"jffi@gmail.com", password:"akash1"), { message }}' })
             .expect(200)
             .end((err, res) => {
+
                 /*
-                 res will contain array with one user
+                if any error the return error
                 */
-                if (err) return done(err);
-                res.body.user.should.have.property('email')
-                res.body.user.should.have.property('password')
+                if (err) {
+                    return done(err);
+                }
+                /*
+                otherwise return success
+                */
+                expect(JSON.parse(res.text).data.signup[0]).to.deep.equal(
+                    {
+                        "firstname": "akashji",
+                        "lastname": "Rathore",
+                        "email": "jffi@gmail.com",
+                        "password": "akash1",
+                        "message": "register successfull"
+                    }
+                )
+
                 done();
-            })
-    })
+            });
+    });
 
-    it('Returns all users', (done) => {
-        request.post('/graphql')
-            .send({ mutation: '{login (email:akash@gmail.com, password:akash1),token }' })
+
+    /***************************************************************************************************************/
+    /*
+    for Login purpose Mocha testing
+    */
+    it('Check data in Database', done => {
+        request(server)
+            .post('/graphql ')
+            /*
+            write your data for checking by giving mutation
+            */
+            .send({ mutation: '{ loginUser( email:"jffi@gmail.com", password:"akash1")}' })
             .expect(200)
             .end((err, res) => {
+
                 /*
-                 res will contain array of all users
+                if any error the return error
                 */
-                if (err) return done(err);
+                if (err) {
+                    return done(err);
+                }
                 /*
-                 assume there are a 100 users in the database
+                otherwise return success
                 */
-               res.body.user.should.have.lengthOf(100);
-            })
-    })
+                expect(JSON.parse(res.text).data.loginUser.message).to.deep.equal(
+                    {
+                        "message": "!Login....Successfully"
+                    }
+                )
+
+                done();
+            });
+    });
 });
