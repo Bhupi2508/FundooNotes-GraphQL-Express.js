@@ -1,4 +1,4 @@
-/******************************************************************************
+/********************************************************************************************************************
  *  Execution       : default node          : cmd> userMutations.js
  *                      
  * 
@@ -6,12 +6,12 @@
  * 
  *  @description    : By mutation create a new files
  * 
- *  @overview       : Create APIs using graphql 
+ *  @overview       : fundoo application  
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
  *  @version        : 1.0
  *  @since          : 02-april-2019
  *
- ******************************************************************************/
+ *******************************************************************************************************************/
 /*
 required files
 */
@@ -24,12 +24,24 @@ const jsonwebtoken = require('jsonwebtoken')
 var bcrypt = require('bcrypt')
 var sendMail = require('../../sendMailer/sendMail')
 var tokenVerify = require('../../Authentication/authenticationUser')
+var client = require('redis')
+var redis = client.createClient()
 var saltRounds = 10;
 
-/*******************************************************************************************************************/
-/*
-create a signup APIs for using graphql
-*/
+/********************************************************************************************************************
+ *  Execution       : default node          : cmd> userMutations.js
+ *                      
+ * 
+ *  Purpose         : for registration purpose
+ * 
+ *  @description    : create registration api by using graphql
+ * 
+ *  @overview       : fundoo application  
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 03-april-2019
+ *
+ *******************************************************************************************************************/
 exports.signup = {
     type: authUser,
     args: {
@@ -93,10 +105,20 @@ exports.signup = {
     }
 }
 
-/*******************************************************************************************************************/
-/*
-updated data APIs for using graphql
-*/
+/********************************************************************************************************************
+ *  Execution       : default node          : cmd> userMutations.js
+ *                      
+ * 
+ *  Purpose         : for update purpose
+ * 
+ *  @description    : update data from database api by using graphql
+ * 
+ *  @overview       : fundoo application  
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 03-april-2019
+ *
+ *******************************************************************************************************************/
 exports.update = {
     type: typeUser,
     args: {
@@ -124,10 +146,20 @@ exports.update = {
     }
 }
 
-/*******************************************************************************************************************/
-/*
-remove data APIs for using graphql
-*/
+/********************************************************************************************************************
+ *  Execution       : default node          : cmd> userMutations.js
+ *                      
+ * 
+ *  Purpose         : for remove purpose
+ * 
+ *  @description    : remove data from database api by using graphql
+ * 
+ *  @overview       : fundoo application 
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 03-april-2019
+ *
+ *******************************************************************************************************************/
 exports.remove = {
     type: typeUser,
     args: {
@@ -151,10 +183,20 @@ exports.remove = {
     }
 }
 
-/*******************************************************************************************************************/
-/*
-login APIs using graphql 
-*/
+/********************************************************************************************************************
+ *  Execution       : default node          : cmd> userMutations.js
+ *                      
+ * 
+ *  Purpose         : for login purpose
+ * 
+ *  @description    : login api by using graphql
+ * 
+ *  @overview       : fundoo application 
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 03-april-2019
+ *
+ *******************************************************************************************************************/
 exports.login = {
     type: authUser,
     args: {
@@ -183,7 +225,7 @@ exports.login = {
             generate a token with expire time and provide a secret key
             */
             var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 })
-
+            redis.get(token)
             /*
             find email that is present in database or not
             */
@@ -212,10 +254,20 @@ exports.login = {
 }
 
 
-/*******************************************************************************************************************/
-/*
-forgotPassword APIs using graphql
-*/
+/********************************************************************************************************************
+ *  Execution       : default node          : cmd> userMutations.js
+ *                      
+ * 
+ *  Purpose         : for forgotPassword purpose
+ * 
+ *  @description    : forgotPassword api by using graphql
+ * 
+ *  @overview       : fundoo application 
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 04-april-2019
+ *
+ *******************************************************************************************************************/
 exports.forgotPassword = {
     type: authUser,
     args: {
@@ -269,10 +321,19 @@ exports.forgotPassword = {
 }
 
 
-/*******************************************************************************************************************/
-/*
-resetPassword APIs using graphql
-*/
+/********************************************************************************************************************
+ *  Execution       : default node          : cmd> userMutations.js
+ *                      
+ * 
+ *  Purpose         : for resetPassowrd purpose
+ * 
+ *  @description    : resetPassword from database api by using graphql
+ * 
+ *  @overview       : fundoo application 
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 04-april-2019
+ *******************************************************************************************************************/
 exports.resetPassword = {
     type: authUser,
     args: {

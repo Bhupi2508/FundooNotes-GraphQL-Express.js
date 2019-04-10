@@ -24,15 +24,49 @@ describe('GraphQL API', () => {
 
     /***************************************************************************************************************/
     /*
+     mocha testing Demo
+     */
+    it('Mocha Demo', done => {
+        request(server)
+            .post('/graphql')
+            /*
+            write your data for checking by giving query
+            */
+            .send({ query: '{ users { id firstname lastname }}' })
+            .expect(200)
+            .end((err, res) => {
+                /*
+                if any error the return error
+                */
+                if (err) {
+                    return done(err);
+                }
+                /*
+                otherwise return success data
+                */
+                expect(JSON.parse(res.text).data.users[0]).to.deep.equal(
+                    {
+                        "id": "5caadab0f3013516974ba4df",
+                        "firstname": "cp",
+                        "lastname": "Rathore"
+                    }
+                )
+                done();
+            });
+    });
+
+
+    /**************************************************************************************************************/
+    /*
     for Register purpose Mocha testing
     */
-    it('Check user list data', done => {
+    it('register API', done => {
         request(server)
-            .post('/graphql ')
+            .post('/graphql')
             /*
             write your data for checking by giving mutation
             */
-            .send({ mutation: '{ signupUser( firstname:"akashji", lastname:"Rathore", email:"jffi@gmail.com", password:"akash1"), { message }}' })
+            .send({ query: 'mutation { signupUser (firstname:"akash" lastname:"sharma" email:"ajss1@gmail.com" password:"akash1") {message}}' })
             .expect(200)
             .end((err, res) => {
 
@@ -43,18 +77,9 @@ describe('GraphQL API', () => {
                     return done(err);
                 }
                 /*
-                otherwise return success
+                otherwise return success data
                 */
-                expect(JSON.parse(res.text).data.signup[0]).to.deep.equal(
-                    {
-                        "firstname": "akashji",
-                        "lastname": "Rathore",
-                        "email": "jffi@gmail.com",
-                        "password": "akash1",
-                        "message": "register successfull"
-                    }
-                )
-
+                expect(JSON.parse(res.text).data.signupUser.message).to.deep.equal("Register successfull")
                 done();
             });
     });
@@ -64,13 +89,13 @@ describe('GraphQL API', () => {
     /*
     for Login purpose Mocha testing
     */
-    it('Check data in Database', done => {
+    it('login APIs', done => {
         request(server)
             .post('/graphql ')
             /*
             write your data for checking by giving mutation
             */
-            .send({ mutation: '{ loginUser( email:"jffi@gmail.com", password:"akash1")}' })
+            .send({ query: 'mutation { loginUser (email:"jdfdi@gmail.com" password:"akash1") {message}}' })
             .expect(200)
             .end((err, res) => {
 
@@ -83,13 +108,67 @@ describe('GraphQL API', () => {
                 /*
                 otherwise return success
                 */
-                expect(JSON.parse(res.text).data.loginUser.message).to.deep.equal(
-                    {
-                        "message": "!Login....Successfully"
-                    }
-                )
-
+                expect(JSON.parse(res.text).data.loginUser.message).to.deep.equal("!Login....Successfully")
                 done();
+            });
+    });
+
+
+    /***************************************************************************************************************/
+    /*
+    for forgotPassword purpose Mocha testing
+    */
+    it('forgotPassword APIs', done => {
+        request(server)
+            .post('/graphql ')
+            /*
+            write your data for checking by giving mutation
+            */
+            .send({ query: 'mutation { forgotPasswordUser (email:"jdfdi@gmail.com") {message}}' })
+            .expect(200)
+            .end((err, res) => {
+
+                /*
+                if any error the return error
+                */
+                if (err) {
+                    return done(err);
+                }
+                /*
+                otherwise return success
+                */
+                expect(JSON.parse(res.text).data.forgotPasswordUser.message).to.deep.equal("Mail sent to your given email id")
+                done();
+            });
+    });
+
+
+    /***************************************************************************************************************/
+    /*
+    for Login purpose Mocha testing
+    */
+    it('resetPassword APIs', done => {
+        request(server)
+            .post('/graphql ')
+            /*
+            write your data for checking by giving mutation
+            */
+            .send({ query: 'mutation{ resetPasswordUser (newPassword:"1234567" confirmPassword:"1234567"){message}}'})
+            .expect(200)
+            .end((err, res) => {
+
+                /*
+                if any error the return error
+                */
+                if (err) {
+                    return done(err);
+                }
+                /*
+                otherwise return success
+                */
+                expect(JSON.parse(res.text).data.resetPasswordUser.message).to.deep.equal("token is not verify")
+                done();
+                
             });
     });
 });
