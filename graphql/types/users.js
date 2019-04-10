@@ -7,7 +7,7 @@
  *  @description    : design GraphQL user schema to specify the types for API using 
  *                    GraphQL schema language
  * 
- *  @overview       : Create APIs using graphql 
+ *  @overview       : fundoo application 
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
  *  @version        : 1.0
  *  @since          : 02-april-2019
@@ -19,7 +19,7 @@ required files
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull } = require('graphql')
 
 /*
-Design a schema 
+Design a schema for users
 */
 exports.userType = new GraphQLObjectType({
     name: 'users',
@@ -44,6 +44,10 @@ exports.userType = new GraphQLObjectType({
         }
     }
 });
+
+/*
+define a another schema for return Message and token
+*/
 exports.authType = new GraphQLObjectType({
     name: 'Auth',
     description: 'GraphQL',

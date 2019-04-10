@@ -1,4 +1,4 @@
-/******************************************************************************
+/********************************************************************************************************************
  *  Execution       : default node          : cmd> test.js
  *                      
  * 
@@ -6,12 +6,12 @@
  * 
  *  @description    : test code with the help of mocha, chai, supertest
  * 
- *  @overview       : Create APIs using graphql 
+ *  @overview       : fundoo application  
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
  *  @version        : 1.0
  *  @since          : 06-april-2019
  *
- ******************************************************************************/
+ *******************************************************************************************************************/
 /*
 required files
 */
@@ -22,10 +22,20 @@ var server = require('../server')
 
 describe('GraphQL API', () => {
 
-    /***************************************************************************************************************/
-    /*
-     mocha testing Demo
-     */
+/********************************************************************************************************************
+ *  Execution       : default node          : cmd> test.js
+ *                      
+ * 
+ *  Purpose         : Demo example for testing
+ * 
+ *  @description    : test code with the help of mocha, chai, supertest
+ * 
+ *  @overview       : fundoo application  
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 06-april-2019
+ *
+ *******************************************************************************************************************/
     it('Mocha Demo', done => {
         request(server)
             .post('/graphql')
@@ -56,10 +66,20 @@ describe('GraphQL API', () => {
     });
 
 
-    /**************************************************************************************************************/
-    /*
-    for Register purpose Mocha testing
-    */
+/********************************************************************************************************************
+ *  Execution       : default node          : cmd> test.js
+ *                      
+ * 
+ *  Purpose         : Register API testing in graphql
+ * 
+ *  @description    : test register code with the help of mocha, chai, supertest
+ * 
+ *  @overview       : fundoo application  
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 06-april-2019
+ *
+ *******************************************************************************************************************/
     it('register API', done => {
         request(server)
             .post('/graphql')
@@ -85,10 +105,20 @@ describe('GraphQL API', () => {
     });
 
 
-    /***************************************************************************************************************/
-    /*
-    for Login purpose Mocha testing
-    */
+/********************************************************************************************************************
+ *  Execution       : default node          : cmd> test.js
+ *                      
+ * 
+ *  Purpose         : Login API testing in graphql
+ * 
+ *  @description    : test login code with the help of mocha, chai, supertest
+ * 
+ *  @overview       : fundoo application  
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 06-april-2019
+ *
+ *******************************************************************************************************************/
     it('login APIs', done => {
         request(server)
             .post('/graphql ')
@@ -114,10 +144,20 @@ describe('GraphQL API', () => {
     });
 
 
-    /***************************************************************************************************************/
-    /*
-    for forgotPassword purpose Mocha testing
-    */
+/********************************************************************************************************************
+ *  Execution       : default node          : cmd> test.js
+ *                      
+ * 
+ *  Purpose         : forgotPassword testing in graphql
+ * 
+ *  @description    : test forgotPassword code with the help of mocha, chai, supertest
+ * 
+ *  @overview       : fundoo application 
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 07-april-2019
+ *
+ *******************************************************************************************************************/
     it('forgotPassword APIs', done => {
         request(server)
             .post('/graphql ')
@@ -143,10 +183,20 @@ describe('GraphQL API', () => {
     });
 
 
-    /***************************************************************************************************************/
-    /*
-    for Login purpose Mocha testing
-    */
+/********************************************************************************************************************
+ *  Execution       : default node          : cmd> test.js
+ *                      
+ * 
+ *  Purpose         : resetPassword testing in graphql
+ * 
+ *  @description    : test resetPassword code with the help of mocha, chai, supertest
+ * 
+ *  @overview       : fundoo application  
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 06-april-2019
+ *
+ *******************************************************************************************************************/
     it('resetPassword APIs', done => {
         request(server)
             .post('/graphql ')

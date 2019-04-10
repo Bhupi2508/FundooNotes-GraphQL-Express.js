@@ -2,14 +2,14 @@
  *  Execution       : default node          : cmd> index.js
  *                      
  * 
- *  Purpose         : Create APIs
+ *  Purpose         : Create APIs and connect server
  * 
  *  @description    
  * 
- *  @overview       : GraphQL APIs
+ *  @overview       : fundoo application
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
  *  @version        : 1.0
- *  @since          : 01-april-2019
+ *  @since          : 02-april-2019
  *
  ******************************************************************************/
 /*

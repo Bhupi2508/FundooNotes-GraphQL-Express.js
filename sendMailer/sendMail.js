@@ -6,7 +6,6 @@
  * 
  *  @description    : For sending mail
  * 
- *  @file           : graphql APIs
  *  @overview       : fundoo app
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
  *  @version        : 1.0

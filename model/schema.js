@@ -6,7 +6,7 @@
  * 
  *  @description    
  * 
- *  @overview       : Schema creating by using GraphQL APIs
+ *  @overview       : fundoo application
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
  *  @version        : 1.0
  *  @since          : 02-april-2019
@@ -22,7 +22,7 @@ create instance of Schema
 var mongoSchema = mongoose.Schema;
 
 /*
-create schema for users
+create schema for Database
 */
 var schemaData = new mongoSchema({
     firstname: {

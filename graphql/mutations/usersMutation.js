@@ -24,8 +24,6 @@ const jsonwebtoken = require('jsonwebtoken')
 var bcrypt = require('bcrypt')
 var sendMail = require('../../sendMailer/sendMail')
 var tokenVerify = require('../../Authentication/authenticationUser')
-var client = require('redis')
-var redis = client.createClient()
 var saltRounds = 10;
 
 /********************************************************************************************************************
@@ -225,7 +223,6 @@ exports.login = {
             generate a token with expire time and provide a secret key
             */
             var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 })
-            redis.get(token)
             /*
             find email that is present in database or not
             */
@@ -368,7 +365,7 @@ exports.resetPassword = {
             /*
             update new password
             */
-            var update = await userModel.updateOne({"email":afterVerify.email},
+            var update = await userModel.updateOne({ "email": afterVerify.email },
                 { $set: { password: params.newPassword } },
                 { new: true })
 

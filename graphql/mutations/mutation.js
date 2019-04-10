@@ -6,7 +6,7 @@
  * 
  *  @description    : mutations are used to modified in these files
  * 
- *  @overview       : Create APIs using graphql 
+ *  @overview       : fundoo application 
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
  *  @version        : 1.0
  *  @since          : 02-april-2019

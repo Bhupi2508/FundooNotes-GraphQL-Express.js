@@ -6,11 +6,10 @@
  * 
  *  @description    : verify token for resetPassword
  * 
- *  @file           : fundoo application
- *  @overview       : Connect and chat with two peoples
+ *  @overview       : fundoo application
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
  *  @version        : 1.0
- *  @since          : 21-mar-2019
+ *  @since          : 02-april-2019
  *
  ******************************************************************************/
 /*
