@@ -26,6 +26,35 @@ var sendMail = require('../../sendMailer/sendMail')
 var tokenVerify = require('../../Authentication/authenticationUser')
 var saltRounds = 10;
 
+
+exports.emailVerify = {
+    type: authUser,
+    async resolve(root, params, context) {
+        try {
+
+            var afterVerify = tokenVerify.verification(context.token)
+            if (!afterVerify > 0) {
+                return { "message": "token is not verify" }
+            }
+            /*
+            update new password
+            */
+            var update = await userModel.updateOne({ "email": afterVerify.email },
+                { $set: { verification: true } },
+                { new: true })
+
+            if (!update) {
+                return { "message": "Password not reset" }
+            }
+            return { "message": "resetPassword Successfully" }
+
+        } catch (err) {
+            console.log("!Error")
+        }
+
+}
+}
+
 /********************************************************************************************************************
  *  Execution       : default node          : cmd> userMutations.js
  *                      
@@ -87,7 +116,7 @@ exports.signup = {
            */
             params.password = await bcrypt.hashSync(params.password, saltRounds)
             const usersMdl = new userModel(params)
-
+            
             /*
             save in database
             */
@@ -95,6 +124,10 @@ exports.signup = {
             if (!uModel) {
                 return { "message": "Register unsuccessfull" }
             } else {
+
+                var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 })
+                var url = `${token}`
+                sendMail.sendEmailFunction(url)
                 return { "message": "Register successfull" }
             }
         } catch (err) {
@@ -230,7 +263,11 @@ exports.login = {
             if (!user.length > 0) {
                 return { "message": "email is not present" }
             }
-
+            console.log(user);
+            
+            if(user[0].verification === false){
+                return {"message": "Email not verified"}
+            }
             /*
             compare password that is present in database or not
             */

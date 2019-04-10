@@ -41,6 +41,10 @@ var schemaData = new mongoSchema({
     password: {
         type: String,
         required: true
+    },
+    verification: {
+        type: Boolean,
+        default: false
     }
 }, {
         timestamps: true

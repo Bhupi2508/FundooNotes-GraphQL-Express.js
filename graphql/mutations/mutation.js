@@ -21,6 +21,7 @@ var updateUser = require('./usersMutation').update;
 var loginUser = require('./usersMutation').login;
 var forgotPasswordUser = require('./usersMutation').forgotPassword;
 var resetPasswordUser = require('./usersMutation').resetPassword
+var emailVerify = require('../mutations/usersMutation').emailVerify
 
 module.exports = {
   signupUser,
@@ -28,5 +29,6 @@ module.exports = {
   updateUser,
   loginUser,
   forgotPasswordUser,
-  resetPasswordUser
+  resetPasswordUser,
+  emailVerify
 }
