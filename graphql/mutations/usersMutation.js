@@ -283,7 +283,6 @@ exports.login = {
             if (!user.length > 0) {
                 return { "message": "email is not present" }
             }
-            console.log(user);
             
             if(user[0].verification === false){
                 return {"message": "Email not verified"}
