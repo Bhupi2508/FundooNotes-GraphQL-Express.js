@@ -27,34 +27,6 @@ var tokenVerify = require('../../Authentication/authenticationUser')
 var saltRounds = 10;
 
 
-exports.emailVerify = {
-    type: authUser,
-    async resolve(root, params, context) {
-        try {
-
-            var afterVerify = tokenVerify.verification(context.token)
-            if (!afterVerify > 0) {
-                return { "message": "token is not verify" }
-            }
-            /*
-            update new password
-            */
-            var update = await userModel.updateOne({ "email": afterVerify.email },
-                { $set: { verification: true } },
-                { new: true })
-
-            if (!update) {
-                return { "message": "Password not reset" }
-            }
-            return { "message": "resetPassword Successfully" }
-
-        } catch (err) {
-            console.log("!Error")
-        }
-
-}
-}
-
 /********************************************************************************************************************
  *  Execution       : default node          : cmd> userMutations.js
  *                      
@@ -124,16 +96,64 @@ exports.signup = {
             if (!uModel) {
                 return { "message": "Register unsuccessfull" }
             } else {
-
+                /*
+                generate a token and send a mail for token verification
+                */
                 var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 })
                 var url = `${token}`
-                sendMail.sendEmailFunction(url)
+                sendMail.sendEmailFunction(url, params.email)
                 return { "message": "Register successfull" }
             }
         } catch (err) {
             console.log("!Error")
         }
     }
+}
+
+
+/********************************************************************************************************************
+ *  Execution       : default node          : cmd> userMutations.js
+ *                      
+ * 
+ *  Purpose         : for email verification purpose
+ * 
+ *  @description    : create email verification api by using graphql
+ * 
+ *  @overview       : fundoo application  
+ *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 03-april-2019
+ *
+ *******************************************************************************************************************/
+exports.emailVerify = {
+    type: authUser,
+    async resolve(root, params, context) {
+        try {
+
+            /*
+            token verification
+            */
+            var afterVerify = tokenVerify.verification(context.token)
+            if (!afterVerify > 0) {
+                return { "message": "token is not verify" }
+            }
+            /*
+            update new email after verification
+            */
+            var update = await userModel.updateOne({ "email": afterVerify.email },
+                { $set: { verification: true } },
+                { new: true })
+
+            if (!update) {
+                return { "message": "verification unsuccessfull" }
+            }
+            return { "message": "verification successfull" }
+
+        } catch (err) {
+            console.log("!Error")
+        }
+
+}
 }
 
 /********************************************************************************************************************

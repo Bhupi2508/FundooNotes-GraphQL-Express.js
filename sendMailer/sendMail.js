@@ -17,7 +17,7 @@ required files
 */
 const nodemailer = require('nodemailer');
 
-exports.sendEmailFunction = (url) => {
+exports.sendEmailFunction = (url, email) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         /*
@@ -31,7 +31,7 @@ exports.sendEmailFunction = (url) => {
 
     const mailOptions = {
         from: process.env.email,
-        to: 'bhupendrasingh.ec18@gmail.com',
+        to: email,
         subject: 'fundoo password reset link ',
         text: 'Please go through the e-mail verifaction link provided in this mail:\n\n' + url
     };

@@ -56,9 +56,9 @@ describe('GraphQL API', () => {
                 */
                 expect(JSON.parse(res.text).data.users[0]).to.deep.equal(
                     {
-                        "id": "5caadab0f3013516974ba4df",
-                        "firstname": "cp",
-                        "lastname": "Rathore"
+                        "id": "5cadfb863f13e9542c96324a",
+                        "firstname" : "aaaa",
+	                    "lastname" : "bcccc",
                     }
                 )
                 done();
@@ -86,7 +86,7 @@ describe('GraphQL API', () => {
             /*
             write your data for checking by giving mutation
             */
-            .send({ query: 'mutation { signupUser (firstname:"akash" lastname:"sharma" email:"ajss1@gmail.com" password:"akash1") {message}}' })
+            .send({ query: 'mutation { signupUser (firstname:"akash" lastname:"sharma" email:"ajsrs1@gmail.com" password:"akash1") {message}}' })
             .expect(200)
             .end((err, res) => {
 
@@ -138,7 +138,7 @@ describe('GraphQL API', () => {
                 /*
                 otherwise return success
                 */
-                expect(JSON.parse(res.text).data.loginUser.message).to.deep.equal("!Login....Successfully")
+                expect(JSON.parse(res.text).data.loginUser.message).to.deep.equal("email is not present")
                 done();
             });
     });
@@ -177,7 +177,7 @@ describe('GraphQL API', () => {
                 /*
                 otherwise return success
                 */
-                expect(JSON.parse(res.text).data.forgotPasswordUser.message).to.deep.equal("Mail sent to your given email id")
+                expect(JSON.parse(res.text).data.forgotPasswordUser.message).to.deep.equal("email is not present in database")
                 done();
             });
     });
