@@ -24,6 +24,8 @@ const jsonwebtoken = require('jsonwebtoken')
 var bcrypt = require('bcrypt')
 var sendMail = require('../../sendMailer/sendMail')
 var tokenVerify = require('../../Authentication/authenticationUser')
+var redis = require('redis')
+var client = redis.createClient()
 var saltRounds = 10;
 
 
@@ -71,8 +73,8 @@ exports.signup = {
             /*
             password validation
             */
-            if (params.password.length < 6) {
-                return { "message": "Enter pasword more than 6 letters " }
+            if (params.password.length < 8) {
+                return { "message": "Enter pasword more than 8 letters " }
             }
 
             /*
@@ -84,11 +86,11 @@ exports.signup = {
             }
 
             /*
-           for bcrypt password
+            for bcrypt password
            */
             params.password = await bcrypt.hashSync(params.password, saltRounds)
             const usersMdl = new userModel(params)
-            
+
             /*
             save in database
             */
@@ -153,7 +155,7 @@ exports.emailVerify = {
             console.log("!Error")
         }
 
-}
+    }
 }
 
 /********************************************************************************************************************
@@ -276,6 +278,16 @@ exports.login = {
             generate a token with expire time and provide a secret key
             */
             var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 })
+
+            /*
+            redis cache storage
+            */
+            client.set('token', token)
+            var takeToken = client.get(token)
+
+            if (!takeToken > 0) {
+                return { "message": "Redis cache cannot get token " }
+            }
             /*
             find email that is present in database or not
             */
@@ -283,9 +295,9 @@ exports.login = {
             if (!user.length > 0) {
                 return { "message": "email is not present" }
             }
-            
-            if(user[0].verification === false){
-                return {"message": "Email not verified"}
+
+            if (user[0].verification === false) {
+                return { "message": "Email not verified" }
             }
             /*
             compare password that is present in database or not
