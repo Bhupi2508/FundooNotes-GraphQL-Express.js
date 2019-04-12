@@ -284,7 +284,7 @@ exports.login = {
             */
             client.set('token', token)
             var takeToken = client.get(token)
-
+            
             if (!takeToken > 0) {
                 return { "message": "Redis cache cannot get token " }
             }

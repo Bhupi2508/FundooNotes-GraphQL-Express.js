@@ -2,7 +2,7 @@
  *  Execution       : default node          : cmd> userLabels.js
  *                      
  * 
- *  Purpose         : store the information about notes
+ *  Purpose         : store the information about notes in labels
  * 
  *  @description    : create a labels APIs using graphql 
  * 

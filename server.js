@@ -16,14 +16,16 @@
 required files
 */
 const express = require('express')
-const cors = require('cors')
-const graphqlExpress = require('express-graphql')
-const userSchema = require('./graphql/types/index').userSchema;
-const mongoose = require('./config/mongoose')
-const db = mongoose();
 const app = express()
+const cors = require('cors')
+var redis = require('redis');
 const bodyParser = require('body-parser')
+const mongoose = require('./config/mongoose')
+const db = mongoose()
+const graphqlExpress = require('express-graphql')
 var expressValidator = require('express-validator')
+const userSchema = require('./graphql/types/index').userSchema;
+var client = redis.createClient();
 require('dotenv').config();
 
 /*
@@ -39,6 +41,17 @@ app.use('/graphql', cors(), graphqlExpress((req) => ({
     graphiql: true
 })))
 
+/*
+redis cache connections
+*/
+client.on('connect', function() {
+    console.log('Redis client connected');
+});
+
+client.on('error', function (err) {
+    console.log('Something went wrong ' + err);
+});
+
 var userPort = (process.env.port)
 app.use('*', cors());
 app.listen(userPort, () => {
@@ -46,6 +59,5 @@ app.listen(userPort, () => {
     console.log('##############          STARTING SERVER at port : ', userPort, '               ##############');
     console.log('#####################################################################################\n');
 });
-
 
 module.exports = app
