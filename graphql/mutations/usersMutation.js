@@ -102,6 +102,22 @@ exports.signup = {
                 generate a token and send a mail for token verification
                 */
                 var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 })
+
+                /*
+                 redis cache storage
+                */
+                client.set('token', token)
+                client.get('token', function (error, result) {
+
+                    if (error) {
+                        return { "message": "Redis cache cannot get result" }
+                    }
+                    console.log('Get result from redis ->' + result);
+                });
+
+                /*
+                url take token
+                */
                 var url = `${token}`
                 sendMail.sendEmailFunction(url, params.email)
                 return { "message": "Register successfull" }
@@ -279,15 +295,6 @@ exports.login = {
             */
             var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 })
 
-            /*
-            redis cache storage
-            */
-            client.set('token', token)
-            var takeToken = client.get(token)
-            
-            if (!takeToken > 0) {
-                return { "message": "Redis cache cannot get token " }
-            }
             /*
             find email that is present in database or not
             */

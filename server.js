@@ -41,23 +41,12 @@ app.use('/graphql', cors(), graphqlExpress((req) => ({
     graphiql: true
 })))
 
-/*
-redis cache connections
-*/
-client.on('connect', function() {
-    console.log('Redis client connected');
-});
-
-client.on('error', function (err) {
-    console.log('Something went wrong ' + err);
-});
-
 var userPort = (process.env.port)
 app.use('*', cors());
 app.listen(userPort, () => {
     console.log('#####################################################################################');
     console.log('##############          STARTING SERVER at port : ', userPort, '               ##############');
-    console.log('#####################################################################################\n');
+    console.log('#####################################################################################');
 });
 
 module.exports = app
