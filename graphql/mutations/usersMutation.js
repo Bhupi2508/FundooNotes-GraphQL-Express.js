@@ -95,6 +95,8 @@ exports.signup = {
             save in database
             */
             const uModel = usersMdl.save();
+            console.log("usersMdl",usersMdl)
+            console.log("uModel",uModel)
             if (!uModel) {
                 return { "message": "Register unsuccessfull" }
             } else {
@@ -306,6 +308,11 @@ exports.login = {
             if (user[0].verification === false) {
                 return { "message": "Email not verified" }
             }
+
+            /*
+            take id for current user from database
+            */
+            var id = user[0].id
             /*
             compare password that is present in database or not
             */
@@ -316,6 +323,7 @@ exports.login = {
             }
             return {
                 "token": token,
+                "id": id,
                 "message": "!Login....Successfully"
             }
 

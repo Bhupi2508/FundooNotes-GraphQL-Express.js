@@ -55,9 +55,12 @@ exports.authType = new GraphQLObjectType({
         return {
             token: {
                 type: new GraphQLNonNull(GraphQLID)
-            } ,
+            },
             message: {
                 type: GraphQLString
+            },
+            id: {
+                type: new GraphQLNonNull(GraphQLID)
             }
         }
     }

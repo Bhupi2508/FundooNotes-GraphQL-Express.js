@@ -31,7 +31,7 @@ var labelSchema = new mongooseSchema({
         'ref': schemaData
     },
 
-    label: {
+    labelName: {
         type: String
     }
 })
