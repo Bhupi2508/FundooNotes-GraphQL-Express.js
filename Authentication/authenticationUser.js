@@ -26,6 +26,6 @@ exports.verification = (token) => {
         return value
     }
     catch (err) {
-        console.log("found error in generating token")
+        console.log("found error in verify token")
     }
 }

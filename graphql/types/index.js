@@ -19,12 +19,24 @@ var GraphQLSchema = require('graphql').GraphQLSchema;
 var GraphQLObjectType = require('graphql').GraphQLObjectType;
 var queryType = require('../queries/users').queryType
 var mutation = require('../mutations/mutation');
+var labelQueryType = require('../queries/labelQuries').labelQuery
 
 /*
 Create a mutation for schema
 */
 exports.userSchema = new GraphQLSchema({
     query : queryType,
+    mutation : new GraphQLObjectType({
+        name : 'Mutation',
+        fields : mutation
+    })
+})
+
+/*
+Create a mutation for schema
+*/
+exports.labelSchema = new GraphQLSchema({
+    query : labelQueryType,
     mutation : new GraphQLObjectType({
         name : 'Mutation',
         fields : mutation

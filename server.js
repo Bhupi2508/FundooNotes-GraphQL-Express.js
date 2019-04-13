@@ -25,6 +25,7 @@ const db = mongoose()
 const graphqlExpress = require('express-graphql')
 var expressValidator = require('express-validator')
 const userSchema = require('./graphql/types/index').userSchema;
+const labelSchema = require('./graphql/types/index').labelSchema;
 var client = redis.createClient();
 require('dotenv').config();
 
@@ -36,6 +37,7 @@ app.use(expressValidator());
 
 app.use('/graphql', cors(), graphqlExpress((req) => ({
     schema: userSchema,
+    schema: labelSchema,
     rootValue: global,
     context: { token: req.headers.authorization },
     graphiql: true

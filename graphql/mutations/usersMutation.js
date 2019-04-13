@@ -95,8 +95,6 @@ exports.signup = {
             save in database
             */
             const uModel = usersMdl.save();
-            console.log("usersMdl",usersMdl)
-            console.log("uModel",uModel)
             if (!uModel) {
                 return { "message": "Register unsuccessfull" }
             } else {
@@ -114,7 +112,7 @@ exports.signup = {
                     if (error) {
                         return { "message": "Redis cache cannot get result" }
                     }
-                    console.log('Get result from redis ->' + result);
+                    console.log('Get result from redis -> ' + result);
                 });
 
                 /*
@@ -293,21 +291,20 @@ exports.login = {
             }
 
             /*
-            generate a token with expire time and provide a secret key
-            */
-            var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 })
-
-            /*
             find email that is present in database or not
             */
             user = await userModel.find({ "email": params.email })
             if (!user.length > 0) {
                 return { "message": "email is not present" }
             }
-
             if (user[0].verification === false) {
                 return { "message": "Email not verified" }
             }
+
+            /*
+            generate a token with expire time and provide a secret key
+            */
+            var token = jsonwebtoken.sign({ email: params.email, userID: user[0].id }, process.env.secretKey, { expiresIn: 86400000 })
 
             /*
             take id for current user from database

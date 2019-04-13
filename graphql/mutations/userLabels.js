@@ -15,10 +15,10 @@
 /*
 required files
 */
-var GraphQLNonNull = require('graphql').GraphQLNonNull;
-var GraphQLString = require('graphql').GraphQLString;
-var authUser = require('../types/users').authType
-var userModel = require('../../model/schema')
+const { GraphQLString, GraphQLID } = require('graphql');
+var authUser = require('../types/labelType').authType
+var labelModel = require('../../model/labelSchema')
+var tokenVerify = require('../../Authentication/authenticationUser')
 
 exports.createLabel = {
     type: authUser,
@@ -28,21 +28,33 @@ exports.createLabel = {
         }
     },
 
-    async resolve(root, params) {
+    async resolve(root, params, context) {
         try {
 
             /*
              Name validation
             */
-            if (params.labelName.length < 3) {
-                return { "message": "Enter name more than 3 letters " }
+            if (params.labelName.length < 4) {
+                return { "message": "Enter name min 4 letter " }
             }
 
             /*
+            for token verification
+            */
+            var payload = tokenVerify.verification(context.token)
+            var labelfind = await labelModel.find({ labelName: params.labelName })
+
+            /*
+            check the label name already present or not
+            */
+            if (labelfind.length > 0) {
+                return { "message": "labelName already present" }
+            }
+            /*
             find id from users models
             */
-            const labelModel = new userModel(params)
-            const label = labelModel.save()
+            const model = new labelModel({ labelName: params.labelName, userID: payload.userID })
+            const label = model.save()
             if (!label) {
                 return { "message": "label is not created" }
             } else {

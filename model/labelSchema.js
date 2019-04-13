@@ -1,6 +1,3 @@
-import { request } from "http";
-import { Type } from "protobufjs";
-
 /******************************************************************************
  *  Execution       : default node          : cmd> labelSchema.js
  *                      
@@ -20,21 +17,23 @@ required files
 */
 var mongoose = require('mongoose');
 
-var mongooseSchema = mongoose.Schema;
+var mongoSchema = mongoose.Schema;
 
 /*
 create schema for labels
 */
-var labelSchema = new mongooseSchema({
+var labelSchema = new mongoSchema({
     userID: {
-        type: object.Type.Objectid,
-        'ref': schemaData
+        type: mongoSchema.Types.ObjectId,
+        ref: 'schemaData'
     },
-
     labelName: {
         type: String
     }
-})
+},
+    {
+        timestamps: true
+    })
 
-var user = mongoose.model('label', labelSchema);
-module.exports = user
+var userLabel = mongoose.model('label', labelSchema);
+module.exports = userLabel
