@@ -23,6 +23,7 @@ var forgotPasswordUser = require('./usersMutation').forgotPassword;
 var resetPasswordUser = require('./usersMutation').resetPassword
 var emailVerify = require('../mutations/usersMutation').emailVerify
 var createLabel = require('../mutations/userLabels').createLabel
+var editLabel = require('../mutations/userLabels').editLabel
 
 module.exports = {
   signupUser,
@@ -32,5 +33,6 @@ module.exports = {
   forgotPasswordUser,
   resetPasswordUser,
   emailVerify,
-  createLabel
+  createLabel,
+  editLabel
 }

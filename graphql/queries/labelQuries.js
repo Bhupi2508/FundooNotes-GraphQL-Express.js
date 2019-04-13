@@ -1,8 +1,8 @@
 /******************************************************************************
- *  Execution       : default node          : cmd> users.js
+ *  Execution       : default node          : cmd> labelQuries.js
  *                      
  * 
- *  Purpose         : Generate a queries for type user
+ *  Purpose         : Generate a queries for type labeluser
  * 
  *  @description    : GraphQL query for specific fields on object and result will come exactly 
  *                    the same shape as request.
@@ -10,7 +10,7 @@
  *  @overview       : fundoo application 
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
  *  @version        : 1.0
- *  @since          : 02-april-2019
+ *  @since          : 13-april-2019
  *
  ******************************************************************************/
 /*

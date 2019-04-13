@@ -18,7 +18,6 @@ required files
 const express = require('express')
 const app = express()
 const cors = require('cors')
-var redis = require('redis');
 const bodyParser = require('body-parser')
 const mongoose = require('./config/mongoose')
 const db = mongoose()
@@ -26,7 +25,6 @@ const graphqlExpress = require('express-graphql')
 var expressValidator = require('express-validator')
 const userSchema = require('./graphql/types/index').userSchema;
 const labelSchema = require('./graphql/types/index').labelSchema;
-var client = redis.createClient();
 require('dotenv').config();
 
 /*

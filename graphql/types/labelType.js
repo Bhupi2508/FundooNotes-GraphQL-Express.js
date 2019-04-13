@@ -1,16 +1,16 @@
 /******************************************************************************
- *  Execution       : default node          : cmd> users.js
+ *  Execution       : default node          : cmd> labelType.js
  *                      
  * 
- *  Purpose         : Generate a schema
+ *  Purpose         : create a type for query purpose 
  * 
- *  @description    : design GraphQL user schema to specify the types for API using 
+ *  @description    : Design GraphQL label schema to specify the types for API using 
  *                    GraphQL schema language
  * 
  *  @overview       : fundoo application 
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
  *  @version        : 1.0
- *  @since          : 02-april-2019
+ *  @since          : 13-april-2019
  *
  ******************************************************************************/
 /*
@@ -20,7 +20,7 @@ const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull } = require(
 
 
 /*
-define a another schema for return Message and token
+define a another schema for return Message, token and id
 */
 exports.authType = new GraphQLObjectType({
     name: 'labelAuth',
