@@ -1,8 +1,8 @@
 /******************************************************************************
- *  Execution       : default node          : cmd> nodemon authenticationUser.js
+ *  @Execution      : default node          : cmd> nodemon authenticationUser.js
  *                      
  * 
- *  Purpose         : verify the token 
+ *  @Purpose        : verify the token 
  * 
  *  @description    : verify token for resetPassword
  * 
@@ -12,16 +12,22 @@
  *  @since          : 02-april-2019
  *
  ******************************************************************************/
-/*
-required files
-*/
-
+/**
+ * @imports 
+ */
 var jwt = require('jsonwebtoken');
+
+/**
+ * @exports verification
+ */
 exports.verification = (token) => {
     try {
-        /*
-        verify the token and then send response to sendMail
-        */
+
+        /**
+         * @param {String}, secretKey is string used for hidden data
+         * @return {String}, value of verify token
+         * @param {String}, secretKey
+         */
         var value = jwt.verify(token, process.env.secretKey)
         return value
     }

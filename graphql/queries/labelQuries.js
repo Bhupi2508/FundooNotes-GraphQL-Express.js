@@ -13,29 +13,52 @@
  *  @since          : 13-april-2019
  *
  ******************************************************************************/
-/*
-required files
-*/
+/**
+ * @import files
+ */
 var GraphQLObjectType = require('graphql').GraphQLObjectType;
 var GraphQLList = require('graphql').GraphQLList;
-var userType = require('../types/labelType').authType
-var userModel = require('../../model/labelSchema')
+var authType = require('../types/labelType').authType
+var userType = require('../types/users').userType
+var labelModel = require('../../model/labelSchema')
+var userModel = require('../../model/schema')
 
-/*
-queries for user
-*/
+
+/**
+ * @exports labelQuery
+ * @returns {labelUsers}, for users label
+ * @function resolvers
+ * @returns {users1}
+ */
 exports.labelQuery = new GraphQLObjectType({
-    name: 'Query',
+    name: 'data',
     fields: function () {
         return {
+            labelUsers: {
+                type: new GraphQLList(authType),
+                resolve: function () {
+                    const users1 = labelModel.find().exec()
+                    if (!users1) {
+                        throw new Error('Error')
+                    }
+                    return users1
+                }
+            },
+
+
+            /**
+             * @returns {users}, for users function
+             * @function resolvers
+             * @returns {users2}
+             */
             users: {
                 type: new GraphQLList(userType),
                 resolve: function () {
-                    const users = userModel.find().exec()
-                    if (!users) {
+                    const users2 = userModel.find().exec()
+                    if (!users2) {
                         throw new Error('Error')
                     }
-                    return users
+                    return users2
                 }
             }
         }

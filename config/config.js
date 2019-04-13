@@ -1,8 +1,8 @@
 /******************************************************************************
- *  Execution       : default node          : cmd> nodemon dbConfig.js
+ *  @Execution      : default node          : cmd> nodemon dbConfig.js
  *                      
  * 
- *  Purpose         : save data in mongoDB in graphql collection
+ *  @Purpose        : save data in mongoDB in graphql collection
  * 
  *  @description    : Connected with mongoDB database
  * 
@@ -12,7 +12,9 @@
  *  @since          : 02-april-2019
  *
  ******************************************************************************/
-
+/**
+ * @exports
+ */
 module.exports = {
     db: 'mongodb://127.0.0.1/graphql',
 }

@@ -27,10 +27,7 @@ const userSchema = require('./graphql/types/index').userSchema;
 const labelSchema = require('./graphql/types/index').labelSchema;
 require('dotenv').config();
 
-/*
- bodyparser parse the req
-*/
-app.use(bodyParser.json())
+app.use(bodyParser.json())  //bodyparser parse the req
 app.use(expressValidator());
 
 app.use('/graphql', cors(), graphqlExpress((req) => ({

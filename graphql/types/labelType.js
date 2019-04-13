@@ -13,20 +13,29 @@
  *  @since          : 13-april-2019
  *
  ******************************************************************************/
-/*
-required files
-*/
+/**
+ * @import files
+ */
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull } = require('graphql')
 
 
-/*
-define a another schema for return Message, token and id
-*/
+
+/**
+ * @exports authType
+ * @field function{}
+ * @returns {token}
+ */
 exports.authType = new GraphQLObjectType({
     name: 'labelAuth',
     description: 'GraphQL',
     fields: function () {
         return {
+
+            /**
+             * @param {token} token
+             * @param {String} message
+             * @param {number} id
+             */
             token: {
                 type: new GraphQLNonNull(GraphQLID)
             },

@@ -12,33 +12,37 @@
  *  @since          : 02-april-2019
  *
  ******************************************************************************/
-/*
-required files
-*/
+/**
+ * @import files
+ */
 var GraphQLSchema = require('graphql').GraphQLSchema;
 var GraphQLObjectType = require('graphql').GraphQLObjectType;
-var queryType = require('../queries/users').queryType
+var queryType = require('../queries/labelQuries')
 var mutation = require('../mutations/mutation');
 var labelQueryType = require('../queries/labelQuries').labelQuery
 
-/*
-Create a mutation for schema
-*/
+
+/**
+ * @exports userSchema
+ * @purpose : return query and mutation for users
+ */
 exports.userSchema = new GraphQLSchema({
-    query : queryType,
-    mutation : new GraphQLObjectType({
-        name : 'Mutation',
-        fields : mutation
+    query: queryType,
+    mutation: new GraphQLObjectType({
+        name: 'Mutation',
+        fields: mutation
     })
 })
 
-/*
-Create a mutation for schema
-*/
+
+/**
+ * @exports labelSchema
+ * @purpose : return query and mutation for Labelusers
+ */
 exports.labelSchema = new GraphQLSchema({
-    query : labelQueryType,
-    mutation : new GraphQLObjectType({
-        name : 'Mutation',
-        fields : mutation
+    query: labelQueryType,
+    mutation: new GraphQLObjectType({
+        name: 'Mutation',
+        fields: mutation
     })
 })

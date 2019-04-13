@@ -13,14 +13,16 @@
  *  @since          : 02-april-2019
  *
  ******************************************************************************/
-/*
-required files
+/** 
+ * @import files
 */
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull } = require('graphql')
 
-/*
-Design a schema for users
-*/
+
+/**
+ * @exports userType
+ * @purpose : users schema for given data
+ */
 exports.userType = new GraphQLObjectType({
     name: 'users',
     description: 'GraphQL',
@@ -45,9 +47,8 @@ exports.userType = new GraphQLObjectType({
     }
 });
 
-/*
-define a another schema for return Message and token
-*/
+
+//define a another schema for return Message and token
 exports.authType = new GraphQLObjectType({
     name: 'Auth',
     description: 'GraphQL',
@@ -62,6 +63,7 @@ exports.authType = new GraphQLObjectType({
             id: {
                 type: new GraphQLNonNull(GraphQLID)
             }
+
         }
     }
 });

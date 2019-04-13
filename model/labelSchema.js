@@ -19,9 +19,8 @@ var mongoose = require('mongoose');
 
 var mongoSchema = mongoose.Schema;
 
-/*
-create schema for labels
-*/
+
+//create schema for labels
 var labelSchema = new mongoSchema({
     userID: {
         type: mongoSchema.Types.ObjectId,
@@ -35,5 +34,6 @@ var labelSchema = new mongoSchema({
         timestamps: true
     })
 
+//connect database using mongoose
 var userLabel = mongoose.model('label', labelSchema);
 module.exports = userLabel

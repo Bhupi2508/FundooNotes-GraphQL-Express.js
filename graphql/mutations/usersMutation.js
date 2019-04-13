@@ -1,8 +1,8 @@
 /********************************************************************************************************************
- *  Execution       : default node          : cmd> userMutations.js
+ *  @Execution       : default node          : cmd> userMutations.js
  *                      
  * 
- *  Purpose         : perform operations by using users
+ *  @Purpose         : perform operations by using users
  * 
  *  @description    : By mutation create a new files
  * 
@@ -12,9 +12,9 @@
  *  @since          : 02-april-2019
  *
  *******************************************************************************************************************/
-/*
-required files
-*/
+/**
+ * @imports file
+ */
 var GraphQLNonNull = require('graphql').GraphQLNonNull;
 var GraphQLString = require('graphql').GraphQLString;
 var typeUser = require('../types/users').userType
@@ -29,23 +29,22 @@ var client = redis.createClient()
 var saltRounds = 10;
 
 
-/********************************************************************************************************************
- *  Execution       : default node          : cmd> userMutations.js
- *                      
- * 
- *  Purpose         : for registration purpose
- * 
- *  @description    : create registration api by using graphql
- * 
- *  @overview       : fundoo application  
- *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
- *  @since          : 03-april-2019
- *
- *******************************************************************************************************************/
+/*******************************************************************************************************************/
+/**
+@description : register a APIs for register a new user using graphql
+@purpose : For register a new data by using CURD operation
+@exports{function} signup
+*/
 exports.signup = {
     type: authUser,
     args: {
+
+        /**
+         * @param {String} firstname 
+         * @param {String} lastname
+         * @param {String} email
+         * @param {String} password
+         */
         firstname: {
             type: new GraphQLNonNull(GraphQLString),
         },
@@ -59,53 +58,52 @@ exports.signup = {
             type: new GraphQLNonNull(GraphQLString),
         }
     },
+
+    /**
+     * @param {*} params
+     */
     async resolve(root, params) {
         try {
-            /*
-            for email validation
-            */
+
+            //for email validation
             var emailformat = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
 
             if (!emailformat.test(params.email)) {
                 return { "message": "not valid email", }
             }
 
-            /*
-            password validation
-            */
+            /**
+             * @param {number}, password validation 
+             */
             if (params.password.length < 8) {
                 return { "message": "Enter pasword more than 8 letters " }
             }
 
-            /*
-            for email id cheking
-            */
+            //for email id cheking
             verify = await userModel.find({ "email": params.email })
             if (verify.length > 0) {
                 return { "message": "email already exists" }
             }
 
-            /*
-            for bcrypt password
-           */
+            //for bcrypt password
             params.password = await bcrypt.hashSync(params.password, saltRounds)
             const usersMdl = new userModel(params)
 
-            /*
-            save in database
-            */
+            //save in database
             const uModel = usersMdl.save();
             if (!uModel) {
                 return { "message": "Register unsuccessfull" }
             } else {
-                /*
-                generate a token and send a mail for token verification
-                */
+
+                /**
+                 * @param {token}, a token and send for verification
+                 */
                 var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 })
 
-                /*
-                 redis cache storage
-                */
+                /**
+                 * @purpose : redis cache, save data in ram
+                 * @returns {String} message
+                 */
                 client.set('token', token)
                 client.get('token', function (error, result) {
 
@@ -115,9 +113,10 @@ exports.signup = {
                     console.log('Get result from redis -> ' + result);
                 });
 
-                /*
-                url take token
-                */
+                /**
+                 * @param {token}, send token for verification to the mail
+                 * @returns {String} message
+                 */
                 var url = `${token}`
                 sendMail.sendEmailFunction(url, params.email)
                 return { "message": "Register successfull" }
@@ -129,39 +128,34 @@ exports.signup = {
 }
 
 
-/********************************************************************************************************************
- *  Execution       : default node          : cmd> userMutations.js
- *                      
- * 
- *  Purpose         : for email verification purpose
- * 
- *  @description    : create email verification api by using graphql
- * 
- *  @overview       : fundoo application  
- *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
- *  @since          : 03-april-2019
- *
- *******************************************************************************************************************/
+/*******************************************************************************************************************/
+/**
+@description : emailverification APIs for verify a eamil that is valid or not using graphql
+@purpose : For regisemailverification by using CURD operation
+@exports emailVerify
+*/
 exports.emailVerify = {
     type: authUser,
     async resolve(root, params, context) {
         try {
 
-            /*
-            token verification
-            */
+            /**
+             * @param {token}, send token for verify
+             * @returns {String} message, token verification
+             */
             var afterVerify = tokenVerify.verification(context.token)
             if (!afterVerify > 0) {
                 return { "message": "token is not verify" }
             }
-            /*
-            update new email after verification
-            */
+
+            /**
+             * @param {String} email
+             * @returns {String} message
+             * @param {$set}, for verification
+             */
             var update = await userModel.updateOne({ "email": afterVerify.email },
                 { $set: { verification: true } },
                 { new: true })
-
             if (!update) {
                 return { "message": "verification unsuccessfull" }
             }
@@ -174,23 +168,20 @@ exports.emailVerify = {
     }
 }
 
-/********************************************************************************************************************
- *  Execution       : default node          : cmd> userMutations.js
- *                      
- * 
- *  Purpose         : for update purpose
- * 
- *  @description    : update data from database api by using graphql
- * 
- *  @overview       : fundoo application  
- *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
- *  @since          : 03-april-2019
- *
- *******************************************************************************************************************/
+/*******************************************************************************************************************/
+/**
+@description : update APIs for updateUser data using graphql
+@purpose : For updation by using CURD operation
+@exports update
+*/
 exports.update = {
     type: typeUser,
     args: {
+
+        /**
+         * @param {number} id 
+         * @param {String} firstname
+         */
         id: {
             type: new GraphQLNonNull(GraphQLString)
         },
@@ -198,9 +189,14 @@ exports.update = {
             type: new GraphQLNonNull(GraphQLString),
         }
     },
-    /*
-    passed argument in resolve
-    */
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} params 
+     * @param {$set}, set given name in database
+     * @returns {String} function{}
+     */
     async resolve(root, params) {
         try {
             return await userModel.findByIdAndUpdate(
@@ -215,30 +211,29 @@ exports.update = {
     }
 }
 
-/********************************************************************************************************************
- *  Execution       : default node          : cmd> userMutations.js
- *                      
- * 
- *  Purpose         : for remove purpose
- * 
- *  @description    : remove data from database api by using graphql
- * 
- *  @overview       : fundoo application 
- *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
- *  @since          : 03-april-2019
- *
- *******************************************************************************************************************/
+/*******************************************************************************************************************/
+/**
+@description : REMOVE APIs for remove data from database using graphql
+@purpose : For deletion by using CURD operation
+@exports remove
+*/
 exports.remove = {
     type: typeUser,
     args: {
+
+        /**
+         * @param {number} id
+         */
         id: {
             type: new GraphQLNonNull(GraphQLString)
         }
     },
-    /*
-    params means arguments which we provided
-    */
+
+    /**
+     * @param {*} root 
+     * @param {*} params
+     * @returns {number} remove user id 
+     */
     async resolve(root, params) {
         try {
             const removeduser = await userModel.findByIdAndRemove(params.id).exec();
@@ -252,23 +247,20 @@ exports.remove = {
     }
 }
 
-/********************************************************************************************************************
- *  Execution       : default node          : cmd> userMutations.js
- *                      
- * 
- *  Purpose         : for login purpose
- * 
- *  @description    : login api by using graphql
- * 
- *  @overview       : fundoo application 
- *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
- *  @since          : 03-april-2019
- *
- *******************************************************************************************************************/
+/*******************************************************************************************************************/
+/**
+@description : Login APIs for login user using graphql
+@purpose : For login new user by using CURD operation
+@exports remove
+*/
 exports.login = {
     type: authUser,
     args: {
+
+        /**
+         * @param {String} email
+         * @param {String} password
+         */
         email: {
             type: new GraphQLNonNull(GraphQLString),
             required: true
@@ -279,20 +271,23 @@ exports.login = {
         }
     },
 
+    /**
+     * 
+     * @param {*} root 
+     * @param {*} params 
+     */
     async resolve(root, params) {
         try {
             var emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-            /*
-            email validations
-            */
+            /**
+             * @return {String} message
+             */
             if (!emailformat.test(params.email)) {
                 return { "message": "not valid email" }
             }
 
-            /*
-            find email that is present in database or not
-            */
+            //find email that is present in database or not
             user = await userModel.find({ "email": params.email })
             if (!user.length > 0) {
                 return { "message": "email is not present" }
@@ -301,23 +296,26 @@ exports.login = {
                 return { "message": "Email not verified" }
             }
 
-            /*
-            generate a token with expire time and provide a secret key
-            */
+            /**
+             * @param {token}, generate a token with expire time and provide a secret key
+             */
             var token = jsonwebtoken.sign({ email: params.email, userID: user[0].id }, process.env.secretKey, { expiresIn: 86400000 })
 
-            /*
-            take id for current user from database
-            */
+            //take id for current user from database
             var id = user[0].id
-            /*
-            compare password that is present in database or not
-            */
+
+            //compare password that is present in database or not
             const valid = await bcrypt.compare(params.password, user[0].password)
 
             if (!valid) {
                 return { "message": "unauthonticate password" }
             }
+
+            /**
+             * @return {token}
+             * @return {number} id
+             * @return {String} message
+             */
             return {
                 "token": token,
                 "id": id,
@@ -331,60 +329,64 @@ exports.login = {
 }
 
 
-/********************************************************************************************************************
- *  Execution       : default node          : cmd> userMutations.js
- *                      
- * 
- *  Purpose         : for forgotPassword purpose
- * 
- *  @description    : forgotPassword api by using graphql
- * 
- *  @overview       : fundoo application 
- *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
- *  @since          : 04-april-2019
- *
- *******************************************************************************************************************/
+/*******************************************************************************************************************/
+/**
+@description : forgotPassword APIs for updatePassword user using graphql
+@purpose : For deletion by using CURD operation
+@exports remove
+*/
 exports.forgotPassword = {
     type: authUser,
     args: {
+
+        /**
+         * @param {String} email
+         */
         email: {
             type: new GraphQLNonNull(GraphQLString),
             required: true
         }
     },
 
+    /**
+     * 
+     * @param {*} root 
+     * @param {*} params 
+     */
     async resolve(root, params) {
         try {
             var emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-            /*
-            email validations
-            */
+            /**
+             * @purpose : check that email is valid or not
+             * @return {String} message
+             */
             if (!emailformat.test(params.email)) {
                 return { "message": "not valid email" }
             }
 
-            /*
-            find email that is present in database or not
-            */
+            /**
+             * @purpose : find email that is present in database or not
+             * @return {String} message
+             */
             user = await userModel.find({ "email": params.email })
             if (!user.length > 0) {
                 return { "message": "email is not present in database" }
             }
 
-            /*
-            generate a token for send a mail
-            */
+            /**
+             * @purpose : generate a token for send a mail
+             */
             var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 });
 
-            /*
-            send token to sendmail function, which is send to the link(token)
-            */
+            //send token to sendmail function, which is send to the link(token)
             var url = `http://localhost:4000/#!/resetPassword/${token}`
 
+            /**
+             * @param {token}, for sending mail to the mail
+             * @returns {String} message
+             */
             var mail = sendMail.sendEmailFunction(url)
-
             if (!mail > 0) {
                 return { "mesage": "!Error, mail not send " }
             }
@@ -398,22 +400,20 @@ exports.forgotPassword = {
 }
 
 
-/********************************************************************************************************************
- *  Execution       : default node          : cmd> userMutations.js
- *                      
- * 
- *  Purpose         : for resetPassowrd purpose
- * 
- *  @description    : resetPassword from database api by using graphql
- * 
- *  @overview       : fundoo application 
- *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
- *  @since          : 04-april-2019
- *******************************************************************************************************************/
+/*******************************************************************************************************************/
+/**
+@description : resetPassword APIs for resetPassword user using graphql
+@purpose : For resetPassword by using CURD operation
+@exports resetPassword
+*/
 exports.resetPassword = {
     type: authUser,
     args: {
+
+        /**
+         * @param {String} newPassword
+         * @param {String} confirmPassword
+         */
         newPassword: {
             type: new GraphQLNonNull(GraphQLString),
             required: true
@@ -424,27 +424,38 @@ exports.resetPassword = {
         }
     },
 
+    /**
+     * 
+     * @param {*} root 
+     * @param {*} params 
+     * @param {*} context 
+     */
     async resolve(root, params, context) {
         try {
 
+            /**
+             * @purpose : for token verification
+             * @returns {String} message
+             */
             var afterVerify = tokenVerify.verification(context.token)
             if (!afterVerify > 0) {
                 return { "message": "token is not verify" }
             }
-            /*
-            password matching
-            */
 
+            //password matching
             if (params.newPassword != params.confirmPassword) {
                 return { "message": "password and confirm password are not match" }
             }
-            /*
-               bcrypt new password
-               */
+
+            //bcrypt new password
             params.newPassword = await bcrypt.hashSync(params.newPassword, saltRounds)
-            /*
-            update new password
-            */
+
+            /**
+             * @purpose : for updated password
+             * @param {String}, message
+             * @param {$set}, new passowrd in database
+             * @returns {String} message
+             */
             var update = await userModel.updateOne({ "email": afterVerify.email },
                 { $set: { password: params.newPassword } },
                 { new: true })

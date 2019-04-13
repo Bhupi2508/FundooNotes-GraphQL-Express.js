@@ -16,14 +16,12 @@
 required files
 */
 var mongoose = require('mongoose')
-/*
-create instance of Schema
-*/
+
+//create instance of Schema
 var mongoSchema = mongoose.Schema;
 
-/*
-create schema for Database
-*/
+
+//create schema for Database
 var schemaData = new mongoSchema({
     firstname: {
         type: String,
@@ -50,8 +48,7 @@ var schemaData = new mongoSchema({
         timestamps: true
     })
 
-/*
-connect database using mongoose
-*/
+
+//connect database using mongoose
 var user = mongoose.model('user', schemaData);
 module.exports = user

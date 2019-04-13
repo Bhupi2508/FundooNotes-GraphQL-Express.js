@@ -1,8 +1,8 @@
 /********************************************************************************************************************
- *  Execution       : default node          : cmd> userLabels.js
+ *  @Execution      : default node          : cmd> userLabels.js
  *                      
  * 
- *  Purpose         : perform operations by using userLabels
+ *  @Purpose        : perform operations by using userLabels
  * 
  *  @description    : create a labels APIs using graphql 
  * 
@@ -12,8 +12,8 @@
  *  @since          : 11-april-2019
  *
  *******************************************************************************************************************/
-/*
-required files
+/**
+@imports files 
 */
 const { GraphQLString, GraphQLID } = require('graphql');
 var authUser = require('../types/labelType').authType
@@ -21,58 +21,63 @@ var labelModel = require('../../model/labelSchema')
 var tokenVerify = require('../../Authentication/authenticationUser')
 
 
-/********************************************************************************************************************
- *  Execution       : default node          : cmd> userLabels.js
- *                      
- * 
- *  Purpose         : create a new label
- * 
- *  @description    : create a labels APIs using graphql 
- * 
- *  @overview       : fundoo application 
- *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
- *  @since          : 13-april-2019
- *
- *******************************************************************************************************************/
+/*******************************************************************************************************************/
+/**
+@description : create a APIs for add lebel for using graphql
+@purpose : For fetch data by using CURD operation 
+@exports createLabel
+*/
 exports.createLabel = {
     type: authUser,
     args: {
+
+        /**
+         * @param {String} labelName
+         */
         labelName: {
             type: GraphQLString
         }
     },
 
+    /**
+    @param {token}, context have token from headers
+    @param {String}, labelName 
+    @param {params} params
+    */
     async resolve(root, params, context) {
         try {
 
-            /*
-             Name validation
-            */
+            /**
+             * @param {number} Name validation 
+             */
             if (params.labelName.length < 4) {
                 return { "message": "Enter name min 4 letter " }
             }
 
-            /*
-            for token verification
-            */
+            /**
+             * @payload send token for verification
+             * @condition if present or not
+             */
             var payload = tokenVerify.verification(context.token)
             if (!payload) {
                 return { "message": "token is not verify" }
             }
             var labelfind = await labelModel.find({ labelName: params.labelName })
 
-            /*
-            check the label name already present or not
+            /**
+            @param {number} label.length, check the label name already present or not
             */
             if (labelfind.length > 0) {
                 return { "message": "labelName already present" }
             }
-            /*
-            find id from users models
-            */
+
+            //find id from users models
             const model = new labelModel({ labelName: params.labelName, userID: payload.userID })
             const label = model.save()
+
+            /**
+             * @return {String}, message
+             */
             if (!label) {
                 return { "message": "label is not created" }
             } else {
@@ -84,23 +89,20 @@ exports.createLabel = {
     }
 }
 
-/********************************************************************************************************************
- *  Execution       : default node          : cmd> userLabels.js
- *                      
- * 
- *  Purpose         : edit label which is already present in database
- * 
- *  @description    : updated a label APIs using graphql 
- * 
- *  @overview       : fundoo application 
- *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
- *  @since          : 13-april-2019
- *
- *******************************************************************************************************************/
+/*******************************************************************************************************************/
+/**
+@description : update a APIs for edit lebel for using graphql
+@purpose : For fetch data by using CURD operation
+@exports editLabel
+*/
 exports.editLabel = {
     type: authUser,
     args: {
+
+        /**
+         * @param {number} labelID
+         * @param {String} editlabelName
+         */
         labelID: {
             type: GraphQLID
         },
@@ -109,11 +111,15 @@ exports.editLabel = {
         }
     },
 
+    /**
+     * @param {token}
+     * @purpose : update name from database
+     * @param {params} params
+     */
     async resolve(root, params, context) {
         try {
-            /*
-            find id from users models
-            */
+
+            //find id from users models
             var model = await labelModel.findOneAndUpdate({ _id: params.labelID },
                 {
                     $set: {
@@ -135,17 +141,4 @@ exports.editLabel = {
 }
 
 
-/********************************************************************************************************************
- *  Execution       : default node          : cmd> userLabels.js
- *                      
- * 
- *  Purpose         : remove label which is already present in database
- * 
- *  @description    : remove a label APIs using graphql 
- * 
- *  @overview       : fundoo application 
- *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
- *  @version        : 1.0
- *  @since          : 13-april-2019
- *
- *******************************************************************************************************************/
+/*******************************************************************************************************************/
