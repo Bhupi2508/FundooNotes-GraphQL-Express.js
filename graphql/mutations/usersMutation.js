@@ -110,7 +110,7 @@ exports.signup = {
                     if (error) {
                         return { "message": "Redis cache cannot get result" }
                     }
-                    console.log('Get result from redis -> ' + result);
+                    // console.log('Get result from redis -> ' + result);
                 });
 
                 /**

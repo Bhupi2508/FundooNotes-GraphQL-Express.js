@@ -78,7 +78,7 @@ describe('GraphQL API', () => {
             .post('/graphql')
 
             //write your data for checking by giving mutation
-            .send({ query: 'mutation { signupUser (firstname:"akash" lastname:"sharma" email:"ajsrs1@gmail.com" password:"akash1") {message}}' })
+            .send({ query: 'mutation { signupUser (firstname:"akash" lastname:"sharma" email:"afsssrs1@gmail.com" password:"akasfdrgh1") {message}}' })
             .expect(200)
             .end((err, res) => {
 
@@ -183,4 +183,70 @@ describe('GraphQL API', () => {
 
             });
     });
+
+    /****************************************************************************************************************/
+    /**
+    * @purpose : Testing for users APIs
+    * @property {request} request has do request for server
+    * @property {post} post has post the function to the given path
+    * @property {send} send has send the parameter to the mutation
+    * @property {expect} expect has pass the ok means all are fine
+    * @returns {error} error
+    */
+
+    it('addLabel APIs', done => {
+        request(server)
+            .post('/graphql ')
+
+            //write your data for checking by giving mutation
+            .send({ query: 'mutation {createLabel(labelName:"abcdefg"){message}}' })
+            .expect(200)
+            .end((err, res) => {
+
+
+                //if any error the return error
+                if (err) {
+                    return done(err);
+                }
+
+                //otherwise return success
+                expect(JSON.parse(res.text).data.createLabel.message).to.deep.equal("token is not verify")
+                done();
+
+            });
+    });
+
+
+    /****************************************************************************************************************/
+    /**
+    * @purpose : Testing for users APIs
+    * @property {request} request has do request for server
+    * @property {post} post has post the function to the given path
+    * @property {send} send has send the parameter to the mutation
+    * @property {expect} expect has pass the ok means all are fine
+    * @returns {error} error
+    */
+
+    it('editLabel APIs', done => {
+        request(server)
+            .post('/graphql ')
+
+            //write your data for checking by giving mutation
+            .send({ query: 'mutation {editLabel(editlabelName:"abcdefg"){message}}' })
+            .expect(200)
+            .end((err, res) => {
+
+
+                //if any error the return error
+                if (err) {
+                    return done(err);
+                }
+
+                //otherwise return success
+                expect(JSON.parse(res.text).data.editLabel.message).to.deep.equal("label is not updated")
+                done();
+
+            });
+    });
 });
+
