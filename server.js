@@ -34,7 +34,7 @@ app.use('/graphql', cors(), graphqlExpress((req) => ({
     schema: userSchema,
     schema: labelSchema,
     rootValue: global,
-    context: { token: req.headers.authorization },
+    context: req.query,
     graphiql: true
 })))
 

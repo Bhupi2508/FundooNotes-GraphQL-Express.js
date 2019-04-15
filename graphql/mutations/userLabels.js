@@ -119,6 +119,15 @@ exports.editLabel = {
     async resolve(root, params, context) {
         try {
 
+            /**
+             * @payload send token for verification
+             * @condition if present or not
+             */
+            var payload = tokenVerify.verification(context.token)
+            if (!payload) {
+                return { "message": "token is not verify" }
+            }
+
             //find id from users models
             var model = await labelModel.findOneAndUpdate({ _id: params.labelID },
                 {
