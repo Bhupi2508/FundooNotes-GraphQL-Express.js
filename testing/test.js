@@ -27,45 +27,6 @@ describe('GraphQL API', () => {
 
     /***************************************************************************************************************/
     /**
-     * @purpose : Testing for users APIs
-     * @property {request} request has do request for server
-     * @property {post} post has post the function to the given path
-     * @property {send} send has send the parameter to the mutation
-     * @property {expect} expect has pass the ok means all are fine
-     * @returns {error} error
-     */
-    it('Mocha Demo', done => {
-        request(server)
-            .post('/graphql')
-            /*
-            write your data for checking by giving query
-            */
-            .send({ query: '{ users { id firstname lastname }}' })
-            .expect(200)
-            .end((err, res) => {
-                /*
-                if any error the return error
-                */
-                if (err) {
-                    return done(err);
-                }
-                /*
-                otherwise return success data
-                */
-                expect(JSON.parse(res.text).data.users[0]).to.deep.equal(
-                    {
-                        "id": "5cadfb863f13e9542c96324a",
-                        "firstname": "aaaa",
-                        "lastname": "bcccc",
-                    }
-                )
-                done();
-            });
-    });
-
-
-    /***************************************************************************************************************/
-    /**
     * @purpose : Testing for users APIs
     * @property {request} request has do request for server
     * @property {post} post has post the function to the given path
@@ -78,7 +39,7 @@ describe('GraphQL API', () => {
             .post('/graphql')
 
             //write your data for checking by giving mutation
-            .send({ query: 'mutation { signupUser (firstname:"akash" lastname:"sharma" email:"afsssrs1@gmail.com" password:"akasfdrgh1") {message}}' })
+            .send({ query: 'mutation { signupUser (firstname:"akash" lastname:"sharma" email:"safrss1@gmail.com" password:"akasfdrgh1") {message}}' })
             .expect(200)
             .end((err, res) => {
 
@@ -243,10 +204,43 @@ describe('GraphQL API', () => {
                 }
 
                 //otherwise return success
-                expect(JSON.parse(res.text).data.editLabel.message).to.deep.equal("label is not updated")
+                expect(JSON.parse(res.text).data.editLabel.message).to.deep.equal("token is not verify")
                 done();
 
             });
     });
+
+
+     /****************************************************************************************************************/
+    /**
+    * @purpose : Testing for users APIs
+    * @property {request} request has do request for server
+    * @property {post} post has post the function to the given path
+    * @property {send} send has send the parameter to the mutation
+    * @property {expect} expect has pass the ok means all are fine
+    * @returns {error} error
+    */
+
+   it('removeLabel APIs', done => {
+    request(server)
+        .post('/graphql ')
+
+        //write your data for checking by giving mutation
+        .send({ query: 'mutation {removeLabel(labelID:"5cb43d85ccbc282ef8213e42"){message}}' })
+        .expect(200)
+        .end((err, res) => {
+
+
+            //if any error the return error
+            if (err) {
+                return done(err);
+            }
+
+            //otherwise return success
+            expect(JSON.parse(res.text).data.removeLabel.message).to.deep.equal("token is not verify")
+            done();
+
+        });
+});
 });
 

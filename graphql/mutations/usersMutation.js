@@ -16,7 +16,7 @@
  * @requires files
  */
 var GraphQLNonNull = require('graphql').GraphQLNonNull;
-var GraphQLString = require('graphql').GraphQLString;
+const {GraphQLString, GraphQLID} = require('graphql')
 var typeUser = require('../types/users').userType
 var authUser = require('../types/users').authType
 var userModel = require('../../model/schema')
@@ -183,7 +183,7 @@ exports.update = {
          * @param {String} firstname
          */
         id: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: new GraphQLNonNull(GraphQLID)
         },
         firstname: {
             type: new GraphQLNonNull(GraphQLString),
@@ -225,7 +225,7 @@ exports.remove = {
          * @param {number} id
          */
         id: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: new GraphQLNonNull(GraphQLID)
         }
     },
 

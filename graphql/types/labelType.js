@@ -26,7 +26,7 @@ const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull } = require(
  * @field function{}
  * @returns {Parameters}
  */
-exports.authType = new GraphQLObjectType({  //authType return some variable which print given response
+exports.labelauthType = new GraphQLObjectType({  //authType return some variable which print given response
     name: 'labelAuth',
     description: 'GraphQL',
     fields: function () {
@@ -35,6 +35,7 @@ exports.authType = new GraphQLObjectType({  //authType return some variable whic
              * @param {token} token
              * @param {String} message
              * @param {number} id
+             * @param {String} labelName
              */
             token: {
                 type: new GraphQLNonNull(GraphQLID)
@@ -44,7 +45,10 @@ exports.authType = new GraphQLObjectType({  //authType return some variable whic
             },
             id: {
                 type: new GraphQLNonNull(GraphQLID)
-            }
+            },
+            labelName: {
+                type: GraphQLString
+            },
         }
     }
 });

@@ -24,6 +24,7 @@ var resetPasswordUser = require('./usersMutation').resetPassword  //resetPasswor
 var emailVerify = require('../mutations/usersMutation').emailVerify  //emailVerify mutation
 var createLabel = require('../mutations/userLabels').createLabel  //createLabel mutation
 var editLabel = require('../mutations/userLabels').editLabel   //editLabel mutation
+var removeLabel = require('../mutations/userLabels').removeLabel   //removeLabel mutation
 
 /**
 @exports files
@@ -37,5 +38,6 @@ module.exports = {
   resetPasswordUser,
   emailVerify,
   createLabel,
-  editLabel
+  editLabel,
+  removeLabel
 }

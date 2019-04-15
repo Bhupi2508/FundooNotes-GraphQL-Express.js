@@ -16,7 +16,7 @@
  * @requires files
  */
 const { GraphQLString, GraphQLID } = require('graphql');
-var authUser = require('../types/labelType').authType
+var authUser = require('../types/labelType').labelauthType
 var labelModel = require('../../model/labelSchema')
 var tokenVerify = require('../../Authentication/authenticationUser')
 
@@ -136,6 +136,9 @@ exports.editLabel = {
                     }
                 })
 
+            /**
+             * @return {String} message
+             */
             if (!model) {
                 return { "message": "label is not updated" }
             } else {
@@ -151,3 +154,57 @@ exports.editLabel = {
 
 
 /*******************************************************************************************************************/
+/**
+@description : remove APIs for remove label for using graphql
+@purpose : For fetch data by using CURD operation
+@exports removeLabel
+*/
+exports.removeLabel = {
+    type: authUser,
+    args: {
+
+        /**
+         * @param {number} labelID
+         */
+        labelID: {
+            type: GraphQLID
+        }
+    },
+
+    /**
+     * 
+     * @param {*} root 
+     * @param {*} params 
+     * @param {*} context 
+     */
+    async resolve(root, params, context) {
+        try {
+
+            /**
+             * @payload send token for verification
+             * @condition if present or not
+             */
+            var payload = tokenVerify.verification(context.token)
+            if (!payload) {
+                return { "message": "token is not verify" }
+            }
+
+            /**
+             * @purpose : find id from database then remove from dataase
+             * @param {String} id
+             * @returns {String} message
+             */
+            var model = await labelModel.findOneAndRemove({ _id: params.labelID })
+            if (!model) {
+                return { "message": "label is already removed" }
+            } else {
+                return { "message": "Label removed" }
+            }
+
+
+        } catch (error) {
+            console.log("error")
+        }
+    }
+}
+
