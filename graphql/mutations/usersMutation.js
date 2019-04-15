@@ -13,7 +13,7 @@
  *
  *******************************************************************************************************************/
 /**
- * @imports file
+ * @requires files
  */
 var GraphQLNonNull = require('graphql').GraphQLNonNull;
 var GraphQLString = require('graphql').GraphQLString;

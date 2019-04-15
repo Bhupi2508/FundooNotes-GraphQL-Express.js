@@ -1,8 +1,8 @@
 /******************************************************************************
- *  Execution       : default node          : cmd> index.js
+ *  @Execution      : default node          : cmd> index.js
  *                      
  * 
- *  Purpose         : connect all the files
+ *  @Purpose        : connect all the files
  * 
  *  @description    : index.js have server connections for all the graphql files
  * 
@@ -13,7 +13,7 @@
  *
  ******************************************************************************/
 /**
- * @import files
+ * @requires files
  */
 var GraphQLSchema = require('graphql').GraphQLSchema;
 var GraphQLObjectType = require('graphql').GraphQLObjectType;

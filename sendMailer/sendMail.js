@@ -1,8 +1,8 @@
 /******************************************************************************
- *  Execution       : default node          : cmd> nodemon sendMail.js
+ *  @Execution      : default node          : cmd> nodemon sendMail.js
  *                      
  * 
- *  Purpose         : sendMail to the user for forgot password
+ *  @Purpose        : sendMail to the user for forgot password
  * 
  *  @description    : For sending mail
  * 
@@ -12,15 +12,22 @@
  *  @since          : 04-april-2019
  *
  ******************************************************************************/
-/*
-required files
-*/
+/**
+ * @requires files
+ */
 const nodemailer = require('nodemailer');
 
+/**
+ * @purpose : send mail to the given mail id for verification
+ * @exports sendEmailFunction
+ * @param {String} url
+ * @param {String} email
+ * @returns {String} message
+ */
 exports.sendEmailFunction = (url, email) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
-        
+
         //email and password are hidden by using of env file
         auth: {
             user: process.env.email,
@@ -34,7 +41,7 @@ exports.sendEmailFunction = (url, email) => {
         subject: 'fundoo password reset link ',
         text: 'Please go through the e-mail verifaction link provided in this mail:\n\n' + url
     };
-    
+
     //send mail from given mail id, by using authriozation info
     var mail = transporter.sendMail(mailOptions)
     if (!mail) {

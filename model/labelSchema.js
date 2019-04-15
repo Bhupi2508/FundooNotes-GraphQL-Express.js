@@ -1,8 +1,8 @@
 /******************************************************************************
- *  Execution       : default node          : cmd> labelSchema.js
+ *  @Execution      : default node          : cmd> labelSchema.js
  *                      
  * 
- *  Purpose         : Create Schema for labelData
+ *  @Purpose        : Create Schema for labelData
  * 
  *  @description    : Create a label schema which store in Database
  * 
@@ -12,15 +12,20 @@
  *  @since          : 13-april-2019
  *
  ******************************************************************************/
-/*
-required files
-*/
+/**
+ * @requires files
+ */
 var mongoose = require('mongoose');
 
 var mongoSchema = mongoose.Schema;
 
 
-//create schema for labels
+/**
+ * @purpose : store data in database based on this schema
+ * @param {number} userID
+ * @param {String} labelName
+ * @param {timestamps} timestamps
+ */
 var labelSchema = new mongoSchema({
     userID: {
         type: mongoSchema.Types.ObjectId,

@@ -1,8 +1,8 @@
 /******************************************************************************
- *  Execution       : default node          : cmd> users.js
+ *  @Execution      : default node          : cmd> users.js
  *                      
  * 
- *  Purpose         : Generate a schema
+ *  @Purpose        : Generate a schema
  * 
  *  @description    : design GraphQL user schema to specify the types for API using 
  *                    GraphQL schema language
@@ -13,21 +13,29 @@
  *  @since          : 02-april-2019
  *
  ******************************************************************************/
-/** 
- * @import files
-*/
+/**
+ * @requires files
+ */
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull } = require('graphql')
 
 
 /**
  * @exports userType
- * @purpose : users schema for given data
+ * @purpose : users schema for fetch data from database
+ * @returns {Parameters}, which has property about schema
  */
 exports.userType = new GraphQLObjectType({
     name: 'users',
     description: 'GraphQL',
     fields: function () {
         return {
+            /**
+             * @param {number} id
+             * @param {String} firstname
+             * @param {String} lastname
+             * @param {String} email
+             * @param {String} password
+             */
             id: {
                 type: new GraphQLNonNull(GraphQLID)
             },
@@ -48,12 +56,21 @@ exports.userType = new GraphQLObjectType({
 });
 
 
-//define a another schema for return Message and token
+/**
+ * @exports authType
+ * @purpose : users schema for fetch data from database
+ * @returns {Parameters}, which has property about schema, and pass message and token, id
+ */
 exports.authType = new GraphQLObjectType({
     name: 'Auth',
     description: 'GraphQL',
     fields: function () {
         return {
+            /**
+             * @param {number} id
+             * @param {String} token
+             * @param {String} message
+             */
             token: {
                 type: new GraphQLNonNull(GraphQLID)
             },

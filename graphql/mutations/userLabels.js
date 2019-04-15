@@ -13,8 +13,8 @@
  *
  *******************************************************************************************************************/
 /**
-@imports files 
-*/
+ * @requires files
+ */
 const { GraphQLString, GraphQLID } = require('graphql');
 var authUser = require('../types/labelType').authType
 var labelModel = require('../../model/labelSchema')

@@ -13,8 +13,8 @@
  *
  ******************************************************************************/
 /**
- * @imports files
-*/
+ * @requires files
+ */
 var signupUser = require('./usersMutation').signup; //signup mutation
 var removeUser = require('./usersMutation').remove; //remove mutation
 var updateUser = require('./usersMutation').update; //update mutation

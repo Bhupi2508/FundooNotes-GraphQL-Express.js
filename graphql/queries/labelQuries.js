@@ -1,8 +1,8 @@
 /******************************************************************************
- *  Execution       : default node          : cmd> labelQuries.js
+ *  @Execution      : default node          : cmd> labelQuries.js
  *                      
  * 
- *  Purpose         : Generate a queries for type labeluser
+ *  @Purpose        : Generate a queries for type labeluser
  * 
  *  @description    : GraphQL query for specific fields on object and result will come exactly 
  *                    the same shape as request.
@@ -14,7 +14,7 @@
  *
  ******************************************************************************/
 /**
- * @import files
+ * @requires files
  */
 var GraphQLObjectType = require('graphql').GraphQLObjectType;
 var GraphQLList = require('graphql').GraphQLList;
@@ -26,7 +26,7 @@ var userModel = require('../../model/schema')
 
 /**
  * @exports labelQuery
- * @returns {labelUsers}, for users label
+ * @returns {Parameters}, for users label
  * @function resolvers
  * @returns {users1}
  */
@@ -37,7 +37,7 @@ exports.labelQuery = new GraphQLObjectType({
             labelUsers: {
                 type: new GraphQLList(authType),
                 resolve: function () {
-                    const users1 = labelModel.find().exec()
+                    const users1 = labelModel.find().exec()  //if user find data then return otherwise error
                     if (!users1) {
                         throw new Error('Error')
                     }

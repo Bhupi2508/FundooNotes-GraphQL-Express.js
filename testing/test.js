@@ -1,8 +1,8 @@
 /********************************************************************************************************************
- *  Execution       : default node          : cmd> test.js
+ *  @Execution      : default node          : cmd> test.js
  *                      
  * 
- *  Purpose         : Mocha testing in graphql
+ *  @Purpose        : Mocha testing in graphql
  * 
  *  @description    : test code with the help of mocha, chai, supertest
  * 
@@ -12,30 +12,28 @@
  *  @since          : 06-april-2019
  *
  *******************************************************************************************************************/
-/*
-required files
-*/
+/**
+ * @requires files
+ */
 const { describe, it } = require('mocha')
 const { expect } = require('chai')
 const request = require('supertest')
 var server = require('../server')
 
+/**
+ * @param {function()}
+ */
 describe('GraphQL API', () => {
 
-    /********************************************************************************************************************
-     *  Execution       : default node          : cmd> test.js
-     *                      
-     * 
-     *  Purpose         : Demo example for testing
-     * 
-     *  @description    : test code with the help of mocha, chai, supertest
-     * 
-     *  @overview       : fundoo application  
-     *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
-     *  @version        : 1.0
-     *  @since          : 06-april-2019
-     *
-     *******************************************************************************************************************/
+    /***************************************************************************************************************/
+    /**
+     * @purpose : Testing for users APIs
+     * @property {request} request has do request for server
+     * @property {post} post has post the function to the given path
+     * @property {send} send has send the parameter to the mutation
+     * @property {expect} expect has pass the ok means all are fine
+     * @returns {error} error
+     */
     it('Mocha Demo', done => {
         request(server)
             .post('/graphql')
@@ -66,20 +64,15 @@ describe('GraphQL API', () => {
     });
 
 
-    /********************************************************************************************************************
-     *  Execution       : default node          : cmd> test.js
-     *                      
-     * 
-     *  Purpose         : Register API testing in graphql
-     * 
-     *  @description    : test register code with the help of mocha, chai, supertest
-     * 
-     *  @overview       : fundoo application  
-     *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
-     *  @version        : 1.0
-     *  @since          : 06-april-2019
-     *
-     *******************************************************************************************************************/
+    /***************************************************************************************************************/
+    /**
+    * @purpose : Testing for users APIs
+    * @property {request} request has do request for server
+    * @property {post} post has post the function to the given path
+    * @property {send} send has send the parameter to the mutation
+    * @property {expect} expect has pass the ok means all are fine
+    * @returns {error} error
+    */
     it('register API', done => {
         request(server)
             .post('/graphql')
@@ -100,7 +93,15 @@ describe('GraphQL API', () => {
             });
     });
 
-
+    /****************************************************************************************************************/
+    /**
+    * @purpose : Testing for users APIs
+    * @property {request} request has do request for server
+    * @property {post} post has post the function to the given path
+    * @property {send} send has send the parameter to the mutation
+    * @property {expect} expect has pass the ok means all are fine
+    * @returns {error} error
+    */
     it('login APIs', done => {
         request(server)
             .post('/graphql ')
@@ -122,7 +123,15 @@ describe('GraphQL API', () => {
             });
     });
 
-
+    /***************************************************************************************************************/
+    /**
+    * @purpose : Testing for users APIs
+    * @property {request} request has do request for server
+    * @property {post} post has post the function to the given path
+    * @property {send} send has send the parameter to the mutation
+    * @property {expect} expect has pass the ok means all are fine
+    * @returns {error} error
+    */
     it('forgotPassword APIs', done => {
         request(server)
             .post('/graphql ')
@@ -144,7 +153,15 @@ describe('GraphQL API', () => {
             });
     });
 
-
+    /***************************************************************************************************************/
+    /**
+    * @purpose : Testing for users APIs
+    * @property {request} request has do request for server
+    * @property {post} post has post the function to the given path
+    * @property {send} send has send the parameter to the mutation
+    * @property {expect} expect has pass the ok means all are fine
+    * @returns {error} error
+    */
     it('resetPassword APIs', done => {
         request(server)
             .post('/graphql ')

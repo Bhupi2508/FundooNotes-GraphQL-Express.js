@@ -1,8 +1,8 @@
 /******************************************************************************
- *  Execution       : default node          : cmd> index.js
+ *  @Execution      : default node          : cmd> index.js
  *                      
  * 
- *  Purpose         : Create APIs and connect server
+ *  @Purpose        : Create APIs and connect server
  * 
  *  @description    
  * 
@@ -12,9 +12,9 @@
  *  @since          : 02-april-2019
  *
  ******************************************************************************/
-/*
-required files
-*/
+/**
+ * @requires files
+ */
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -38,6 +38,7 @@ app.use('/graphql', cors(), graphqlExpress((req) => ({
     graphiql: true
 })))
 
+//listen the given port
 var userPort = (process.env.port)
 app.use('*', cors());
 app.listen(userPort, () => {

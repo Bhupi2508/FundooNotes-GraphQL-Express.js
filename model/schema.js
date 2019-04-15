@@ -12,16 +12,23 @@
  *  @since          : 02-april-2019
  *
  ******************************************************************************/
-/*
-required files
-*/
+/**
+ * @requires files
+ */
 var mongoose = require('mongoose')
 
 //create instance of Schema
 var mongoSchema = mongoose.Schema;
 
 
-//create schema for Database
+/**
+ * @purpose : store data in database based on this schema
+ * @param {String} firstname
+ * @param {String} lastname
+ * @param {String} email
+ * @param {String} password
+ * @param {timestamps} timestamps
+ */
 var schemaData = new mongoSchema({
     firstname: {
         type: String,
