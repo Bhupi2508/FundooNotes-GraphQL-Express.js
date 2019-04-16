@@ -64,7 +64,7 @@ exports.signup = {
      */
     async resolve(root, params) {
         try {
-
+            
             //for email validation
             var emailformat = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
 
