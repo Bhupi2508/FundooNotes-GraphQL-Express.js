@@ -1,10 +1,10 @@
 /******************************************************************************
- *  @Execution      : default node          : cmd> index.js
+ *  @Execution      : default node          : cmd> server.js
  *                      
  * 
  *  @Purpose        : Create APIs and connect server
  * 
- *  @description    
+ *  @description    : operations using graphql query
  * 
  *  @overview       : fundoo application
  *  @author         : Bhupendra Singh <bhupendrasingh.ec18@gmail.com>
@@ -26,15 +26,27 @@ var expressValidator = require('express-validator')
 const userSchema = require('./graphql/types/index').userSchema;
 const labelSchema = require('./graphql/types/index').labelSchema;
 require('dotenv').config();
-
 app.use(bodyParser.json())  //bodyparser parse the req
 app.use(expressValidator());
+
+// app.use((req)=>{
+//     req.base_domain = req.headers.origin
+// })
+// console.log(JSON.stringify({
+//     schema: "labelSchema",
+//     // schema: "userSchema",
+//     rootValue: "global",
+//     context: "req.query",
+//     graphiql: true
+// }, 0, 4));
+// app.use('/graphql', cors(), (req)=>console.log('origin:', req.headers.origin, '   host', req.headers.host),
 
 app.use('/graphql', cors(), graphqlExpress((req) => ({
     schema: userSchema,
     schema: labelSchema,
     rootValue: global,
     context: req.query,
+    origin: req.headers.origin,
     graphiql: true
 })))
 

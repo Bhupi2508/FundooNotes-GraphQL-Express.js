@@ -23,7 +23,6 @@ var userType = require('../types/users').userType
 var labelModel = require('../../model/labelSchema')
 var userModel = require('../../model/schema')
 
-
 /**
  * @exports labelQuery
  * @returns {Parameters}, for users label

@@ -117,7 +117,7 @@ exports.signup = {
                  * @param {token}, send token for verification to the mail
                  * @returns {String} message
                  */
-                var url = `http://localhost:4000/graphql?token=${token}`
+                var url = `${process.env.link}${token}`
                 sendMail.sendEmailFunction(url, params.email)
                 return { "message": "Register successfull" }
             }
@@ -380,7 +380,7 @@ exports.forgotPassword = {
             var token = jsonwebtoken.sign({ email: params.email }, process.env.secretKey, { expiresIn: 86400000 });
 
             //send token to sendmail function, which is send to the link(token)
-            var url = `http://localhost:4000/graphql?token=${token}`
+            var url = `${process.env.link}${token}`
 
             /**
              * @param {token}, for sending mail to the mail
