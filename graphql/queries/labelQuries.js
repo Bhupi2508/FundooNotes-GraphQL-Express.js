@@ -20,17 +20,18 @@ var GraphQLObjectType = require('graphql').GraphQLObjectType;
 const { GraphQLList, GraphQLString } = require('graphql')
 var labelType = require('../types/labelType').labelauthType
 var userType = require('../types/users').userType
+var noteType = require('../types/noteTypes').noteAuthType
 var labelModel = require('../../model/labelSchema')
 var userModel = require('../../model/schema')
 
 //create a empty function
-var queries = function(){}
+var queries = function () { }
 
 /**
  * @exports labelQuery
  * @returns {Parameters}, for users label
  * @function resolvers
- * @returns {users1}
+ * @returns {users_label}
  */
 queries.prototype.labelQuery = new GraphQLObjectType({
     name: 'data',
@@ -45,27 +46,48 @@ queries.prototype.labelQuery = new GraphQLObjectType({
                 },
                 resolve: async function (root, args) {
                     //if user find data then return otherwise error
-                    const users1 = await labelModel.find({ "userID": args.userID })
-                    if (!users1) {
+                    const users_label = await labelModel.find({ "userID": args.userID })
+                    if (!users_label) {
                         throw new Error('Error')
                     }
-                    return users1
+                    return users_label
                 }
             },
 
             /**
              * @returns {users}, for users function
              * @function resolvers
-             * @returns {users2}
+             * @returns {user_s}
              */
             users: {
-                type: new GraphQLList(userType),
+                type: new GraphQLList(noteType),
+                args: {
+                    userID: {
+                        type: GraphQLString
+                    }
+                },
                 resolve: async function () {
-                    const users2 = await userModel.find().exec()
-                    if (!users2) {
+                    const user_s = await userModel.find().exec()
+                    if (!user_s) {
                         throw new Error('Error')
                     }
-                    return users2
+                    return user_s
+                }
+            },
+
+            /**
+           * @returns {noteQuery}, for users function
+           * @function resolvers
+           * @returns {users_note}
+           */
+            noteUsers: {
+                type: new GraphQLList(userType),
+                resolve: async function () {
+                    const users_note = await userModel.find({ "userID": args.userID })
+                    if (!users_note) {
+                        throw new Error('Error')
+                    }
+                    return users_note
                 }
             }
         }

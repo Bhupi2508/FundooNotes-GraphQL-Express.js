@@ -16,7 +16,7 @@
 /**
  * @requires files
  */
-const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull } = require('graphql')
+const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull, GraphQLBoolean } = require('graphql')
 
 
 
@@ -26,28 +26,52 @@ const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull } = require(
  * @field function{}
  * @returns {Parameters}
  */
-exports.labelauthType = new GraphQLObjectType({  //authType return some variable which print given response
-    name: 'labelAuth',
+exports.noteAuthType = new GraphQLObjectType({  //authType return some variable which print given response
+    name: 'noteAuth',
     description: 'GraphQL',
     fields: function () {
         return {
             /**
-             * @param {token} token
              * @param {String} message
              * @param {number} id
-             * @param {String} labelName
+             * @param {String} title  
+             * @param {String} description 
+             * @param {String} reminder  
+             * @param {String} color 
+             * @param {String} img
+             * @param {String} archieve
+             * @param {String} trash
+             * @param {String} pin
              */
-            token: {
-                type: new GraphQLNonNull(GraphQLID)
-            },
             message: {
                 type: GraphQLString
             },
             id: {
                 type: new GraphQLNonNull(GraphQLID)
             },
-            labelName: {
+            title: {
                 type: GraphQLString
+            },
+            description: {
+                type: GraphQLString
+            },
+            reminder: {
+                type: GraphQLString
+            },
+            color: {
+                type: GraphQLString
+            },
+            img: {
+                type: GraphQLString
+            },
+            archieve: {
+                type: GraphQLBoolean
+            },
+            trash: {
+                type: GraphQLBoolean
+            },
+            pin: {
+                type: GraphQLBoolean
             },
         }
     }
