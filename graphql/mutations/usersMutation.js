@@ -28,14 +28,14 @@ var redis = require('redis')
 var client = redis.createClient()
 var saltRounds = 10;
 
-
+//create a empty function
+var userMutation = function(){}
 /*******************************************************************************************************************/
 /**
 @description : register a APIs for register a new user using graphql
 @purpose : For register a new data by using CURD operation
-@exports{function} signup
 */
-exports.signup = {
+userMutation.prototype.signup = {
     type: authUser,
     args: {
 
@@ -132,9 +132,8 @@ exports.signup = {
 /**
 @description : emailverification APIs for verify a eamil that is valid or not using graphql
 @purpose : For regisemailverification by using CURD operation
-@exports emailVerify
 */
-exports.emailVerify = {
+userMutation.prototype.emailVerify = {
     type: authUser,
     async resolve(root, params, context) {
         try {
@@ -172,9 +171,8 @@ exports.emailVerify = {
 /**
 @description : update APIs for updateUser data using graphql
 @purpose : For updation by using CURD operation
-@exports update
 */
-exports.update = {
+userMutation.prototype.update = {
     type: typeUser,
     args: {
 
@@ -215,9 +213,8 @@ exports.update = {
 /**
 @description : REMOVE APIs for remove data from database using graphql
 @purpose : For deletion by using CURD operation
-@exports remove
 */
-exports.remove = {
+userMutation.prototype.remove = {
     type: typeUser,
     args: {
 
@@ -251,9 +248,8 @@ exports.remove = {
 /**
 @description : Login APIs for login user using graphql
 @purpose : For login new user by using CURD operation
-@exports remove
 */
-exports.login = {
+userMutation.prototype.login = {
     type: authUser,
     args: {
 
@@ -333,9 +329,8 @@ exports.login = {
 /**
 @description : forgotPassword APIs for updatePassword user using graphql
 @purpose : For deletion by using CURD operation
-@exports remove
 */
-exports.forgotPassword = {
+userMutation.prototype.forgotPassword = {
     type: authUser,
     args: {
 
@@ -404,9 +399,8 @@ exports.forgotPassword = {
 /**
 @description : resetPassword APIs for resetPassword user using graphql
 @purpose : For resetPassword by using CURD operation
-@exports resetPassword
 */
-exports.resetPassword = {
+userMutation.prototype.resetPassword = {
     type: authUser,
     args: {
 
@@ -470,3 +464,8 @@ exports.resetPassword = {
         }
     }
 }
+
+/**
+ * @exports userMutation
+ */
+module.exports = new userMutation()

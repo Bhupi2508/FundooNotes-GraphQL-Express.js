@@ -17,11 +17,14 @@
  * @requires files
  */
 var GraphQLObjectType = require('graphql').GraphQLObjectType;
-const { GraphQLList, GraphQLID } = require('graphql')
+const { GraphQLList, GraphQLString } = require('graphql')
 var labelType = require('../types/labelType').labelauthType
 var userType = require('../types/users').userType
 var labelModel = require('../../model/labelSchema')
 var userModel = require('../../model/schema')
+
+//create a empty function
+var queries = function(){}
 
 /**
  * @exports labelQuery
@@ -29,14 +32,20 @@ var userModel = require('../../model/schema')
  * @function resolvers
  * @returns {users1}
  */
-exports.labelQuery = new GraphQLObjectType({
+queries.prototype.labelQuery = new GraphQLObjectType({
     name: 'data',
     fields: function () {
         return {
             labelUsers: {
                 type: new GraphQLList(labelType),
-                resolve: async function () {
-                    const users1 = await labelModel.find().exec()  //if user find data then return otherwise error
+                args: {
+                    userID: {
+                        type: GraphQLString
+                    }
+                },
+                resolve: async function (root, args) {
+                    //if user find data then return otherwise error
+                    const users1 = await labelModel.find({ "userID": args.userID })
                     if (!users1) {
                         throw new Error('Error')
                     }
@@ -62,3 +71,8 @@ exports.labelQuery = new GraphQLObjectType({
         }
     }
 })
+
+/**
+ * @exports queries
+ */
+module.exports = new queries()

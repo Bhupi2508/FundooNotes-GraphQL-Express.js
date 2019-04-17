@@ -20,6 +20,8 @@ var authUser = require('../types/labelType').labelauthType
 var labelModel = require('../../model/labelSchema')
 var tokenVerify = require('../../Authentication/authenticationUser')
 
+//create a empty function
+var labelMutation = function(){}
 
 /*******************************************************************************************************************/
 /**
@@ -27,7 +29,7 @@ var tokenVerify = require('../../Authentication/authenticationUser')
 @purpose : For fetch data by using CURD operation 
 @exports createLabel
 */
-exports.createLabel = {
+labelMutation.prototype.createLabel = {
     type: authUser,
     args: {
 
@@ -95,7 +97,7 @@ exports.createLabel = {
 @purpose : For fetch data by using CURD operation
 @exports editLabel
 */
-exports.editLabel = {
+labelMutation.prototype.editLabel = {
     type: authUser,
     args: {
 
@@ -159,7 +161,7 @@ exports.editLabel = {
 @purpose : For fetch data by using CURD operation
 @exports removeLabel
 */
-exports.removeLabel = {
+labelMutation.prototype.removeLabel = {
     type: authUser,
     args: {
 
@@ -208,3 +210,7 @@ exports.removeLabel = {
     }
 }
 
+/**
+ * @exports labelMutation
+ */
+module.exports = new labelMutation()

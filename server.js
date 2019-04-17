@@ -31,8 +31,7 @@ app.use(bodyParser.json())  //bodyparser parse the req
 app.use(expressValidator());
 
 app.use('/graphql', cors(), graphqlExpress((req) => ({
-    schema: userSchema,
-    schema: labelSchema,
+    schema: userSchema,labelSchema,
     rootValue: global,
     context: req.query,
     graphiql: true
