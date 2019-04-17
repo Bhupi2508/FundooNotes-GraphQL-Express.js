@@ -87,8 +87,9 @@ noteMutation.prototype.createNote = {
             var notefind = await noteModel.find({ title: params.title })
 
             /**
-            @param {number} notefind.length, check the label name already present or not
-            */
+             * @param {number} notefind.length, check the label name already present or not
+             * @returns {String} message
+             */
             if (notefind.length > 0) {
                 return { "message": "title already present" }
             }
@@ -151,6 +152,7 @@ noteMutation.prototype.editNote = {
             /**
              * @payload send token for verification
              * @condition if present or not
+             * @returns {String} message
              */
             var payload = tokenVerify.verification(context.token)
             if (!payload) {
@@ -211,6 +213,7 @@ noteMutation.prototype.removeNote = {
             /**
              * @payload send token for verification
              * @condition if present or not
+             * @returns {String} message
              */
             var payload = tokenVerify.verification(context.token)
             if (!payload) {
