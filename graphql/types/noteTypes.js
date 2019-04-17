@@ -72,7 +72,7 @@ exports.noteAuthType = new GraphQLObjectType({  //authType return some variable 
             },
             pin: {
                 type: GraphQLBoolean
-            },
+            }
         }
     }
 });

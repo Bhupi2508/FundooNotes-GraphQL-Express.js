@@ -60,12 +60,7 @@ queries.prototype.labelQuery = new GraphQLObjectType({
              * @returns {user_s}
              */
             users: {
-                type: new GraphQLList(noteType),
-                args: {
-                    userID: {
-                        type: GraphQLString
-                    }
-                },
+                type: new GraphQLList(userType),
                 resolve: async function () {
                     const user_s = await userModel.find().exec()
                     if (!user_s) {
@@ -81,8 +76,13 @@ queries.prototype.labelQuery = new GraphQLObjectType({
            * @returns {users_note}
            */
             noteUsers: {
-                type: new GraphQLList(userType),
-                resolve: async function () {
+                type: new GraphQLList(noteType),
+                args: {
+                    userID: {
+                        type: GraphQLString
+                    }
+                },
+                resolve: async function (root, args) {
                     const users_note = await userModel.find({ "userID": args.userID })
                     if (!users_note) {
                         throw new Error('Error')

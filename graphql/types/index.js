@@ -19,9 +19,7 @@ var GraphQLSchema = require('graphql').GraphQLSchema;
 var GraphQLObjectType = require('graphql').GraphQLObjectType;
 var queryType = require('../queries/labelQuries').labelQuery
 var mutation = require('../mutations/mutation');
-// var labelQueryType = require('../queries/labelQuries')
 
-// var 
 /**
  * @exports userSchema
  * @purpose : return query and mutation for users

@@ -42,10 +42,10 @@ labelMutation.prototype.createLabel = {
     },
 
     /**
-    @param {token}, context have token from headers
-    @param {String}, labelName 
-    @param {params} params
-    */
+     * @param {*} root 
+     * @param {*} params 
+     * @param {*} context 
+     */
     async resolve(root, params, context) {
         try {
 

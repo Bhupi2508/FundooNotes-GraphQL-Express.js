@@ -25,6 +25,7 @@ const graphqlExpress = require('express-graphql')
 var expressValidator = require('express-validator')
 const userSchema = require('./graphql/types/index').userSchema;
 const labelSchema = require('./graphql/types/index').labelSchema;
+// const labelSchema = require('./graphql/types/index').n;
 require('dotenv').config();
 
 app.use(bodyParser.json())  //bodyparser parse the req

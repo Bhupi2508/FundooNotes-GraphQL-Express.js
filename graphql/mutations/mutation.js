@@ -25,6 +25,7 @@ var emailVerify = require('../mutations/usersMutation').emailVerify  //emailVeri
 var createLabel = require('../mutations/userLabels').createLabel  //createLabel mutation
 var editLabel = require('../mutations/userLabels').editLabel   //editLabel mutation
 var removeLabel = require('../mutations/userLabels').removeLabel   //removeLabel mutation
+var createNote = require('../mutations/userNotes').createNote   //createNote mutation
 
 /**
 @exports files
@@ -39,5 +40,6 @@ module.exports = {
   emailVerify,
   createLabel,
   editLabel,
-  removeLabel
+  removeLabel,
+  createNote
 }

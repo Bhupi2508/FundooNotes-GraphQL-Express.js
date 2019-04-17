@@ -39,10 +39,12 @@ var noteSchema = new mongoSchema({
         ref: 'schemaData'
     },
     title: {
-        type: String
+        type: String,
+        required: true
     },
     description: {
-        type: String
+        type: String,
+        required: true
     },
     reminder: {
         type: String
@@ -54,27 +56,30 @@ var noteSchema = new mongoSchema({
         type: String
     },
     archieve: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     trash: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     pin: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
-    label: {
-        type: mongoSchema.Types.labelName,
-        ref: 'labelSchema'
-    }
+    // label: {
+    //     type: mongoSchema.Types.labelName,
+    //     ref: 'labelSchema'
+    // }
 },
     {
         timestamps: true
     })
 
 //connect database using mongoose
-var userLabel = mongoose.model('notes', noteSchema);
+var notes_Schema = mongoose.model('notes', noteSchema);
 
 /**
  * @exports userLabel
  */
-module.exports = userLabel
+module.exports = notes_Schema
