@@ -67,10 +67,10 @@ var noteSchema = new mongoSchema({
         type: Boolean,
         default: false
     },
-    // label: {
-    //     type: mongoSchema.Types.labelName,
-    //     ref: 'labelSchema'
-    // }
+    label: {
+        type: mongoSchema.Types.ObjectId,
+        ref: 'labelSchema'
+    }
 },
     {
         timestamps: true

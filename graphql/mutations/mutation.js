@@ -26,6 +26,8 @@ var createLabel = require('../mutations/userLabels').createLabel  //createLabel 
 var editLabel = require('../mutations/userLabels').editLabel   //editLabel mutation
 var removeLabel = require('../mutations/userLabels').removeLabel   //removeLabel mutation
 var createNote = require('../mutations/userNotes').createNote   //createNote mutation
+var editNote = require('../mutations/userNotes').editNote  //editNote mutation
+var removeNote = require('../mutations/userNotes').removeNote   //removeNote mutation
 
 /**
 @exports files
@@ -41,5 +43,7 @@ module.exports = {
   createLabel,
   editLabel,
   removeLabel,
-  createNote
+  createNote,
+  editNote,
+  removeNote
 }
