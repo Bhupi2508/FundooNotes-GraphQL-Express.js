@@ -73,4 +73,8 @@ var noteSchema = new mongoSchema({
 
 //connect database using mongoose
 var userLabel = mongoose.model('notes', noteSchema);
+
+/**
+ * @exports userLabel
+ */
 module.exports = userLabel
