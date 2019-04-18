@@ -18,6 +18,7 @@
 const { GraphQLString, GraphQLID } = require('graphql');
 var noteAuthUser = require('../types/noteTypes').noteAuthType
 var noteModel = require('../../model/noteSchema')
+var labelModel = require('../../model/labelSchema')
 var tokenVerify = require('../../Authentication/authenticationUser')
 
 //create a empty function
@@ -70,20 +71,25 @@ noteMutation.prototype.createNote = {
              * @param {String} description validation
              */
             if (params.title.length < 3) {
-                return { "message": "Enter name min 3 letter " }
+                return { "message": "Enter title length min 3 letter " }
             }
-            if (params.description.length < 5) {
-                return { "message": "Enter name min 3 letter " }
+            if (params.description.length < 4) {
+                return { "message": "Enter description length min 4 letter " }
             }
+
 
             /**
              * @payload send token for verification
              * @condition if present or not
+             * @returns {String} message
              */
             var payload = tokenVerify.verification(context.token)
             if (!payload) {
                 return { "message": "token is not verify" }
             }
+
+
+            //find title from database
             var notefind = await noteModel.find({ title: params.title })
 
             /**
@@ -94,6 +100,7 @@ noteMutation.prototype.createNote = {
                 return { "message": "title already present" }
             }
 
+
             //find id from users models
             const model = new noteModel({
                 title: params.title,
@@ -102,8 +109,10 @@ noteMutation.prototype.createNote = {
                 color: params.color,
                 img: params.img,
                 userID: payload.userID
+
             })
             const note = model.save()
+
 
             /**
              * @return {String}, message
@@ -113,8 +122,9 @@ noteMutation.prototype.createNote = {
             } else {
                 return { "message": "note created" }
             }
+
         } catch (error) {
-            console.log("error")
+            console.log("error in catch")
         }
     }
 }
@@ -146,18 +156,8 @@ noteMutation.prototype.editNote = {
      * @purpose : update title or description from database
      * @param {params} params
      */
-    async resolve(root, params, context) {
+    async resolve(root, params) {
         try {
-
-            /**
-             * @payload send token for verification
-             * @condition if present or not
-             * @returns {String} message
-             */
-            var payload = tokenVerify.verification(context.token)
-            if (!payload) {
-                return { "message": "token is not verify" }
-            }
 
             //find id from users models
             var note = await noteModel.findOneAndUpdate({ _id: params.noteID },
@@ -205,20 +205,9 @@ noteMutation.prototype.removeNote = {
      * 
      * @param {*} root 
      * @param {*} params 
-     * @param {*} context 
      */
-    async resolve(root, params, context) {
+    async resolve(root, params) {
         try {
-
-            /**
-             * @payload send token for verification
-             * @condition if present or not
-             * @returns {String} message
-             */
-            var payload = tokenVerify.verification(context.token)
-            if (!payload) {
-                return { "message": "token is not verify" }
-            }
 
             /**
              * @purpose : find id from database then remove from dataase
@@ -238,6 +227,72 @@ noteMutation.prototype.removeNote = {
         }
     }
 }
+
+
+
+/*******************************************************************************************************************/
+/**
+ * @description : create a APIs for add notes for using graphql
+ * @purpose : For fetch data by using CURD operation
+ */
+noteMutation.prototype.saveLabelToNote = {
+    type: noteAuthUser,
+    args: {
+
+        /**
+         * @param {String} title  
+         * @param {String} description 
+         * @param {String} reminder  
+         * @param {String} color 
+         * @param {String} img
+        */
+
+        noteID: {
+            type: GraphQLString
+        },
+        label_ID: {
+            type: GraphQLString
+        }
+    },
+
+    /**
+     * @param {*} root 
+     * @param {*} params  
+     */
+    async resolve(root, params) {
+        try {
+
+            var id = await noteModel.find({ "labelID[0]": params.label_ID })
+            console.log("id", id)
+            if (!id) {
+                return { "message": "This label is already added in note" }
+            }
+
+            //find id from noteModel and update(push) into notes
+            var note = await noteModel.findOneAndUpdate({ _id: params.noteID },
+                {
+                    $push: {
+                        labelID: params.label_ID
+                    }
+                })
+
+
+            /**
+             * @return {String}, message
+             */
+            if (!note) {
+                return { "message": "label not added " }
+            } else {
+                return { "message": "label added on note successfully " }
+            }
+
+        } catch (error) {
+            console.log("error in catch")
+        }
+    }
+}
+
+
 
 /**
  * @exports noteMutation

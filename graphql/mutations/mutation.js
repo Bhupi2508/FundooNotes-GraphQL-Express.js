@@ -28,6 +28,7 @@ var removeLabel = require('../mutations/userLabels').removeLabel   //removeLabel
 var createNote = require('../mutations/userNotes').createNote   //createNote mutation
 var editNote = require('../mutations/userNotes').editNote  //editNote mutation
 var removeNote = require('../mutations/userNotes').removeNote   //removeNote mutation
+var savelabelonNote=require('../mutations/userNotes').saveLabelToNote  //savelabelonNote mutation
 
 /**
 @exports files
@@ -45,5 +46,6 @@ module.exports = {
   removeLabel,
   createNote,
   editNote,
-  removeNote
+  removeNote,
+  savelabelonNote
 }
