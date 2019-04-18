@@ -72,7 +72,7 @@ labelMutation.prototype.createLabel = {
             if (labelfind.length > 0) {
                 return { "message": "labelName already present" }
             }
-
+            
             //find id from users models
             const model = new labelModel({ labelName: params.labelName, userID: payload.userID })
             const label = model.save()

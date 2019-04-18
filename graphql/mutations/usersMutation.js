@@ -16,7 +16,7 @@
  * @requires files
  */
 var GraphQLNonNull = require('graphql').GraphQLNonNull;
-const {GraphQLString, GraphQLID} = require('graphql')
+const { GraphQLString, GraphQLID } = require('graphql')
 var typeUser = require('../types/users').userType
 var authUser = require('../types/users').authType
 var userModel = require('../../model/schema')
@@ -29,7 +29,7 @@ var client = redis.createClient()
 var saltRounds = 10;
 
 //create a empty function
-var userMutation = function(){}
+var userMutation = function () { }
 /*******************************************************************************************************************/
 /**
 @description : register a APIs for register a new user using graphql
@@ -62,9 +62,9 @@ userMutation.prototype.signup = {
     /**
      * @param {*} params
      */
-    async resolve(root, params) {
+    async resolve(root, params, context) {
         try {
-            
+
             //for email validation
             var emailformat = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
 
@@ -117,7 +117,15 @@ userMutation.prototype.signup = {
                  * @param {token}, send token for verification to the mail
                  * @returns {String} message
                  */
-                var url = `${process.env.link}${token}`
+
+                // var url = `${process.env.link}${token}`
+                /**
+                 * @purpose : we can also use origin(port) from headers for 
+                 *             query, instead of hard code
+                 * @param {String} token
+                 */
+                var url = `${context.origin}/graphql?token=${token}`
+
                 sendMail.sendEmailFunction(url, params.email)
                 return { "message": "Register successfull" }
             }
@@ -376,6 +384,7 @@ userMutation.prototype.forgotPassword = {
 
             //send token to sendmail function, which is send to the link(token)
             var url = `${process.env.link}${token}`
+            //var url = `${context.origin}/graphql?token=${token}`
 
             /**
              * @param {token}, for sending mail to the mail
