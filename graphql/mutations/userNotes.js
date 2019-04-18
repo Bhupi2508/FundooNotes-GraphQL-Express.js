@@ -240,11 +240,9 @@ noteMutation.prototype.saveLabelToNote = {
     args: {
 
         /**
-         * @param {String} title  
-         * @param {String} description 
-         * @param {String} reminder  
-         * @param {String} color 
-         * @param {String} img
+         * @param {String} tinoteIDtle  
+         * @param {String} label_ID 
+
         */
 
         noteID: {
@@ -256,8 +254,9 @@ noteMutation.prototype.saveLabelToNote = {
     },
 
     /**
+     * 
      * @param {*} root 
-     * @param {*} params  
+     * @param {*} params 
      */
     async resolve(root, params) {
         try {
