@@ -232,7 +232,7 @@ noteMutation.prototype.removeNote = {
 
 /*******************************************************************************************************************/
 /**
- * @description : create a APIs for add notes for using graphql
+ * @description : save label into notes APIs for updated notes for using graphql
  * @purpose : For fetch data by using CURD operation
  */
 noteMutation.prototype.saveLabelToNote = {
@@ -260,10 +260,9 @@ noteMutation.prototype.saveLabelToNote = {
      */
     async resolve(root, params) {
         try {
-         
+
             //find labelID from noteModel Schema
             var id = await noteModel.find({ "labelID": params.label_ID })
-        
 
             //if id is already present
             if (id.length > 0) {
@@ -278,7 +277,6 @@ noteMutation.prototype.saveLabelToNote = {
                     }
                 })
 
-                console.log("note", note.labelID)
             /**
              * @return {String}, message
              */
@@ -295,6 +293,74 @@ noteMutation.prototype.saveLabelToNote = {
 }
 
 
+
+/*******************************************************************************************************************/
+/**
+ * @description : save label into notes APIs for updated notes for using graphql
+ * @purpose : For fetch data by using CURD operation
+ */
+noteMutation.prototype.removeLabelFromNote = {
+    type: noteAuthUser,
+    args: {
+
+        /**
+         * @param {String} noteID  
+         * @param {String} label_ID 
+
+        */
+
+        noteID: {
+            type: GraphQLString
+        },
+        label_ID: {
+            type: GraphQLString
+        }
+    },
+
+    /**
+     * 
+     * @param {*} root 
+     * @param {*} params 
+     */
+    async resolve(root, params) {
+        try {
+
+            //find labelID from noteModel Schema
+            var id = await noteModel.find({ "labelID": params.label_ID })
+
+            //if id is already present
+            if (!id.length > 0) {
+                return { "message": "This label is not present in notes" }
+            }
+
+            //find id from noteModel and update(push) into notes
+            var note = await noteModel.findOneAndUpdate({ _id: params.noteID },
+                {
+                    $pull: {
+                        labelID: params.label_ID
+                    }
+                })
+
+            /**
+             * @return {String}, message
+             */
+            if (!note) {
+                return { "message": "label not deleted " }
+            } else {
+                for (let i = 0; i < (note.labelID).length; i++) {
+                    if (note.labelID[i] === params.label_ID) {
+                        note.labelID.splice(i, 1);
+                    }
+                }
+                return { "message": "label delete from note successfully " }
+            }
+
+
+        } catch (error) {
+            console.log("error in catch")
+        }
+    }
+}
 
 /**
  * @exports noteMutation
