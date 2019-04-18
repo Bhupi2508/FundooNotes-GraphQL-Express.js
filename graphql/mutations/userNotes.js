@@ -240,7 +240,7 @@ noteMutation.prototype.saveLabelToNote = {
     args: {
 
         /**
-         * @param {String} tinoteIDtle  
+         * @param {String} noteID  
          * @param {String} label_ID 
 
         */
@@ -260,10 +260,13 @@ noteMutation.prototype.saveLabelToNote = {
      */
     async resolve(root, params) {
         try {
+         
+            //find labelID from noteModel Schema
+            var id = await noteModel.find({ "labelID": params.label_ID })
+        
 
-            var id = await noteModel.find({ "labelID[0]": params.label_ID })
-            console.log("id", id)
-            if (!id) {
+            //if id is already present
+            if (id.length > 0) {
                 return { "message": "This label is already added in note" }
             }
 
@@ -275,7 +278,7 @@ noteMutation.prototype.saveLabelToNote = {
                     }
                 })
 
-
+                console.log("note", note.labelID)
             /**
              * @return {String}, message
              */
