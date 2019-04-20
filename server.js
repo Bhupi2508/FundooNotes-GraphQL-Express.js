@@ -26,6 +26,7 @@ var session = require('express-session')
 const graphqlExpress = require('express-graphql')
 var expressValidator = require('express-validator')
 var GithubPassport = require('passport-github').Strategy
+const gitAuth = require('./Authentication/githubAuth')
 const userSchema = require('./graphql/types/index').userSchema;
 const labelSchema = require('./graphql/types/index').labelSchema;
 // const labelSchema = require('./graphql/types/index').n;
@@ -45,12 +46,6 @@ app.use(session({
 // app.get('/login/github',
 //   passport.authenticate('github'));
 
-// app.get('/login/github/callback', 
-//   passport.authenticate('github', { failureRedirect: '/login' }),
-//   function(req, res) {
-//     // Successful authentication, redirect home.
-//     res.redirect('/');
-//   });
 
 app.use('/graphql', cors(), graphqlExpress((req) => ({
     schema: userSchema, labelSchema,

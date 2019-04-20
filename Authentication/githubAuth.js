@@ -16,9 +16,8 @@
  * @requires files
  */
 
- //pass the github information
-const gitStrategy = require('passport-github').Strategy
-exports.ids = new gitStrategy({
+//pass the github information
+exports.ids = ({
     github: {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,

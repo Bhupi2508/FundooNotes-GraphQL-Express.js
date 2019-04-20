@@ -17,6 +17,9 @@ const userSchema = new mongoose.Schema({
     timeExpires: {
         type: Date
     }
+},
+{
+    timestamps: true
 });
 
 module.exports = mongoose.model('githubAuth', userSchema)
