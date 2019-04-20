@@ -1,8 +1,8 @@
 /********************************************************************************************************************
- *  @Execution       : default node          : cmd> userMutations.js
+ *  @Execution      : default node          : cmd> userMutations.js
  *                      
  * 
- *  @Purpose         : perform operations by using users
+ *  @Purpose        : perform operations by using users
  * 
  *  @description    : By mutation create a new files
  * 

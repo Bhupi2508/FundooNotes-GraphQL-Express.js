@@ -25,10 +25,10 @@ var passport = require('passport')
 var session = require('express-session')
 const graphqlExpress = require('express-graphql')
 var expressValidator = require('express-validator')
-var GithubPassport = require('passport-github').Strategy
 const gitAuth = require('./Authentication/githubAuth')
-const userSchema = require('./graphql/types/index').userSchema;
-const labelSchema = require('./graphql/types/index').labelSchema;
+const userSchema = require('./graphql/types/index').userSchema
+
+
 // const labelSchema = require('./graphql/types/index').n;
 require('dotenv').config();
 
@@ -46,13 +46,14 @@ app.use(session({
 // app.get('/login/github',
 //   passport.authenticate('github'));
 
-
-app.use('/graphql', cors(), graphqlExpress((req) => ({
-    schema: userSchema, labelSchema,
+//middleware for social auth
+app.use('/graphql', graphqlExpress((req) => ({
+    schema: userSchema,
     rootValue: global,
     context: {
         origin: req.headers.origin,
-        token: req.query.token
+        token: req.query.token,
+        code: req.query.code
     },
     graphiql: true
 })))

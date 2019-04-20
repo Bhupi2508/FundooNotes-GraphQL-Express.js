@@ -4,22 +4,25 @@ var Schema = mongoose.Schema;
 
 // create User Schema
 const userSchema = new mongoose.Schema({
-    userID: {
-        type: mongoSchema.Types.ObjectId,
-        ref: 'schemaData'
-    },
-    accessToken: {
+    login: {
         type: String
     },
-    refreshToken: {
+    name: {
         type: String
     },
-    timeExpires: {
-        type: Date
-    }
+    company: {
+        type: String
+    },
+    location: {
+        type: String
+    },
+    bio: {
+        type: String
+    },
 },
 {
     timestamps: true
 });
 
-module.exports = mongoose.model('githubAuth', userSchema)
+var model = mongoose.model('githubAuth', userSchema)
+module.exports = model

@@ -31,16 +31,3 @@ exports.userSchema = new GraphQLSchema({
         fields: mutation
     })
 })
-
-
-// /**
-//  * @exports labelSchema
-//  * @purpose : return query and mutation for Labelusers
-//  */
-// exports.labelSchema = new GraphQLSchema({
-//     query: labelQueryType,
-//     mutation: new GraphQLObjectType({
-//         name: 'Mutation',
-//         fields: mutation
-//     })
-// })
