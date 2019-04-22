@@ -14,6 +14,7 @@
   "dependencies": {
     "apollo-server": "^2.4.8",
     "apollo-server-express": "^2.4.8",
+    "axios": "^0.18.0",
     "bcrypt": "^3.0.5",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
@@ -28,6 +29,7 @@
     "graphiql": "^0.13.0",
     "graphql": "^14.2.1",
     "graphql-middleware": "^3.0.2",
+    "graphql-request": "^1.8.2",
     "graphql-tools": "^4.0.4",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.1.1",
@@ -38,6 +40,7 @@
     "passport": "^0.4.0",
     "passport-github": "^1.1.0",
     "redis": "^2.8.0",
+    "request": "^2.88.0",
     "supertest": "^4.0.2"
   }
 }

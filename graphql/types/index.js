@@ -26,8 +26,5 @@ var mutation = require('../mutations/mutation');
  */
 exports.userSchema = new GraphQLSchema({
     query: queryType,
-    mutation: new GraphQLObjectType({
-        name: 'Mutation',
-        fields: mutation
-    })
+    mutation: mutation
 })

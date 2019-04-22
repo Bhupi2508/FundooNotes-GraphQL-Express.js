@@ -23,8 +23,6 @@ var userType = require('../types/users').userType
 var noteType = require('../types/noteTypes').noteAuthType
 var labelModel = require('../../model/labelSchema')
 var userModel = require('../../model/schema')
-var authModel = require('../../model/githubSchemaAuth')
-var authType = require('../types/gitAuthType').gitauthType
 
 //create a empty function
 var queries = function () { }
@@ -99,9 +97,9 @@ queries.prototype.labelQuery = new GraphQLObjectType({
              * @returns {user_auth}
              */
             gitAuth: {
-                type: new GraphQLList(authType),
+                type: new GraphQLList(userType),
                 resolve: async function () {
-                    const user_auth = await authModel.find().exec()
+                    const user_auth = await userModel.find().exec()
                     if (!user_auth) {
                         throw new Error('Error')
                     }

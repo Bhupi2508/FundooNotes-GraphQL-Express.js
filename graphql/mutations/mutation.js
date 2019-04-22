@@ -15,6 +15,7 @@
 /**
  * @requires files
  */
+const {GraphQLObjectType} = require('graphql')
 var signupUser = require('./usersMutation').signup; //signup mutation
 var removeUser = require('./usersMutation').remove; //remove mutation
 var updateUser = require('./usersMutation').update; //update mutation
@@ -30,30 +31,32 @@ var editNote = require('../mutations/userNotes').editNote  //editNote mutation
 var removeNote = require('../mutations/userNotes').removeNote   //removeNote mutation
 var savelabelonNote = require('../mutations/userNotes').saveLabelToNote  //savelabelonNote mutation
 var DeletelabelFromNote = require('../mutations/userNotes').removeLabelFromNote  //savelabelonNote mutation
-var gitAuthSocial = require('../mutations/gitAuth').GithubAuth  //GithubAuth mutation
-var codeVerify = require('../mutations/gitAuth').codeVerify  //codeVerify mutation
-var getInformationGithub = require('../mutations/gitAuth').getInformationGithub  //codeVerify mutation
+var gitAuthSocial = require('../mutations/gitAuthMutation').GithubAuth  //GithubAuth mutation
+var codeVerify = require('../mutations/gitAuthMutation').codeVerify  //codeVerify mutation
 
 /**
 @exports files
 */
-module.exports = {
-  signupUser,
-  removeUser,
-  updateUser,
-  loginUser,
-  forgotPasswordUser,
-  resetPasswordUser,
-  emailVerify,
-  createLabel,
-  editLabel,
-  removeLabel,
-  createNote,
-  editNote,
-  removeNote,
-  savelabelonNote,
-  DeletelabelFromNote,
-  gitAuthSocial,
-  codeVerify,
-  getInformationGithub
-}
+module.exports = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    signupUser,
+    removeUser,
+    updateUser,
+    loginUser,
+    forgotPasswordUser,
+    resetPasswordUser,
+    emailVerify,
+    createLabel,
+    editLabel,
+    removeLabel,
+    createNote,
+    editNote,
+    removeNote,
+    savelabelonNote,
+    DeletelabelFromNote,
+    gitAuthSocial,
+    codeVerify
+
+  }
+})

@@ -50,6 +50,16 @@ var schemaData = new mongoSchema({
     verification: {
         type: Boolean,
         default: false
+    },
+    isGitVerify: {
+        type: Boolean,
+        default: false,
+        gitID: {
+            type: String,
+        },
+        login: {
+            type: String,
+        }
     }
 }, {
         timestamps: true

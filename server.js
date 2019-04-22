@@ -21,11 +21,8 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongoose = require('./config/mongoose')
 const db = mongoose()
-var passport = require('passport')
-var session = require('express-session')
 const graphqlExpress = require('express-graphql')
 var expressValidator = require('express-validator')
-const gitAuth = require('./Authentication/githubAuth')
 const userSchema = require('./graphql/types/index').userSchema
 
 
@@ -35,17 +32,6 @@ require('dotenv').config();
 app.use(bodyParser.json())  //bodyparser parse the req
 app.use(expressValidator());
 
-app.use(session({
-    secret: process.env.secretKey,
-    resave: true,
-    saveUninitialized: true
-  }));
-  app.use(passport.initialize());
-  app.use(passport.session());
-
-// app.get('/login/github',
-//   passport.authenticate('github'));
-
 //middleware for social auth
 app.use('/graphql', graphqlExpress((req) => ({
     schema: userSchema,
@@ -53,7 +39,7 @@ app.use('/graphql', graphqlExpress((req) => ({
     context: {
         origin: req.headers.origin,
         token: req.query.token,
-        code: req.query.code
+        code: req.query.code,
     },
     graphiql: true
 })))
