@@ -32,20 +32,20 @@ var mongoSchema = mongoose.Schema;
 var schemaData = new mongoSchema({
     firstname: {
         type: String,
-        required: true,
+        // required: true,
     },
     lastname: {
         type: String,
-        required: true
+        // required: true
     },
     email: {
         type: String,
         unique: true,
-        required: true
+        // required: true
     },
     password: {
         type: String,
-        required: true
+        // required: true
     },
     verification: {
         type: Boolean,
@@ -53,13 +53,13 @@ var schemaData = new mongoSchema({
     },
     isGitVerify: {
         type: Boolean,
-        default: false,
-        gitID: {
-            type: String,
-        },
-        login: {
-            type: String,
-        }
+        default: false
+    },
+    loginName: {
+        type: String,
+    },
+    gitID: {
+        type: String,
     }
 }, {
         timestamps: true

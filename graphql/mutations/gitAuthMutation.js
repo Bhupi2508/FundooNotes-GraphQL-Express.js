@@ -75,9 +75,8 @@ gitAuthMutation.prototype.codeVerify = {
 
     /**
      * @param {*} root 
-     * @param {*} params 
      */
-    async resolve(root, context) {
+    async resolve(root, params, context) {
         try {
 
             /**
@@ -91,39 +90,53 @@ gitAuthMutation.prototype.codeVerify = {
                 headers: {
                     accept: 'application/json',
                 }
-            }).then((response) => {
+            }).then(response => {
 
                 // Once we get the response, extract the access token from
-                const accessToken = response.data.access_token
+                const access_token = response.data.access_token
 
                 //function for access token
-                getToken(accessToken)
-                console.log("Access token : ", accessToken)
+                getToken(access_token)
+                console.log("Access token : ", access_token)
             })
                 .catch(error => {
                     console.log(error)
                 })
 
-                
-                /**
-                 * @param {*} accessToken 
-                 * @headers : application/json
-                 */
-            function getToken(accessToken) {
+
+            /**
+             * @param {*} access_token 
+             * @headers : application/json
+             */
+            function getToken(access_token) {
                 axios({
                     method: 'get',
-                    url: `https://api.github.com/user?access_token=${accessToken}`,
+                    url: `https://api.github.com/user?access_token=${access_token}`,
                     headers: {
                         accept: 'application/json',
                     }
                 })
-                    .then((response) => {
+                    .then(async response => {
                         console.log("\nResponse.Data : \n", response.data)
+
+                        //save those data in user database
+                        var gituser = new model({
+                            isGitVerify: true,
+                            loginName: response.data.login,
+                            gitID: response.data.id
+                        });
+
+                        saveuser = await gituser.save();
+                        console.log(saveuser)
                     })
                     .catch(error => {
                         console.log(error)
                     })
             }
+            if (!saveuser) {
+                return { "message": "data not save successfully" }
+            }
+            return { "message": "Data save successfully" }
         }
         catch (err) {
             console.log("!Error")
