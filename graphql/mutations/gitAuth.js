@@ -2,7 +2,7 @@
  *  @Execution      : default node          : cmd> gitAuth.js
  *                      
  * 
- *  @Purpose        : perform operations by using gitHub server
+ *  @Purpose        : socail OAuth login for github by graphql 
  * 
  *  @description    : By mutation give path for github server a new files
  * 
@@ -18,6 +18,7 @@
 const { GraphQLNonNull, GraphQLString } = require('graphql')
 var gitAuthType = require('../types/gitAuthType').gitauthType
 var sendMail = require('../../sendMailer/sendMail')
+var model = require('../../model/githubSchemaAuth')
 
 //create a empty function
 var gitAuthMutation = function () { }
@@ -113,12 +114,9 @@ gitAuthMutation.prototype.getInformationGithub = {
         access_token: {
             type: new GraphQLNonNull(GraphQLString),
         },
-        scope: {
+        email: {
             type: new GraphQLNonNull(GraphQLString),
         },
-        token_type: {
-            type: new GraphQLNonNull(GraphQLString),
-        }
     },
 
     /**
@@ -127,7 +125,15 @@ gitAuthMutation.prototype.getInformationGithub = {
      */
     async resolve(root, params, context) {
         try {
-            return { "message": "Data fetch successfully" }
+
+            var url = `https://api.github.com/user?access_token=${params.access_token}&scope=repo,gist&token_type=bearer`
+
+            //sent mail to the mail id, and fetch data by mail
+            var mail = sendMail.sendEmailFunction(url, params.email)
+            if (!mail) {
+                return { "message": "mail not sent" }
+            }
+            return { "message": "mail sent to mail id and data fetch data successfully after click link" }
 
         } catch (err) {
             console.log("!Error")

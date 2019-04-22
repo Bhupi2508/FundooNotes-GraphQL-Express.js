@@ -19,6 +19,15 @@ const userSchema = new mongoose.Schema({
     bio: {
         type: String
     },
+    public_repos:{
+        type: String
+    },
+    followers:{
+        type: String
+    },
+    following:{
+        type: String
+    }
 },
 {
     timestamps: true
