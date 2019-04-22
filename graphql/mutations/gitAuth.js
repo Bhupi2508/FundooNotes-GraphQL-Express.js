@@ -15,14 +15,18 @@
 /**
  * @requires files
  */
-const {GraphQLNonNull, GraphQLString} = require('graphql')
+const { GraphQLNonNull, GraphQLString } = require('graphql')
 var gitAuthType = require('../types/gitAuthType').gitauthType
 var sendMail = require('../../sendMailer/sendMail')
 
 //create a empty function
 var gitAuthMutation = function () { }
 
-
+/*******************************************************************************************************************/
+/**
+ * @description : social auth2.0 for github login using graphql
+ * @purpose : For fetch data by using CURD operation
+ */
 gitAuthMutation.prototype.GithubAuth = {
     type: gitAuthType,
     args: {
@@ -38,20 +42,67 @@ gitAuthMutation.prototype.GithubAuth = {
     async resolve(root, params) {
         try {
 
-            // var clientID = process.env.GITHUB_CLIENT_ID,
-            // var clientSecret = process.env.GITHUB_CLIENT_SECRET,
-            // var callbackURL = process.env.Git_Link
-
+            /**
+             * @param {String}, create a code, which is redirect in graphiql
+             * @returns {String} message
+             */
             var url = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${process.env.Git_Link}`
 
-            sendMail.sendEmailFunction(url, params.email)
-
+            //sent mail to the mail id
+            var mail = sendMail.sendEmailFunction(url, params.email)
+            if (!mail) {
+                return { "message": "mail not sent" }
+            }
+            return { "message": "Mail sent to your mail ID" }
 
         } catch (err) {
             console.log("!Error")
         }
     }
 }
+
+
+/*******************************************************************************************************************/
+/**
+ * @description : code verify for auth2.0 for github login using graphql
+ * @purpose : For fetch data by using CURD operation
+ */
+gitAuthMutation.prototype.codeVerify = {
+    type: gitAuthType,
+    args: {
+        email: {
+            type: new GraphQLNonNull(GraphQLString),
+        }
+    },
+
+    /**
+     * @param {*} root 
+     * @param {*} params 
+     */
+    async resolve(root, params, context) {
+        try {
+
+            /**
+             * @param {String}, create a access_token, which is redirect in graphiql
+             * @returns {String} message
+             */
+            var url = `https://github.com/login/oauth/access_token?client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}&redirect_uri=${process.env.Git_Link}&code=${context.code}`
+
+            //sent mail to the mail id
+            var mail = sendMail.sendEmailFunction(url, params.email)
+            if (!mail) {
+                return { "message": "mail not sent" }
+            }
+            return { "message": "Mail sent to your mail ID" }
+
+        } catch (err) {
+            console.log("!Error")
+        }
+    }
+}
+
+
+
 /**
 * @exports gitAuthMutation
 */

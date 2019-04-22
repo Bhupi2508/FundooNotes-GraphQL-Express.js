@@ -38,7 +38,7 @@ exports.gitauthType = new GraphQLObjectType({  //authType return some variable w
             message: {
                 type: GraphQLString
             },
-            gitId: {
+            code: {
                 type: new GraphQLNonNull(GraphQLID)
             },
         }

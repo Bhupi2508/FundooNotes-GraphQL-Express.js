@@ -31,6 +31,7 @@ var removeNote = require('../mutations/userNotes').removeNote   //removeNote mut
 var savelabelonNote = require('../mutations/userNotes').saveLabelToNote  //savelabelonNote mutation
 var DeletelabelFromNote = require('../mutations/userNotes').removeLabelFromNote  //savelabelonNote mutation
 var gitAuthSocial = require('../mutations/gitAuth').GithubAuth  //GithubAuth mutation
+var codeVerify = require('../mutations/gitAuth').codeVerify  //codeVerify mutation
 
 /**
 @exports files
@@ -51,5 +52,6 @@ module.exports = {
   removeNote,
   savelabelonNote,
   DeletelabelFromNote,
-  gitAuthSocial
+  gitAuthSocial,
+  codeVerify
 }
