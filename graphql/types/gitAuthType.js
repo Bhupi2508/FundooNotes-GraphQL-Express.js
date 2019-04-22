@@ -41,6 +41,21 @@ exports.gitauthType = new GraphQLObjectType({  //authType return some variable w
             code: {
                 type: new GraphQLNonNull(GraphQLID)
             },
+            login: {
+                type: GraphQLString
+            },
+            name: {
+                type: GraphQLString
+            },
+            company: {
+                type: GraphQLString
+            },
+            location: {
+                type: GraphQLString
+            },
+            bio: {
+                type: GraphQLString
+            },
         }
     }
 });

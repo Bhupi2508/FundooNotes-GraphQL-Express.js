@@ -102,6 +102,40 @@ gitAuthMutation.prototype.codeVerify = {
 }
 
 
+/*******************************************************************************************************************/
+/**
+ * @description : code verify for auth2.0 for github login using graphql
+ * @purpose : For fetch data by using CURD operation
+ */
+gitAuthMutation.prototype.getInformationGithub = {
+    type: gitAuthType,
+    args: {
+        access_token: {
+            type: new GraphQLNonNull(GraphQLString),
+        },
+        scope: {
+            type: new GraphQLNonNull(GraphQLString),
+        },
+        token_type: {
+            type: new GraphQLNonNull(GraphQLString),
+        }
+    },
+
+    /**
+     * @param {*} root 
+     * @param {*} params 
+     */
+    async resolve(root, params, context) {
+        try {
+            return { "message": "Data fetch successfully" }
+
+        } catch (err) {
+            console.log("!Error")
+        }
+    }
+}
+
+
 
 /**
 * @exports gitAuthMutation
