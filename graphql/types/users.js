@@ -16,7 +16,11 @@
 /**
  * @requires files
  */
-const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull } = require('graphql')
+const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull, GraphQLList } = require('graphql')
+var labelType = require('../types/labelType').labelauthType
+var noteType = require('../types/noteTypes').noteAuthType
+var labelModel = require('../../model/labelSchema')
+var noteModel = require('../../model/noteSchema')
 
 
 /**
@@ -50,6 +54,26 @@ exports.userType = new GraphQLObjectType({
             },
             password: {
                 type: new GraphQLNonNull(GraphQLString)
+            },
+            labels: {
+                type: new GraphQLList(labelType),
+                resolve: async function (root, args) {
+                    const users_label = await labelModel.find({ "userID": root.id })
+                    if (!users_label) {
+                        return { "message": "Id not found" }
+                    }
+                    return users_label
+                }
+            },
+            notes: {
+                type: new GraphQLList(noteType),
+                resolve: async function (root, args) {
+                    const users_note = await noteModel.find({ "userID": root.id })
+                    if (!users_note) {
+                        return { "message": "Id not found" }
+                    }
+                    return users_note
+                }
             }
         }
     }

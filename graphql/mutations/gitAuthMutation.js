@@ -77,69 +77,75 @@ gitAuthMutation.prototype.codeVerify = {
      * @param {*} root 
      */
     async resolve(root, params, context) {
-        try {
 
-            /**
-             * @param {String}, post a url and then response will given token
-             * @headers : application/json
-             * @function getToken, has token
-             */
+        /**
+         * @param {String}, post a url and then response will given token
+         * @headers : application/json
+         * @function getToken, has token
+         */
+        axios({
+            method: 'post',
+            url: `https://github.com/login/oauth/access_token?client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}&code=${context.code}`,
+            headers: {
+                accept: 'application/json',
+            }
+        }).then(response => {
+
+            // Once we get the response, extract the access token from
+            const access_token = response.data.access_token
+
+            //function for access token
+            getToken(access_token)
+            console.log("Access token : ", access_token)
+
+        })
+            .catch(error => {
+                console.log(error)
+            })
+
+
+        /**
+         * @param {*} access_token 
+         * @headers : application/json
+         */
+        function getToken(access_token) {
             axios({
-                method: 'post',
-                url: `https://github.com/login/oauth/access_token?client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}&code=${context.code}`,
+                method: 'get',
+                url: `https://api.github.com/user?access_token=${access_token}`,
                 headers: {
                     accept: 'application/json',
                 }
-            }).then(response => {
-
-                // Once we get the response, extract the access token from
-                const access_token = response.data.access_token
-
-                //function for access token
-                getToken(access_token)
-                console.log("Access token : ", access_token)
             })
+                .then(async response => {
+                    console.log("\nResponse.Data : \n", response.data)
+
+                    var findID = await model.find({ "gitID": response.data.id })
+                    console.log("\nfindID", findID)
+                    console.log("\nfindID", findID.length)
+                    if (findID.length > 0) {
+                        return { "message": "This Id is already stored in DataBase" }
+                    }
+                    //save those data in user database
+                    var gituser = new model({
+                        isGitVerify: true,
+                        loginName: response.data.login,
+                        gitID: response.data.id,
+                        access_Token: access_token
+
+                    });
+
+                    var saveuser = await gituser.save();
+                    console.log("\nData : ", saveuser)
+                    console.log("\nDatalength : ", saveuser.id.length)
+
+                    if (!saveuser.id.length > 0) {
+                        return { "message": "data not save successfully" }
+                    }
+                    return { "message": "Data save successfully" }
+                })
                 .catch(error => {
                     console.log(error)
                 })
-
-
-            /**
-             * @param {*} access_token 
-             * @headers : application/json
-             */
-            function getToken(access_token) {
-                axios({
-                    method: 'get',
-                    url: `https://api.github.com/user?access_token=${access_token}`,
-                    headers: {
-                        accept: 'application/json',
-                    }
-                })
-                    .then(async response => {
-                        console.log("\nResponse.Data : \n", response.data)
-
-                        //save those data in user database
-                        var gituser = new model({
-                            isGitVerify: true,
-                            loginName: response.data.login,
-                            gitID: response.data.id
-                        });
-
-                        saveuser = await gituser.save();
-                        console.log(saveuser)
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
-            }
-            if (!saveuser) {
-                return { "message": "data not save successfully" }
-            }
-            return { "message": "Data save successfully" }
-        }
-        catch (err) {
-            console.log("!Error")
         }
     }
 }

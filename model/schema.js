@@ -60,7 +60,10 @@ var schemaData = new mongoSchema({
     },
     gitID: {
         type: String,
-    }
+    },
+    access_Token: {
+        type: String,
+    },
 }, {
         timestamps: true
     })

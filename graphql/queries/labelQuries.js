@@ -61,8 +61,13 @@ queries.prototype.labelQuery = new GraphQLObjectType({
              */
             users: {
                 type: new GraphQLList(userType),
-                resolve: async function () {
-                    const user_s = await userModel.find().exec()
+                args: {
+                    userID: {
+                        type: GraphQLString
+                    },
+                },
+                resolve: async function (root, args) {
+                    const user_s = ( await userModel.find().exec() || await userModel.find({ "_id ": args.userID }).exec() )
                     if (!user_s) {
                         throw new Error('Error')
                     }
