@@ -119,6 +119,7 @@ gitAuthMutation.prototype.codeVerify = {
                 .then(async response => {
                     console.log("\nResponse.Data : \n", response.data)
 
+                    //check wheather is present or not
                     var findID = await model.find({ "gitID": response.data.id })
                     console.log("\nfindID", findID)
                     console.log("\nfindID", findID.length)
