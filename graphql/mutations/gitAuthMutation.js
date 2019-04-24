@@ -51,7 +51,7 @@ gitAuthMutation.prototype.GithubAuth = {
              * @param {String}, create a code, which is redirect in graphiql
              * @returns {String} message
              */
-            var url = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${process.env.Git_Link}`
+            var url = `https://github.com/login/oauth/authorize?client_id=${process.env.ClientID}&redirect_uri=${process.env.Git_Link}`
 
             //sent mail to the mail id
             var mail = sendMail.sendEmailFunction(url, params.email)
@@ -87,7 +87,7 @@ gitAuthMutation.prototype.codeVerify = {
          */
         axios({
             method: 'post',
-            url: `https://github.com/login/oauth/access_token?client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}&code=${context.code}`,
+            url: `https://github.com/login/oauth/access_token?client_id=${process.env.ClientID}&client_secret=${process.env.ClientSecret}&code=${context.code}`,
             headers: {
                 accept: 'application/json',
             }
@@ -121,13 +121,6 @@ gitAuthMutation.prototype.codeVerify = {
                 .then(async response => {
                     console.log("\nResponse.Data : \n", response.data)
 
-                    //token created for gitAuth login verification and send to git mail
-                    var token = await jwt.sign({ "id": response.data.id, "login": response.data.login }, process.env.secretKey, { expiresIn: 86400000 })
-
-                    //send mail to the given mail id
-                    var url = `http://localhost:4000/graphql?token=${token}`
-                    sendMail.sendEmailFunction(url, response.data.email)
-
                     //save those data in user database
                     var gituser = new model({
                         loginName: response.data.login,
@@ -139,7 +132,14 @@ gitAuthMutation.prototype.codeVerify = {
                     //save data into database
                     var saveuser = await gituser.save();
                     console.log("\nData : ", saveuser)
-                    console.log("\nDatalength : ", saveuser.id.length)
+
+                    //token created for gitAuth login verification and send to git mail
+                    var token = await jwt.sign({ "userID": saveuser.id, "id": response.data.id, "login": response.data.login }, process.env.secretKey, { expiresIn: 86400000 })
+
+                    //send mail to the given mail id
+                    var url = `http://localhost:4000/graphql?token=${token}`
+                    sendMail.sendEmailFunction(url, response.data.email)
+
 
                     if (!saveuser.id.length > 0) {
                         return { "message": "data not save successfully" }
