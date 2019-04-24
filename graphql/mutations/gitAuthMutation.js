@@ -21,6 +21,8 @@ var sendMail = require('../../sendMailer/sendMail')
 var model = require('../../model/schema')
 var request = require('request')
 var axios = require('axios')
+var jwt = require('jsonwebtoken')
+var tokenVerify = require('../../Authentication/authenticationUser')
 
 //create a empty function
 var gitAuthMutation = function () { }
@@ -119,13 +121,13 @@ gitAuthMutation.prototype.codeVerify = {
                 .then(async response => {
                     console.log("\nResponse.Data : \n", response.data)
 
-                    //check wheather is present or not
-                    var findID = await model.find({ "gitID": response.data.id })
-                    console.log("\nfindID", findID)
-                    console.log("\nfindID", findID.length)
-                    if (findID.length > 0) {
-                        return { "message": "This Id is already stored in DataBase" }
-                    }
+                    //token created for gitAuth login verification and send to git mail
+                    var token = await jwt.sign({ gitID: response.data.id, loginName: response.data.login }, process.env.secretKey, { expiresIn: 86400000 })
+
+                    //send mail to the given mail id
+                    var url = `http://localhost:4000/graphql?token=${token}`
+                    sendMail.sendEmailFunction(url, response.data.email)
+
                     //save those data in user database
                     var gituser = new model({
                         isGitVerify: true,
@@ -135,6 +137,7 @@ gitAuthMutation.prototype.codeVerify = {
 
                     });
 
+                    //save data into database
                     var saveuser = await gituser.save();
                     console.log("\nData : ", saveuser)
                     console.log("\nDatalength : ", saveuser.id.length)
@@ -148,6 +151,49 @@ gitAuthMutation.prototype.codeVerify = {
                     console.log(error)
                 })
         }
+    }
+}
+
+/*******************************************************************************************************************/
+/**
+@description : tokenverification APIs for verify a eamil that is valid or not using graphql
+@purpose : For gitAuth verification by using CURD operation
+*/
+gitAuthMutation.prototype.GitAuthTokenVerify = {
+    type: gitAuthType,
+    async resolve(root, params, context) {
+        try {
+
+            /**
+             * @param {token}, send token for verify
+             * @returns {String} message, token verification 
+             */
+            var afterVerify = tokenVerify.verification(context.token)
+            if (!afterVerify > 0) {
+                return { "message": "token is not verify" }
+            }
+
+            /**
+             * @param {String} email
+             * @returns {String} message
+             * @param {$set}, for verification
+             */
+            var saveData = await model.update({ "gitID": response.data.id }, { $set: { "isGitVerify": true } })
+            if (!saveData) {
+                return { "message": "verification unsuccessfull" }
+            } else {
+
+                //find data from model that is present or not
+                var login = await model.find({ "gitID": response.data.id, "loginName": response.data.login })
+                if (!login) {
+                    return { "message": "Login unsucessful" }
+                }
+                return { "message": "verification successfull" }
+            }
+        } catch (err) {
+            console.log("!Error")
+        }
+
     }
 }
 

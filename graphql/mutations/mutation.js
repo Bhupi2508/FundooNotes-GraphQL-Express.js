@@ -33,6 +33,7 @@ var savelabelonNote = require('../mutations/userNotes').saveLabelToNote  //savel
 var DeletelabelFromNote = require('../mutations/userNotes').removeLabelFromNote  //savelabelonNote mutation
 var gitAuthSocial = require('../mutations/gitAuthMutation').GithubAuth  //GithubAuth mutation
 var codeVerify = require('../mutations/gitAuthMutation').codeVerify  //codeVerify mutation
+var gitAuthTokenVerify = require('../mutations/gitAuthMutation').GitAuthTokenVerify //GitAuthTokenVerify mutation
 
 /**
 @exports files
@@ -56,7 +57,8 @@ module.exports = new GraphQLObjectType({
     savelabelonNote,
     DeletelabelFromNote,
     gitAuthSocial,
-    codeVerify
+    codeVerify,
+    gitAuthTokenVerify
 
   }
 })
