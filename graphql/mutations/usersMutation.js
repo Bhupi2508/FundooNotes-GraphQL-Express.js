@@ -131,6 +131,7 @@ userMutation.prototype.signup = {
             }
         } catch (err) {
             console.log("!Error")
+            return { "message": err }
         }
     }
 }
@@ -170,6 +171,7 @@ userMutation.prototype.emailVerify = {
 
         } catch (err) {
             console.log("!Error")
+            return { "message": err }
         }
 
     }
@@ -213,6 +215,7 @@ userMutation.prototype.update = {
                 .catch(err => new Error(err));
         } catch (err) {
             console.log("!Error")
+            return { "message": err }
         }
     }
 }
@@ -248,6 +251,7 @@ userMutation.prototype.remove = {
             return removeduser;
         } catch (err) {
             console.log("!Error")
+            return { "message": err }
         }
     }
 }
@@ -328,6 +332,7 @@ userMutation.prototype.login = {
 
         } catch (err) {
             console.log("!Error")
+            return { "message": err }
         }
     }
 }
@@ -398,6 +403,7 @@ userMutation.prototype.forgotPassword = {
 
         } catch (err) {
             console.log("!Error")
+            return { "message": err }
         }
 
     }
@@ -470,6 +476,7 @@ userMutation.prototype.resetPassword = {
 
         } catch (err) {
             console.log("!Error")
+            return { "message": err }
         }
     }
 }

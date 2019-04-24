@@ -172,7 +172,7 @@ gitAuthMutation.prototype.GitAuthTokenVerify = {
                 return { "message": "token is not verify" }
             }
 
-            console.log("id",afterVerify.id);
+            console.log("id", afterVerify.id);
 
             /**
              * @param {String} email
@@ -192,7 +192,8 @@ gitAuthMutation.prototype.GitAuthTokenVerify = {
                 return { "message": "verification successfull" }
             }
         } catch (err) {
-            console.log("!Error",err)
+            console.log("!Error", err)
+            return { "message": err }
         }
 
     }

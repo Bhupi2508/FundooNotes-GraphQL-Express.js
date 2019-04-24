@@ -33,5 +33,6 @@ exports.verification = (token) => {
     }
     catch (err) {
         console.log("found error in verify token")
+        return { "message": err }
     }
 }

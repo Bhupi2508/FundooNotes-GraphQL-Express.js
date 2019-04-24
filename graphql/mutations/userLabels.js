@@ -21,7 +21,7 @@ var labelModel = require('../../model/labelSchema')
 var tokenVerify = require('../../Authentication/authenticationUser')
 
 //create a empty function
-var labelMutation = function(){}
+var labelMutation = function () { }
 
 /*******************************************************************************************************************/
 /**
@@ -72,7 +72,7 @@ labelMutation.prototype.createLabel = {
             if (labelfind.length > 0) {
                 return { "message": "labelName already present" }
             }
-            
+
             //find id from users models
             const model = new labelModel({ labelName: params.labelName, userID: payload.userID })
             const label = model.save()
@@ -87,6 +87,7 @@ labelMutation.prototype.createLabel = {
             }
         } catch (error) {
             console.log("error")
+            return { "message": err }
         }
     }
 }
@@ -150,6 +151,7 @@ labelMutation.prototype.editLabel = {
 
         } catch (error) {
             console.log("error")
+            return { "message": err }
         }
     }
 }
@@ -206,6 +208,7 @@ labelMutation.prototype.removeLabel = {
 
         } catch (error) {
             console.log("error")
+            return { "message": err }
         }
     }
 }

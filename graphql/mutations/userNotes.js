@@ -125,6 +125,7 @@ noteMutation.prototype.createNote = {
 
         } catch (error) {
             console.log("error in catch")
+            return { "message": err }
         }
     }
 }
@@ -179,6 +180,7 @@ noteMutation.prototype.editNote = {
 
         } catch (error) {
             console.log("error")
+            return { "message": err }
         }
     }
 }
@@ -224,6 +226,7 @@ noteMutation.prototype.removeNote = {
 
         } catch (error) {
             console.log("error")
+            return { "message": err }
         }
     }
 }
@@ -288,6 +291,7 @@ noteMutation.prototype.saveLabelToNote = {
 
         } catch (error) {
             console.log("error in catch")
+            return { "message": err }
         }
     }
 }
@@ -358,6 +362,7 @@ noteMutation.prototype.removeLabelFromNote = {
 
         } catch (error) {
             console.log("error in catch")
+            return { "message": err }
         }
     }
 }
