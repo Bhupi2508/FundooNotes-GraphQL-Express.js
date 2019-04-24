@@ -122,7 +122,7 @@ gitAuthMutation.prototype.codeVerify = {
                     console.log("\nResponse.Data : \n", response.data)
 
                     //token created for gitAuth login verification and send to git mail
-                    var token = await jwt.sign({ gitID: response.data.id, loginName: response.data.login }, process.env.secretKey, { expiresIn: 86400000 })
+                    var token = await jwt.sign({ "id": response.data.id, "login": response.data.login }, process.env.secretKey, { expiresIn: 86400000 })
 
                     //send mail to the given mail id
                     var url = `http://localhost:4000/graphql?token=${token}`
@@ -130,7 +130,6 @@ gitAuthMutation.prototype.codeVerify = {
 
                     //save those data in user database
                     var gituser = new model({
-                        isGitVerify: true,
                         loginName: response.data.login,
                         gitID: response.data.id,
                         access_Token: access_token
@@ -173,25 +172,27 @@ gitAuthMutation.prototype.GitAuthTokenVerify = {
                 return { "message": "token is not verify" }
             }
 
+            console.log("id",afterVerify.id);
+
             /**
              * @param {String} email
              * @returns {String} message
              * @param {$set}, for verification
              */
-            var saveData = await model.update({ "gitID": response.data.id }, { $set: { "isGitVerify": true } })
+            var saveData = await model.updateOne({ "gitID": afterVerify.id }, { $set: { "isGitVerify": true } })
             if (!saveData) {
                 return { "message": "verification unsuccessfull" }
             } else {
 
                 //find data from model that is present or not
-                var login = await model.find({ "gitID": response.data.id, "loginName": response.data.login })
+                var login = await model.find({ "gitID": afterVerify.id, "loginName": afterVerify.login })
                 if (!login) {
                     return { "message": "Login unsucessful" }
                 }
                 return { "message": "verification successfull" }
             }
         } catch (err) {
-            console.log("!Error")
+            console.log("!Error",err)
         }
 
     }
