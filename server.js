@@ -46,7 +46,6 @@ app.use('/graphql', graphqlExpress((req) => ({
 
 //listen the given port
 var userPort = (process.env.port)
-app.use('*', cors());
 app.listen(userPort, () => {
     console.log('#####################################################################################');
     console.log('##############          STARTING SERVER at port : ', userPort, '               ##############');

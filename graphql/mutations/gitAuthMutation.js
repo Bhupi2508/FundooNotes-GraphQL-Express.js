@@ -150,6 +150,7 @@ gitAuthMutation.prototype.codeVerify = {
                     console.log(error)
                 })
         }
+        return { "message": "Data save successfully" }
     }
 }
 
