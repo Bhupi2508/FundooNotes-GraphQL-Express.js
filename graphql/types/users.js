@@ -55,6 +55,12 @@ exports.userType = new GraphQLObjectType({
             password: {
                 type: new GraphQLNonNull(GraphQLString)
             },
+            uploadURL: {
+                type: new GraphQLNonNull(GraphQLString)
+            },
+            Key: {
+                type: new GraphQLNonNull(GraphQLID)
+            },
             labels: {
                 type: new GraphQLList(labelType),
                 resolve: async function (root, args) {
@@ -73,7 +79,7 @@ exports.userType = new GraphQLObjectType({
                         return { "message": "Id not found" }
                     }
                     return users_note
-                }
+                },
             }
         }
     }

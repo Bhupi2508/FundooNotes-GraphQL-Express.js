@@ -17,6 +17,9 @@
  */
 const express = require('express')
 const app = express()
+var aws = require('aws-sdk')
+var multer = require('multer')
+var multerS3 = require('multer-s3')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongoose = require('./config/mongoose')
@@ -43,6 +46,39 @@ app.use('/graphql', graphqlExpress((req) => ({
     },
     graphiql: true
 })))
+
+
+//for s3 upload a pic in S# bucket
+var s3 = new aws.S3({
+    bucketName: 'myfundoo',
+    dirName: 'photos',
+    region: 'ap-south-1',
+    accessKeyId: process.env.awsID,
+    secretAccessKey: process.env.awsSecret,
+    s3Url: 'https://my-s3-url.com/.jpg',
+})
+
+//create a uplaod file for given aws information
+var upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: 'myfundoo',
+        metadata: function (req, file, cb) {
+            cb(null, { fieldName: file.fieldname });
+        },
+        key: function (req, file, cb) {
+            console.log("inside cb fn");
+            cb(null, Date.now().toString())
+        }
+    })
+})
+
+// console.log("before req");
+app.post('/upload', upload.single('photos'), function (req, res, next) {
+    var a = res.send('Successfully uploaded ' + req.file.mimetype + req.file.location + ' files!')
+})
+
+
 
 //listen the given port
 var userPort = (process.env.port)
