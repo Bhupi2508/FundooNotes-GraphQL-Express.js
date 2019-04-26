@@ -62,7 +62,7 @@ exports.userType = new GraphQLObjectType({
                 type: new GraphQLNonNull(GraphQLID)
             },
             labels: {
-                type: new GraphQLList(labelType),
+                type: new GraphQLList(labelType),  //find labels details also 
                 resolve: async function (root, args) {
                     const users_label = await labelModel.find({ "userID": root.id })
                     if (!users_label) {
@@ -72,7 +72,7 @@ exports.userType = new GraphQLObjectType({
                 }
             },
             notes: {
-                type: new GraphQLList(noteType),
+                type: new GraphQLList(noteType),  //find notes details also 
                 resolve: async function (root, args) {
                     const users_note = await noteModel.find({ "userID": root.id })
                     if (!users_note) {
