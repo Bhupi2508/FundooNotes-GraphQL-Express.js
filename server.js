@@ -45,7 +45,7 @@ var s3 = new aws.S3({
 })
 
 //create a uplaod file for given aws information
-var upload = multer({
+var upload = multer({  
     storage: multerS3({
         s3: s3,
         bucket: 'myfundoo',
@@ -58,7 +58,7 @@ var upload = multer({
     })
 })
 
-//middleware for social auth
+//middleware 
 app.use('/graphql', upload.single('picture'), graphqlExpress((req) => ({
     schema: userSchema,
     rootValue: global,
