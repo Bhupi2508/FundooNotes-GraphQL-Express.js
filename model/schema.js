@@ -64,6 +64,9 @@ var schemaData = new mongoSchema({
     access_Token: {
         type: String,
     },
+    ProfilePicUrl: {
+        type: String
+    }
 }, {
         timestamps: true
     })

@@ -20,7 +20,6 @@ const app = express()
 var aws = require('aws-sdk')
 var multer = require('multer')
 var multerS3 = require('multer-s3')
-const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongoose = require('./config/mongoose')
 const db = mongoose()
@@ -35,23 +34,10 @@ require('dotenv').config();
 app.use(bodyParser.json())  //bodyparser parse the req
 app.use(expressValidator());
 
-//middleware for social auth
-app.use('/graphql', graphqlExpress((req) => ({
-    schema: userSchema,
-    rootValue: global,
-    context: {
-        origin: req.headers.origin,
-        token: req.query.token,
-        code: req.query.code,
-    },
-    graphiql: true
-})))
-
 
 //for s3 upload a pic in S# bucket
 var s3 = new aws.S3({
     bucketName: 'myfundoo',
-    dirName: 'photos',
     region: 'ap-south-1',
     accessKeyId: process.env.awsID,
     secretAccessKey: process.env.awsSecret,
@@ -67,18 +53,23 @@ var upload = multer({
             cb(null, { fieldName: file.fieldname });
         },
         key: function (req, file, cb) {
-            console.log("inside cb fn");
             cb(null, Date.now().toString())
         }
     })
 })
 
-// console.log("before req");
-app.post('/upload', upload.single('photos'), function (req, res, next) {
-    var a = res.send('Successfully uploaded ' + req.file.mimetype + req.file.location + ' files!')
-})
-
-
+//middleware for social auth
+app.use('/graphql', upload.single('picture'), graphqlExpress((req) => ({
+    schema: userSchema,
+    rootValue: global,
+    context: {
+        origin: req.headers.origin,
+        token: req.query.token,
+        code: req.query.code,
+        req: req
+    },
+    graphiql: true
+})))
 
 //listen the given port
 var userPort = (process.env.port)
