@@ -17,6 +17,7 @@
  * @requires files
  */
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull, GraphQLBoolean } = require('graphql')
+const { GraphQLDate, GraphQLTime, GraphQLDateTime } = require('graphql-iso-date')
 
 
 
@@ -56,7 +57,7 @@ exports.noteAuthType = new GraphQLObjectType({  //authType return some variable 
                 type: GraphQLString
             },
             reminder: {
-                type: GraphQLString
+                type: GraphQLDateTime
             },
             color: {
                 type: GraphQLString

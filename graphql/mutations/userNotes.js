@@ -16,6 +16,7 @@
  * @requires files
  */
 const { GraphQLString, GraphQLID } = require('graphql');
+const { GraphQLDate, GraphQLTime, GraphQLDateTime } = require('graphql-iso-date')
 var noteAuthUser = require('../types/noteTypes').noteAuthType
 var noteModel = require('../../model/noteSchema')
 var labelModel = require('../../model/labelSchema')
@@ -358,6 +359,71 @@ noteMutation.prototype.removeLabelFromNote = {
                 }
                 return { "message": "label delete from note successfully " }
             }
+
+
+        } catch (error) {
+            console.log("error in catch")
+            return { "message": err }
+        }
+    }
+}
+
+
+/*******************************************************************************************************************/
+/**
+ * @description : save label into notes APIs for updated notes for using graphql
+ * @purpose : For fetch data by using CURD operation
+ */
+noteMutation.prototype.addReminder = {
+    type: noteAuthUser,
+    args: {
+
+        /**
+         * @param {String} DateTime  
+         * @param {String} label_ID 
+
+        */
+        noteID: {
+            type: GraphQLID
+        },
+        reminder: {
+            type: GraphQLDateTime
+        }
+    },
+
+    /**
+     * 
+     * @param {*} root 
+     * @param {*} params 
+     */
+    async resolve(root, params) {
+        try {
+
+            //find labelID from noteModel Schema
+            var id = await noteModel.find({ "_id": params.noteID })
+
+            //if id is already present
+            if (!id.length > 0) {
+                return { "message": "This noteID is not present in notes" }
+            }
+
+            //find id from noteModel and update(push) into notes
+            var note = await noteModel.findOneAndUpdate({ reminder: params.reminder },
+                {
+                    $set: {
+                        reminder: params.reminder
+                    }
+                })
+
+            //time set for reminder
+            
+                /**
+             * @return {String}, message
+             */
+            if (!note) {
+                return { "message": "reminder not set " }
+            }
+            return { "message": "reminder set in note successfully " }
 
 
         } catch (error) {
