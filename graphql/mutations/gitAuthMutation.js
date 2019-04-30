@@ -40,7 +40,7 @@ gitAuthMutation.prototype.GithubAuth = {
         }
     },
 
-    /**
+    /** 
      * @param {*} root 
      * @param {*} params 
      */

@@ -15,7 +15,7 @@
 /**
  * @requires files
  */
-var type = require('../types//users').userType
+var type = require('../types/users').userType
 const { GraphQLString } = require('graphql')
 var userModel = require('../../model/schema');
 var verifyToken = require('../../Authentication/authenticationUser')

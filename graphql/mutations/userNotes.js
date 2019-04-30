@@ -415,7 +415,8 @@ noteMutation.prototype.addReminder = {
                     }
                 })
 
-            //time set for reminder
+            //time set for reminder time
+            
             
                 /**
              * @return {String}, message

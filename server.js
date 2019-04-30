@@ -17,49 +17,25 @@
  */
 const express = require('express')
 const app = express()
-var aws = require('aws-sdk')
-var multer = require('multer')
-var multerS3 = require('multer-s3')
+require('dotenv').config();
 const bodyParser = require('body-parser')
 const mongoose = require('./config/mongoose')
 const db = mongoose()
 const graphqlExpress = require('express-graphql')
 var expressValidator = require('express-validator')
+var upload = require('./services/aws-s3Services')
 const userSchema = require('./graphql/types/index').userSchema
 
-
-// const labelSchema = require('./graphql/types/index').n;
-require('dotenv').config();
-
-app.use(bodyParser.json())  //bodyparser parse the req
+//bodyparser parse the req
+app.use(bodyParser.json())
 app.use(expressValidator());
 
 
-//for s3 upload a pic in S# bucket
-var s3 = new aws.S3({
-    bucketName: 'myfundoo',
-    region: 'ap-south-1',
-    accessKeyId: process.env.awsID,
-    secretAccessKey: process.env.awsSecret,
-    s3Url: 'https://my-s3-url.com/.jpg',
-})
-
-//create a uplaod file for given aws information
-var upload = multer({  
-    storage: multerS3({
-        s3: s3,
-        bucket: 'myfundoo',
-        metadata: function (req, file, cb) {
-            cb(null, { fieldName: file.fieldname });
-        },
-        key: function (req, file, cb) {
-            cb(null, Date.now().toString())
-        }
-    })
-})
+//middleware for s3 APIs
+app.use('/graphql', upload.single('picture'))
 
 //middleware 
-app.use('/graphql', upload.single('picture'), graphqlExpress((req) => ({
+app.use('/graphql', graphqlExpress((req) => ({
     schema: userSchema,
     rootValue: global,
     context: {
