@@ -40,7 +40,8 @@ gitAuthMutation.prototype.GithubAuth = {
         }
     },
 
-    /** 
+    /**
+     * 
      * @param {*} root 
      * @param {*} params 
      */
@@ -121,8 +122,16 @@ gitAuthMutation.prototype.codeVerify = {
                 .then(async response => {
                     console.log("\nResponse.Data : \n", response.data)
 
+
+                    //take data in a function and use ahead
+                    getRepo(response.data.repos_url)
+
+
                     //save those data in user database
                     var gituser = new model({
+                        firstName: params.firstName,
+                        lastName: params.lastName,
+                        email: params.email,
                         loginName: response.data.login,
                         gitID: response.data.id,
                         access_Token: access_token
@@ -150,7 +159,22 @@ gitAuthMutation.prototype.codeVerify = {
                     console.log(error)
                 })
         }
-        return { "message": "Data save successfully" }
+
+        function getRepo(repo) {
+            axios({
+                method: 'get',
+                url: repo,
+                headers: {
+                    accept: 'application/json'
+                }
+            }).then((res) => {
+                for (var i = 0; i < res.data.length; i++) {
+                    console.log("\n", i, ". Repository Names : ", res.data[i].name)
+                    console.log(i, ". Repository Description : ", res.data[i].description)
+                }
+            })
+            return { "message": "Data save successfully" }
+        }
     }
 }
 
