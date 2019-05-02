@@ -33,6 +33,7 @@ var savelabelonNote = require('../mutations/userNotes').saveLabelToNote  //savel
 var DeletelabelFromNote = require('../mutations/userNotes').removeLabelFromNote  //savelabelonNote mutation
 var gitAuthSocial = require('../mutations/gitAuthMutation').GithubAuth  //GithubAuth mutation
 var codeVerify = require('../mutations/gitAuthMutation').codeVerify  //codeVerify mutation
+var pullGitRepository = require('../mutations/gitAuthMutation').pullGitRepository    //pullGitRepository mutation
 var gitAuthTokenVerify = require('../mutations/gitAuthMutation').GitAuthTokenVerify //GitAuthTokenVerify mutation
 var uploadPic = require('../mutations/uploadPic').picUpload //picUpload mutation
 
@@ -59,6 +60,7 @@ module.exports = new GraphQLObjectType({
     DeletelabelFromNote,
     gitAuthSocial,
     codeVerify,
+    pullGitRepository,
     gitAuthTokenVerify,
     uploadPic
 

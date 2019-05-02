@@ -19,6 +19,7 @@ const { GraphQLNonNull, GraphQLString } = require('graphql')
 var gitAuthType = require('../types/users').authType
 var sendMail = require('../../sendMailer/sendMail')
 var model = require('../../model/schema')
+var noteModel = require('../../model/noteSchema')
 var request = require('request')
 var axios = require('axios')
 var jwt = require('jsonwebtoken')
@@ -122,11 +123,6 @@ gitAuthMutation.prototype.codeVerify = {
                 .then(async response => {
                     console.log("\nResponse.Data : \n", response.data)
 
-
-                    //take data in a function and use ahead
-                    getRepo(response.data.repos_url)
-
-
                     //save those data in user database
                     var gituser = new model({
                         firstName: params.firstName,
@@ -158,22 +154,6 @@ gitAuthMutation.prototype.codeVerify = {
                 .catch(error => {
                     console.log(error)
                 })
-        }
-
-        function getRepo(repo) {
-            axios({
-                method: 'get',
-                url: repo,
-                headers: {
-                    accept: 'application/json'
-                }
-            }).then((res) => {
-                for (var i = 0; i < res.data.length; i++) {
-                    console.log("\n", i, ". Repository Names : ", res.data[i].name)
-                    console.log(i, ". Repository Description : ", res.data[i].description)
-                }
-            })
-            return { "message": "Data save successfully" }
         }
     }
 }
@@ -224,6 +204,73 @@ gitAuthMutation.prototype.GitAuthTokenVerify = {
     }
 }
 
+
+
+/*******************************************************************************************************************/
+/**
+@description : pullGitRepository APIs for fetching repository Details using apollo-graphql
+@purpose : For gitAuth verification by using CURD operation
+*/
+gitAuthMutation.prototype.pullGitRepository = {
+    type: gitAuthType,
+    async resolve(root, params, context) {
+        try {
+
+
+            /**
+            * @param {token}, send token for verify
+            * @returns {String} message, token verification 
+            */
+            var afterVerify = tokenVerify.verification(context.token)
+            if (!afterVerify > 0) {
+                return { "message": "token is not verify" }
+            }
+
+            //find token from dataBase
+            var user = await model.find({ _id: afterVerify.userID })
+            if (!user) {
+                return { "message": "user not verified" }
+            }
+
+            // Access_token
+            var access_token = user[0].access_Token;
+
+
+
+            //get response from given url
+            axios({
+                method: 'get',
+                url: `https://api.github.com/user/repos?access_token=${access_token}`,
+                headers: {
+                    accept: 'application/json'
+                }
+            }).then((res) => {
+
+                for (var i = 0; i < res.data.length; i++) {
+                    console.log("\n", i, ". Repository Names : ", res.data[i].name)
+                    console.log(i, ". Repository Description : ", res.data[i].description)
+
+                    //save those data in user database
+                    var model = new noteModel({
+                        title: res.data[i].name,
+                        description: res.data[i].description,
+                        userID: afterVerify.userID
+                    });
+
+                    //save data in database
+                    const note = model.save()
+
+                }
+            })
+
+            return { "message": "note added successfully" }
+
+        } catch (err) {
+            console.log("!Error", err)
+            return { "message": err }
+        }
+    }
+}
 
 
 /**
