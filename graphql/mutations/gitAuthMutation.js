@@ -243,22 +243,28 @@ gitAuthMutation.prototype.pullGitRepository = {
                 headers: {
                     accept: 'application/json'
                 }
-            }).then((res) => {
+            }).then(async (res) => {
 
+
+                //for loop for save the repository in database
                 for (var i = 0; i < res.data.length; i++) {
                     console.log("\n", i, ". Repository Names : ", res.data[i].name)
                     console.log(i, ". Repository Description : ", res.data[i].description)
 
-                    //save those data in user database
-                    var model = new noteModel({
-                        title: res.data[i].name,
-                        description: res.data[i].description,
-                        userID: afterVerify.userID
-                    });
+                    //find title from database
+                    var findRepo = await noteModel.find({ title: res.data[i].name })
+                    if (!findRepo.length > 0) {
 
-                    //save data in database
-                    const note = model.save()
+                        //save those data in user database
+                        var model = new noteModel({
+                            title: res.data[i].name,
+                            description: res.data[i].description,
+                            userID: afterVerify.userID
+                        });
 
+                        //save data in database
+                        const note = model.save()
+                    }
                 }
             })
 
