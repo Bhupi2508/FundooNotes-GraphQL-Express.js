@@ -16,7 +16,7 @@
  * @requires files
  */
 const { GraphQLString, GraphQLID } = require('graphql');
-const { GraphQLDate, GraphQLTime, GraphQLDateTime } = require('graphql-iso-date')
+const { GraphQLDateTime } = require('graphql-iso-date')
 var noteAuthUser = require('../types/noteTypes').noteAuthType
 var noteModel = require('../../model/noteSchema')
 var labelModel = require('../../model/labelSchema')
@@ -46,9 +46,6 @@ noteMutation.prototype.createNote = {
             type: GraphQLString
         },
         description: {
-            type: GraphQLString
-        },
-        reminder: {
             type: GraphQLString
         },
         color: {
@@ -106,7 +103,6 @@ noteMutation.prototype.createNote = {
             const model = new noteModel({
                 title: params.title,
                 description: params.description,
-                reminder: params.reminder,
                 color: params.color,
                 img: params.img,
                 userID: payload.userID
@@ -374,7 +370,7 @@ noteMutation.prototype.removeLabelFromNote = {
  * @description : save label into notes APIs for updated notes for using graphql
  * @purpose : For fetch data by using CURD operation
  */
-noteMutation.prototype.addReminder = {
+noteMutation.prototype.Reminder = {
     type: noteAuthUser,
     args: {
 
@@ -387,7 +383,7 @@ noteMutation.prototype.addReminder = {
             type: GraphQLID
         },
         reminder: {
-            type: GraphQLDateTime
+            type: GraphQLString
         }
     },
 
@@ -406,12 +402,14 @@ noteMutation.prototype.addReminder = {
             if (!id.length > 0) {
                 return { "message": "This noteID is not present in notes" }
             }
-
+             
+            var date = new Date(params.reminder)
+            console.log(date)
             //find id from noteModel and update(push) into notes
-            var note = await noteModel.findOneAndUpdate({ reminder: params.reminder },
+            var note = await noteModel.findOneAndUpdate({ _id: params.noteID },
                 {
                     $set: {
-                        reminder: params.reminder
+                        reminder: date
                     }
                 })
 

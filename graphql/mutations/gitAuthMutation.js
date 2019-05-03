@@ -53,7 +53,7 @@ gitAuthMutation.prototype.GithubAuth = {
              * @param {String}, create a code, which is redirect in graphiql
              * @returns {String} message
              */
-            var url = `https://github.com/login/oauth/authorize?client_id=${process.env.ClientID}&redirect_uri=${process.env.Git_Link}`
+            var url = `${process.env.gitCode}?client_id=${process.env.ClientID}&redirect_uri=${process.env.Git_Link}`
 
             //sent mail to the mail id
             var mail = sendMail.sendEmailFunction(url, params.email)
@@ -89,7 +89,7 @@ gitAuthMutation.prototype.codeVerify = {
          */
         axios({
             method: 'post',
-            url: `https://github.com/login/oauth/access_token?client_id=${process.env.ClientID}&client_secret=${process.env.ClientSecret}&code=${context.code}`,
+            url: `${process.env.gitAccess}client_id=${process.env.ClientID}&client_secret=${process.env.ClientSecret}&code=${context.code}`,
             headers: {
                 accept: 'application/json',
             }
@@ -115,7 +115,7 @@ gitAuthMutation.prototype.codeVerify = {
         function getToken(access_token) {
             axios({
                 method: 'get',
-                url: `https://api.github.com/user?access_token=${access_token}`,
+                url: `${process.env.getResponse}access_token=${access_token}`,
                 headers: {
                     accept: 'application/json',
                 }
@@ -125,9 +125,7 @@ gitAuthMutation.prototype.codeVerify = {
 
                     //save those data in user database
                     var gituser = new model({
-                        firstName: params.firstName,
-                        lastName: params.lastName,
-                        email: params.email,
+                        // firstName: response.data.name,
                         loginName: response.data.login,
                         gitID: response.data.id,
                         access_Token: access_token
@@ -239,7 +237,7 @@ gitAuthMutation.prototype.pullGitRepository = {
             //get response from given url
             axios({
                 method: 'get',
-                url: `https://api.github.com/user/repos?access_token=${access_token}`,
+                url: `${process.env.gitRepository}?access_token=${access_token}`,
                 headers: {
                     accept: 'application/json'
                 }
@@ -263,7 +261,7 @@ gitAuthMutation.prototype.pullGitRepository = {
                         });
 
                         //save data in database
-                        const note = model.save()
+                        const note = await model.save()
                     }
                 }
             })
