@@ -49,12 +49,6 @@ var noteSchema = new mongoSchema({
     reminder: {
         type: Date
     },
-    color: {
-        type: String
-    },
-    img: {
-        type: String
-    },
     archieve: {
         type: Boolean,
         default: false

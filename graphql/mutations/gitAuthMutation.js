@@ -208,14 +208,13 @@ gitAuthMutation.prototype.GitAuthTokenVerify = {
 
 /*******************************************************************************************************************/
 /**
-@description : pullGitRepository APIs for fetching repository Details using apollo-graphql
+@description : pullGitRepository APIs for fetching repository Details using graphql
 @purpose : For gitAuth verification by using CURD operation
 */
 gitAuthMutation.prototype.pullGitRepository = {
     type: gitAuthType,
     async resolve(root, params, context) {
         try {
-
 
             /**
             * @param {token}, send token for verify

@@ -416,11 +416,11 @@ noteMutation.prototype.addReminder = {
                 })
 
             //time set for reminder time
-            
-            
-                /**
-             * @return {String}, message
-             */
+
+
+            /**
+         * @return {String}, message
+         */
             if (!note) {
                 return { "message": "reminder not set " }
             }
@@ -433,6 +433,184 @@ noteMutation.prototype.addReminder = {
         }
     }
 }
+
+
+/*******************************************************************************************************************/
+/**
+ * @description : Archieve data APIs for updated notes for using graphql
+ * @purpose : For fetch data by using CURD operation
+ * @param {payload}, has token for verification and ID
+ * @purpose : Archiev note from database
+ * @param {params} params
+ */
+noteMutation.prototype.Archieve = {
+    type: noteAuthUser,
+    args: {
+
+        /**  
+         * @param {String} label_ID 
+        */
+        noteID: {
+            type: GraphQLID
+        }
+    },
+
+    /**
+     * 
+     * @param {*} root 
+     * @param {*} params 
+     */
+    async resolve(root, params, context) {
+        try {
+
+
+            /**
+             * @payload send token for verification
+             * @condition if present or not
+             * @returns {String} message
+             */
+            var payload = tokenVerify.verification(context.token)
+            if (!payload) {
+                return { "message": "token is not verify" }
+            }
+
+            //find that id id presen or not
+            var checkNote = await noteModel.find({ _id: params.noteID })
+            console.log(checkNote[0].archieve);
+
+
+            //check whether is false or true in database
+            if (checkNote[0].archieve == false) {
+
+
+                /**
+                 * @purpose : find id and then update archieve
+                 * @param {ID}, userID
+                 * @returns {String}, message
+                 */
+                var note = await noteModel.updateOne({ userID: payload.userID },
+                    {
+                        $set:
+                        {
+                            "archieve": true
+                        }
+                    })
+
+                return { "message": "note Archieve" }
+
+            } else {
+
+                /**
+                * @purpose : find id and then update archieve
+                * @param {ID}, userID
+                * @returns {String}, message
+                */
+                var note = await noteModel.updateOne({ userID: payload.userID },
+                    {
+                        $set:
+                        {
+                            "archieve": false
+                        }
+                    })
+
+                return { "message": "note remove from Archieve" }
+            }
+
+
+        } catch (error) {
+            console.log("error")
+            return { "message": err }
+        }
+    }
+}
+
+
+/*******************************************************************************************************************/
+/**
+ * @description : Trash data APIs check whether is Trash/Delete or not for using graphql
+ * @purpose : For fetch data by using CURD operation
+ * @param {payload}, has token for verification and ID
+ * @purpose : Trash note from database
+ * @param {params} params
+ */
+noteMutation.prototype.Trash = {
+    type: noteAuthUser,
+    args: {
+
+        /**  
+         * @param {String} label_ID 
+        */
+        noteID: {
+            type: GraphQLID
+        }
+    },
+
+    /**
+     * 
+     * @param {*} root 
+     * @param {*} params 
+     */
+    async resolve(root, params, context) {
+        try {
+
+            /**
+             * @payload send token for verification
+             * @condition if present or not
+             * @returns {String} message
+             */
+            var payload = tokenVerify.verification(context.token)
+            if (!payload) {
+                return { "message": "token is not verify" }
+            }
+
+            //find that id id presen or not
+            var checkNote = await noteModel.find({ _id: params.noteID })
+
+            //check whether is false or true in database
+            if (checkNote[0].trash == false) {
+
+
+                /**
+                 * @purpose : find id and then update archieve
+                 * @param {ID}, userID
+                 * @returns {String}, message
+                 */
+                var note = await noteModel.updateOne({ userID: payload.userID },
+                    {
+                        $set:
+                        {
+                            "trash": true
+                        }
+                    })
+
+                return { "message": "note trash" }
+
+            } else {
+
+                /**
+                * @purpose : find id and then update archieve
+                * @param {ID}, userID
+                * @returns {String}, message
+                */
+                var note = await noteModel.updateOne({ userID: payload.userID },
+                    {
+                        $set:
+                        {
+                            "trash": false
+                        }
+                    })
+
+                return { "message": "note remove from trash" }
+            }
+
+
+        } catch (error) {
+            console.log("error")
+            return { "message": err }
+        }
+    }
+}
+
 
 /**
  * @exports noteMutation
