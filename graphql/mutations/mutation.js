@@ -30,6 +30,7 @@ var createNote = require('../mutations/userNotes').createNote   //createNote mut
 var editNote = require('../mutations/userNotes').editNote  //editNote mutation
 var removeNote = require('../mutations/userNotes').removeNote   //removeNote mutation
 var Reminder = require('../mutations/userNotes').Reminder  //addReminder mutation
+var deleteReminder = require('../mutations/userNotes').deleteReminder  //deleteReminder mutation
 var Archieve = require('../mutations/userNotes').Archieve   //Archieve mutation
 var Trash = require('../mutations/userNotes').Trash   //Trash mutation
 var savelabelonNote = require('../mutations/userNotes').saveLabelToNote  //savelabelonNote mutation
@@ -60,6 +61,7 @@ module.exports = new GraphQLObjectType({
     editNote,
     removeNote,
     Reminder,
+    deleteReminder,
     Archieve,
     Trash,
     savelabelonNote,

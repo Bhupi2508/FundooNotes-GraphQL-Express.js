@@ -25,8 +25,6 @@ var mongoSchema = mongoose.Schema;
  * @param {String} title  
  * @param {String} description 
  * @param {String} reminder  
- * @param {String} color 
- * @param {String} img
  * @param {String} archieve
  * @param {String} trash
  * @param {String} pin
@@ -40,11 +38,10 @@ var noteSchema = new mongoSchema({
     },
     title: {
         type: String,
-        required: true
+        required: [true, 'title is required']
     },
     description: {
         type: String,
-        //required: true
     },
     reminder: {
         type: Date
