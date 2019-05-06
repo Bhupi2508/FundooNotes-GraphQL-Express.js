@@ -46,7 +46,7 @@ queries.prototype.labelQuery = new GraphQLObjectType({
                 },
                 resolve: async function (root, args) {
                     //if user find data then return otherwise error
-                    const users_label = await labelModel.find({ "userID": args.userID })
+                    const users_label = await labelModel.find({ "userID": args.userID }).sort({ "labelName": 1 })
                     if (!users_label) {
                         throw new Error('Error')
                     }
@@ -67,7 +67,7 @@ queries.prototype.labelQuery = new GraphQLObjectType({
                     },
                 },
                 resolve: async function (root, args) {
-                    const user_s = ( await userModel.find().exec() || await userModel.find({ "_id ": args.userID }).exec() )
+                    const user_s = (await userModel.find().exec() || await userModel.find({ "_id ": args.userID }).exec())
                     if (!user_s) {
                         throw new Error('Error')
                     }

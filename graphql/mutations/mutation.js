@@ -39,6 +39,7 @@ var gitAuthSocial = require('../mutations/gitAuthMutation').GithubAuth  //Github
 var codeVerify = require('../mutations/gitAuthMutation').codeVerify  //codeVerify mutation
 var pullGitRepository = require('../mutations/gitAuthMutation').pullGitRepository    //pullGitRepository mutation
 var gitAuthTokenVerify = require('../mutations/gitAuthMutation').GitAuthTokenVerify //GitAuthTokenVerify mutation
+var gitBranch = require('../mutations/gitAuthMutation').gitBranch   //gitBranch mutation
 var uploadPic = require('../mutations/uploadPic').picUpload //picUpload mutation
 
 /**
@@ -70,6 +71,7 @@ module.exports = new GraphQLObjectType({
     codeVerify,
     pullGitRepository,
     gitAuthTokenVerify,
+    gitBranch,
     uploadPic
 
   }
