@@ -248,6 +248,7 @@ gitAuthMutation.prototype.pullGitRepository = {
                 for (var i = 0; i < res.data.length; i++) {
                     console.log("\n", i, ". Repository Names : ", res.data[i].name)
                     console.log(i, ". Repository Description : ", res.data[i].description)
+                    console.log(i, ". Repository watchers : ", res.data[i].watchers)
 
                     //find title from database
                     var findRepo = await noteModel.find({ title: res.data[i].name })
@@ -296,9 +297,9 @@ gitAuthMutation.prototype.gitBranch = {
 
 
             /**
-            * @param {token}, send token for verify
-            * @returns {String} message, token verification 
-            */
+        * @param {token}, send token for verify
+        * @returns {String} message, token verification 
+        */
             var afterVerify = tokenVerify.verification(context.token)
             if (!afterVerify > 0) {
                 return { "message": "token is not verify" }
@@ -325,7 +326,7 @@ gitAuthMutation.prototype.gitBranch = {
             }).then((res) => {
 
 
-                console.log("res", res);
+                console.log("Repository Branch Name : ", res.data[0].name);
             })
 
             return { "message": "git branch fetch Successfully" }
