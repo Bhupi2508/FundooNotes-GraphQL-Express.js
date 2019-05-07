@@ -15,6 +15,8 @@
 /**
  * @requires files
  */
+const redis = require("async-redis");
+const client = redis.createClient()
 const { GraphQLString, GraphQLID } = require('graphql');
 var authUser = require('../types/labelType').labelauthType
 var labelModel = require('../../model/labelSchema')
@@ -76,6 +78,9 @@ labelMutation.prototype.createLabel = {
             //find id from users models
             const model = new labelModel({ labelName: params.labelName, userID: payload.userID })
             const label = model.save()
+
+            // delete labels from redis
+            client.del("labels" + payload.userID)
 
             /**
              * @return {String}, message

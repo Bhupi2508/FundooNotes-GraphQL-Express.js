@@ -23,6 +23,9 @@ var userType = require('../types/users').userType
 var noteType = require('../types/noteTypes').noteAuthType
 var labelModel = require('../../model/labelSchema')
 var userModel = require('../../model/schema')
+const redis = require("async-redis");
+const client = redis.createClient()
+
 
 //create a empty function
 var queries = function () { }
@@ -39,18 +42,16 @@ queries.prototype.labelQuery = new GraphQLObjectType({
         return {
             labelUsers: {
                 type: new GraphQLList(labelType),
-                args: {
-                    userID: {
-                        type: GraphQLString
+                async labels(root, params, context) {
+                    var labels = await client.get('labels' + root._id)
+                    if (labels) {
+                        var value = JSON.parse(labels)
+                        return value
                     }
-                },
-                resolve: async function (root, args) {
-                    //if user find data then return otherwise error
-                    const users_label = await labelModel.find({ "userID": args.userID }).sort({ "labelName": 1 })
-                    if (!users_label) {
-                        throw new Error('Error')
+                    else {
+                        var labels = await labelModel.find({ userID: root._id })
+                        return labels
                     }
-                    return users_label
                 }
             },
 

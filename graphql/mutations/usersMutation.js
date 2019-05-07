@@ -24,8 +24,8 @@ const jsonwebtoken = require('jsonwebtoken')
 var bcrypt = require('bcrypt')
 var sendMail = require('../../sendMailer/sendMail')
 var tokenVerify = require('../../Authentication/authenticationUser')
-var redis = require('redis')
-var client = redis.createClient()
+const redis = require("async-redis");
+const client = redis.createClient()
 var saltRounds = 10;
 
 //create a empty function
@@ -318,6 +318,14 @@ userMutation.prototype.login = {
             if (!valid) {
                 return { "message": "unauthonticate password" }
             }
+
+
+            //find user Id from database
+            var labelFind = await labelModel.find({ userID: user[0]._id })
+
+            //set the labels in redis
+            await client.set('labels' + user[0]._id, JSON.stringify(labelFind))
+
 
             /**
              * @return {token}
