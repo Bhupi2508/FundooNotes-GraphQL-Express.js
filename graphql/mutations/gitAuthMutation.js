@@ -339,6 +339,209 @@ gitAuthMutation.prototype.gitBranch = {
 }
 
 
+
+
+
+
+/*******************************************************************************************************************/
+/**
+ * @description : createGitBranch APIs for create Branch in github using apollo-graphql
+ * @purpose : For gitAuth verification by using CURD operation
+ * @param {*} root
+ * @param {*} params
+ * @param {*} token
+ */
+gitAuthMutation.prototype.createGitBranch = {
+    type: gitAuthType,
+    args: {
+        newBranch: {
+            type: new GraphQLNonNull(GraphQLString),
+        }
+    },
+
+    /**
+     * 
+     * @param {*} root 
+     * @param {*} params 
+     */
+    async resolve(root, params, context) {
+        try {
+
+
+            /**
+            * @param {token}, send token for verify
+            * @returns {String} message, token verification 
+            */
+            var afterVerify = tokenVerify.verification(context.token)
+            if (!afterVerify > 0) {
+                return { "message": "token is not verify" }
+            }
+
+            //find token from dataBase
+            var user = await model.find({ _id: afterVerify.userID })
+            if (!user) {
+                return { "message": "user not verified" }
+            }
+
+            // Access_token
+            var access_token = process.env.gitCreateBranchToken;
+            console.log("access_token", access_token)
+
+
+            /**
+             * @function (Axios), which is used to handle http request
+             * @method (get), Get data in response when hit the url
+             * @param {headers}
+             * @purpose : get response from given url
+             */
+            axios({
+                method: 'get',
+                url: `${process.env.getCreateBranch}access_token=${access_token}`,
+                headers: {
+                    accept: 'application/json'
+                },
+
+            }).then((res) => {
+                console.log("\nRepository Branch Response Data : ", res.data);
+                console.log("\nRepository Branch Object Data : ", res.data[0].object.sha);
+
+
+                //take those value in a object
+                hashSha(res.data[0].object.sha)
+
+            })
+
+
+            /**
+             * @function (hashSha), which has some value from previous same name object
+             * @param {String} sha 
+             * @purpose : use this function which have some value
+             */
+            function hashSha(sha) {
+
+                /**
+                 * @function (Axios), which is used to handle http request
+                 * @method (post), DELETE data from response when hit the url
+                 * @param {headers}
+                 * @Data : send the given data depend on what you doing
+                 * @purpose : get response from given url
+                 */
+                axios({
+                    method: 'post',
+                    url: `${process.env.postCreateBranch}access_token=${access_token}`,
+                    headers: {
+                        accept: 'application/json'
+                    },
+                    data: JSON.stringify({
+                        'ref': `refs/heads/${params.newBranch}`,
+                        'sha': `${sha}`
+                    }),
+
+                }).then((res) => {
+                    console.log("\nRepository Branch after post Data : ", res.data);
+
+                })
+                    .catch(error => {
+                        console.log(error)
+                        return { "message": error }
+                    })
+            }
+
+            return { "message": "git branch create Successfully" }
+
+        } catch (err) {
+            console.log("!Error in catch : ", err)
+            return { "message": err }
+        }
+    }
+
+}
+
+
+
+
+
+/*******************************************************************************************************************/
+/**
+ * @description : deleteGitBranch APIs for delete branch from github repository using apollo-graphql
+ * @purpose : For gitAuth verification by using CURD operation
+ * @param {*} root
+ * @param {*} params
+ * @param {*} token
+ */
+gitAuthMutation.prototype.deleteGitBranch = {
+    type: gitAuthType,
+    args: {
+        DeleteBranch: {
+            type: new GraphQLNonNull(GraphQLString),
+        }
+    },
+
+    /**
+     * 
+     * @param {*} root 
+     * @param {*} params 
+     */
+    async resolve(root, params, context) {
+        try {
+
+
+            /**
+            * @param {token}, send token for verify
+            * @returns {String} message, token verification 
+            */
+            var afterVerify = tokenVerify.verification(context.token)
+            if (!afterVerify > 0) {
+                return { "message": "token is not verify" }
+            }
+
+            //find token from dataBase
+            var user = await model.find({ _id: afterVerify.userID })
+            if (!user) {
+                return { "message": "user not verified" }
+            }
+
+            // Access_token
+            var access_token = process.env.gitCreateBranchToken;
+            console.log("access_token", access_token)
+
+
+            /**
+             * @function (Axios), which is used to handle http request
+             * @method (DELETE), DELETE data from response when hit the url
+             * @param {headers}
+             * @purpose : get response from given url
+             */
+            axios({
+                method: 'DELETE',
+                url: `${process.env.deleteBranch}${params.DeleteBranch}?access_token=${access_token}`,
+                headers: {
+                    accept: 'application/json'
+                },
+
+            }).then((res) => {
+                console.log("\nRepository Branch Response Data : ", res);
+
+            })
+                .catch(error => {
+                    console.log(error)
+                    return { "message": error }
+
+                })
+
+            return { "message": "git branch delete Successfully" }
+
+        } catch (err) {
+            console.log("!Error", err)
+            return { "message": err }
+        }
+    }
+}
+
+
+
+
+
 /**
 * @exports gitAuthMutation
 */
