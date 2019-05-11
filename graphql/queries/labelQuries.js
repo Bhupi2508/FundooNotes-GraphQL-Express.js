@@ -17,7 +17,7 @@
  * @requires files
  */
 var GraphQLObjectType = require('graphql').GraphQLObjectType;
-const { GraphQLList, GraphQLString } = require('graphql')
+const { GraphQLList, GraphQLString, GraphQLInt } = require('graphql')
 var labelType = require('../types/labelType').labelauthType
 var userType = require('../types/users').userType
 var noteType = require('../types/noteTypes').noteAuthType
@@ -66,9 +66,15 @@ queries.prototype.labelQuery = new GraphQLObjectType({
                     userID: {
                         type: GraphQLString
                     },
+                    first: {
+                        type: GraphQLInt
+                    },
+                    offset: {
+                        type: GraphQLInt
+                    }
                 },
                 resolve: async function (root, args) {
-                    const user_s = (await userModel.find().exec() || await userModel.find({ "_id ": args.userID }).exec())
+                    const user_s = (await userModel.find().limit(params.first).skip(params.offset) || await userModel.find({ "_id ": args.userID }).limit(params.first).skip(params.offset))
                     if (!user_s) {
                         throw new Error('Error')
                     }
@@ -86,10 +92,16 @@ queries.prototype.labelQuery = new GraphQLObjectType({
                 args: {
                     userID: {
                         type: GraphQLString
+                    },
+                    first: {
+                        type: GraphQLInt
+                    },
+                    offset: {
+                        type: GraphQLInt
                     }
                 },
                 resolve: async function (root, args) {
-                    const users_note = await userModel.find({ "userID": args.userID })
+                    const users_note = await userModel.find({ "userID": args.userID }).limit(params.first).skip(params.offset)
                     if (!users_note) {
                         throw new Error('Error')
                     }
@@ -104,8 +116,16 @@ queries.prototype.labelQuery = new GraphQLObjectType({
              */
             gitAuth: {
                 type: new GraphQLList(userType),
+                args: {
+                    first: {
+                        type: GraphQLInt
+                    },
+                    offset: {
+                        type: GraphQLInt
+                    }
+                },
                 resolve: async function () {
-                    const user_auth = await userModel.find().exec()
+                    const user_auth = await userModel.find().limit(params.first).skip(params.offset)
                     if (!user_auth) {
                         throw new Error('Error')
                     }
