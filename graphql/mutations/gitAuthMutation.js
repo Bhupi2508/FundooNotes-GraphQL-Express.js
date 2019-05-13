@@ -53,7 +53,7 @@ gitAuthMutation.prototype.GithubAuth = {
              * @param {String}, create a code, which is redirect in graphiql
              * @returns {String} message
              */
-            var url = `${process.env.gitCode}?client_id=${process.env.ClientID}&redirect_uri=${process.env.Git_Link}`
+            var url = `${process.env.gitCode}?client_id=${process.env.ClientID}&redirect_uri=${process.env.Git_Link}&scope=repo`
 
             //sent mail to the mail id
             var mail = sendMail.sendEmailFunction(url, params.email)
