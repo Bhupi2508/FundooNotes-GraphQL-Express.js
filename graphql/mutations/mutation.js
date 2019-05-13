@@ -41,6 +41,8 @@ var pullGitRepository = require('../mutations/gitAuthMutation').pullGitRepositor
 var gitAuthTokenVerify = require('../mutations/gitAuthMutation').GitAuthTokenVerify   //GitAuthTokenVerify mutation
 var createGitBranch = require('../mutations/gitAuthMutation').createGitBranch   //createGitBranch mutation
 var deleteGitBranch = require('../mutations/gitAuthMutation').deleteGitBranch  //deleteGitBranch mutation
+var addWatchInGitRepo = require('../mutations/gitAuthMutation').addWatchInGitRepo  //addWatchInGitRepo mutation
+var deleteWatchInGitRepo = require('../mutations/gitAuthMutation').deleteWatchInGitRepo  //deleteWatchInGitRepo mutation
 var gitBranch = require('../mutations/gitAuthMutation').gitBranch   //gitBranch mutation
 var uploadPic = require('../mutations/uploadPic').picUpload //picUpload mutation
 
@@ -75,6 +77,8 @@ module.exports = new GraphQLObjectType({
     gitAuthTokenVerify,
     createGitBranch,
     deleteGitBranch,
+    addWatchInGitRepo,
+    deleteWatchInGitRepo,
     gitBranch,
     uploadPic
 

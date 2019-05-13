@@ -283,7 +283,7 @@ gitAuthMutation.prototype.pullGitRepository = {
 
 /*******************************************************************************************************************/
 /**
- * @description : Get branch APIs for fetching repository branch Details using apollo-graphql
+ * @description : Get branch APIs for fetching repository branch Details using graphql
  * @purpose : For gitAuth verification by using CURD operation
  * @param {*} root
  * @param {*} params
@@ -345,7 +345,7 @@ gitAuthMutation.prototype.gitBranch = {
 
 /*******************************************************************************************************************/
 /**
- * @description : createGitBranch APIs for create Branch in github using apollo-graphql
+ * @description : createGitBranch APIs for create Branch in github using graphql
  * @purpose : For gitAuth verification by using CURD operation
  * @param {*} root
  * @param {*} params
@@ -463,7 +463,7 @@ gitAuthMutation.prototype.createGitBranch = {
 
 /*******************************************************************************************************************/
 /**
- * @description : deleteGitBranch APIs for delete branch from github repository using apollo-graphql
+ * @description : deleteGitBranch APIs for delete branch from github repository using graphql
  * @purpose : For gitAuth verification by using CURD operation
  * @param {*} root
  * @param {*} params
@@ -534,6 +534,167 @@ gitAuthMutation.prototype.deleteGitBranch = {
         } catch (err) {
             console.log("!Error", err)
             return { "message": err }
+        }
+    }
+}
+
+
+
+
+
+
+/*******************************************************************************************************************/
+/**
+ * @description : addWatchInGitRepo APIs for add watch repository Details using apollo-graphql
+ * @purpose : For gitAuth verification by using CURD operation
+ * @param {*} root
+ * @param {*} params
+ * @param {*} token
+ */
+gitAuthMutation.prototype.addWatchInGitRepo = {
+    type: gitAuthType,
+    args: {
+        gitUsername: {
+            type: new GraphQLNonNull(GraphQLString),
+        },
+        repoName: {
+            type: new GraphQLNonNull(GraphQLString),
+        }
+    },
+
+    /**
+     * 
+     * @param {*} root 
+     * @param {*} params 
+     */
+    async resolve(root, params, context) {
+        try {
+
+
+            /**
+            * @param {token}, send token for verify
+            * @returns {String} message, token verification 
+            */
+            var afterVerify = tokenVerify.verification(context.token)
+            if (!afterVerify > 0) {
+                return { "message": "token is not verify" }
+            }
+
+            //find token from dataBase
+            var user = await model.find({ _id: afterVerify.userID })
+            if (!user) {
+                return { "message": "user not verified" }
+            }
+
+            // Access_token
+            //var access_token = user[0].access_Token;
+            var access_token = process.env.gitCreateBranchToken
+            console.log("access_token", access_token)
+
+
+            /**
+             * @function (Axios), which is used to handle http request
+             * @method (PUT), Get data from response when hit the url
+             * @param {headers}
+             * @purpose : get response from given url
+             */
+            axios({
+                method: 'PUT',
+                url: `${process.env.addWatchInGit}${params.gitUsername}/${params.repoName}?access_token=${access_token}`,
+                headers: {
+                    accept: 'application/json'
+                }
+
+            }).then((res) => {
+                console.log("Repository Branch Name : ", res);
+            })
+
+            return { "message": "Watch add successfully in Git Repository" }
+
+        } catch (err) {
+            console.log("!Error", err)
+            return { "message": "Watch is not added in Github" }
+        }
+    }
+}
+
+
+
+
+
+
+
+/*******************************************************************************************************************/
+/**
+ * @description : deleteWatchInGitRepo APIs for delete watch from repository Details using apollo-graphql
+ * @purpose : For gitAuth verification by using CURD operation
+ * @param {*} root
+ * @param {*} params
+ * @param {*} token
+ */
+gitAuthMutation.prototype.deleteWatchInGitRepo = {
+    type: gitAuthType,
+    args: {
+        gitUsername: {
+            type: new GraphQLNonNull(GraphQLString),
+        },
+        repoName: {
+            type: new GraphQLNonNull(GraphQLString),
+        }
+    },
+
+    /**
+     * 
+     * @param {*} root 
+     * @param {*} params 
+     */
+    async resolve(root, params, context) {
+        try {
+
+
+            /**
+            * @param {token}, send token for verify
+            * @returns {String} message, token verification 
+            */
+            var afterVerify = tokenVerify.verification(context.token)
+            if (!afterVerify > 0) {
+                return { "message": "token is not verify" }
+            }
+
+            //find token from dataBase
+            var user = await model.find({ _id: afterVerify.userID })
+            if (!user) {
+                return { "message": "user not verified" }
+            }
+
+            // Access_token
+            //var access_token = user[0].access_Token;
+            var access_token = process.env.gitCreateBranchToken
+            console.log("access_token", access_token)
+
+
+            /**
+             * @function (Axios), which is used to handle http request
+             * @method (DELETE), Get data from response when hit the url
+             * @param {headers}
+             * @purpose : get response from given url
+             */
+            axios({
+                method: 'DELETE',
+                url: `${process.env.deleteWatchInGitRepo}${params.gitUsername}/${params.repoName}/subscription?access_token=${access_token}`,
+                headers: {
+                    accept: 'application/json'
+                }
+
+            }).then((res) => {
+                console.log("Repository Branch Name : ", res);
+            })
+
+            return { "message": "Watch Remove successfully from Git Repository" }
+
+        } catch (err) {
+            console.log("!Error", err)
+            return { "message": "Watch is not removed from Github" }
         }
     }
 }
