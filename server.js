@@ -47,6 +47,8 @@ app.use('/graphql', graphqlExpress((req) => ({
     graphiql: true
 })))
 
+
+
 //listen the given port
 var userPort = (process.env.port)
 app.listen(userPort, () => {
@@ -55,4 +57,8 @@ app.listen(userPort, () => {
     console.log('#####################################################################################');
 });
 
+
+/**
+ * @exports app
+ */
 module.exports = app

@@ -42,6 +42,8 @@ var labelSchema = new mongoSchema({
         timestamps: true
     })
 
+
+    
 //connect database using mongoose
 var userLabel = mongoose.model('label', labelSchema);
 module.exports = userLabel
