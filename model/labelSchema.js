@@ -17,6 +17,7 @@
  */
 var mongoose = require('mongoose');
 
+//create a schema for mongoDB
 var mongoSchema = mongoose.Schema;
 
 
