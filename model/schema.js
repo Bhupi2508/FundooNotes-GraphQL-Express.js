@@ -61,6 +61,8 @@ var schemaData = new mongoSchema({
     },
     loginName: {
         type: String,
+        minlength: [3, 'min length is 3 for loginName'],
+        maxlength: [200, 'max length 200 for loginName']
     },
     gitID: {
         type: String,

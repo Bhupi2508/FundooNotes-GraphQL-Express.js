@@ -32,7 +32,9 @@ var labelSchema = new mongoSchema({
         ref: 'schemaData'
     },
     labelName: {
-        type: String
+        type: String,
+        minlength: [3, 'min length is 3 for labelName'],
+        maxlength: [200, 'max length 200 for labelName']
     }
 },
     {

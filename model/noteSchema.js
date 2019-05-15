@@ -38,7 +38,9 @@ var noteSchema = new mongoSchema({
     },
     title: {
         type: String,
-        required: [true, 'title is required']
+        required: [true, 'title is required'],
+        minlength: [3, 'min length is 3 for title'],
+        maxlength: [200, 'max length 200 for title']
     },
     description: {
         type: String,
