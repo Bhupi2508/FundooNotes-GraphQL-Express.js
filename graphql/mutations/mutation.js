@@ -46,6 +46,7 @@ var deleteGitBranch = require('../mutations/gitAuthMutation').deleteGitBranch  /
 var addWatchInGitRepo = require('../mutations/gitAuthMutation').addWatchInGitRepo  //addWatchInGitRepo mutation
 var deleteWatchInGitRepo = require('../mutations/gitAuthMutation').deleteWatchInGitRepo  //deleteWatchInGitRepo mutation
 var gitBranch = require('../mutations/gitAuthMutation').gitBranch   //gitBranch mutation
+var addCollaboration = require('../mutations/collaboratorMutation').addCollaboration   //addCollaboration mutation
 var uploadPic = require('../mutations/uploadPic').picUpload //picUpload mutation
 
 /**
@@ -84,6 +85,7 @@ module.exports = new GraphQLObjectType({
     addWatchInGitRepo,
     deleteWatchInGitRepo,
     gitBranch,
+    addCollaboration,
     uploadPic
 
   }
