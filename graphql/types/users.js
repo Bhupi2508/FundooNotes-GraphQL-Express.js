@@ -72,9 +72,16 @@ exports.userType = new GraphQLObjectType({
                 }
             },
             notes: {
-                type: new GraphQLList(noteType),  //find notes details also 
+                type: new GraphQLList(noteType),
+                args: {
+                    title: {
+                        type: GraphQLString
+                    }
+                },
+                //find notes details also 
                 resolve: async function (root, args) {
-                    const users_note = await noteModel.find({ "userID": root.id })
+                    var regex1 = new RegExp(args.title)
+                    const users_note = await noteModel.find({ "userID": root.id, title: regex1 })
                     if (!users_note) {
                         return { "message": "Id not found" }
                     }

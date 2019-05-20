@@ -22,7 +22,9 @@ var labelType = require('../types/labelType').labelauthType
 var userType = require('../types/users').userType
 var noteType = require('../types/noteTypes').noteAuthType
 var labelModel = require('../../model/labelSchema')
+var notesModel = require('../../model/noteSchema')
 var userModel = require('../../model/schema')
+var tokenVerify = require('../../Authentication/authenticationUser')
 const redis = require("async-redis");
 const client = redis.createClient()
 
@@ -73,8 +75,14 @@ queries.prototype.labelQuery = new GraphQLObjectType({
                         type: GraphQLInt
                     }
                 },
-                resolve: async function (root, args) {
-                    const user_s = (await userModel.find().limit(params.first).skip(params.offset) || await userModel.find({ "_id ": args.userID }).limit(params.first).skip(params.offset))
+                resolve: async function (root, args, context) {
+                    if (!context.token) {
+                        return {
+                            "message": "token not provided"
+                        }
+                    }
+                    var payload = tokenVerify.verification(context.token)
+                    const user_s = await userModel.find({ _id: payload.userID }).limit(args.first).skip(args.offset)
                     if (!user_s) {
                         throw new Error('Error')
                     }
@@ -101,7 +109,7 @@ queries.prototype.labelQuery = new GraphQLObjectType({
                     }
                 },
                 resolve: async function (root, args) {
-                    const users_note = await userModel.find({ "userID": args.userID }).limit(params.first).skip(params.offset)
+                    const users_note = await userModel.find({ "userID": args.userID }).limit(args.first).skip(args.offset)
                     if (!users_note) {
                         throw new Error('Error')
                     }
@@ -124,13 +132,70 @@ queries.prototype.labelQuery = new GraphQLObjectType({
                         type: GraphQLInt
                     }
                 },
-                resolve: async function () {
+                resolve: async function (root, params) {
                     const user_auth = await userModel.find().limit(params.first).skip(params.offset)
                     if (!user_auth) {
                         throw new Error('Error')
                     }
                     return user_auth
                 }
+            },
+
+
+
+            /**
+             * @purpose : for searchNoteByTitle Query 
+             * @param {args}
+             * @param {context}
+             */
+            searchNoteByTitle: {
+                type: new GraphQLList(noteType),
+                args: {
+                    first: {
+                        type: GraphQLInt
+                    },
+                    offset: {
+                        type: GraphQLInt
+                    },
+                    title: {
+                        type: GraphQLString
+                    }
+                },
+                resolve: async function (root, params) {
+                    var regex1 = new RegExp(params.title)
+                    var notes_User = await notesModel.find({ title: regex1 }).limit(params.first).skip(params.offset)
+                    console.log("notes_user", notes_User[0]);
+                    return notes_User
+                }
+            },
+
+
+
+            /**
+             * @purpose : for searchNoteByDescription Query 
+             * @param {args}
+             * @param {context}
+             */
+            searchNoteByDescription: {
+                type: new GraphQLList(noteType),
+                args: {
+                    first: {
+                        type: GraphQLInt
+                    },
+                    offset: {
+                        type: GraphQLInt
+                    },
+                    description: {
+                        type: GraphQLString
+                    }
+                },
+                resolve: async function (root, params) {
+                    var regex2 = new RegExp(params.description)
+                    var notes_User = await notesModel.find({ description: regex2 }).limit(params.first).skip(params.offset)
+                    console.log("notes_user", notes_User[0]);
+                    return notes_User
+                }
+
             }
         }
     }

@@ -20,6 +20,7 @@ const { GraphQLString, GraphQLID } = require('graphql')
 var typeUser = require('../types/users').userType
 var authUser = require('../types/users').authType
 var userModel = require('../../model/schema')
+var labelModel = require('../../model/labelSchema')
 const jsonwebtoken = require('jsonwebtoken')
 var bcrypt = require('bcrypt')
 var sendMail = require('../../sendMailer/sendMail')
@@ -311,9 +312,12 @@ userMutation.prototype.login = {
 
             //take id for current user from database
             var id = user[0].id
+            console.log("id", id);
+
 
             //compare password that is present in database or not
             const valid = await bcrypt.compare(params.password, user[0].password)
+            console.log("valid", valid);
 
             if (!valid) {
                 return { "message": "unauthonticate password" }

@@ -14,10 +14,12 @@
 /**
  * @requires files
  */
+const { GraphQLNonNull, GraphQLString } = require('graphql')
 var userModel = require('../../model/schema')
 var noteModel = require('../../model/noteSchema')
 var sendMail = require('../../sendMailer/sendMail')
 var colModel = require('../../model/collabatorsSchema');
+var gitAuthType = require('../types/users').authType
 var tokenVerify = require('../../Authentication/authenticationUser')
 
 
