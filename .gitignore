@@ -2,4 +2,6 @@ npm-debug.log
 /.vscode
 /node_modules
 .env
+docker-compose.yml
+sonar-project.properties
 
