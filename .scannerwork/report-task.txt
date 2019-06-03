@@ -1,6 +1,6 @@
-projectKey=fundoo_express_Graphql
+projectKey=Fundoo_Graphql
 serverUrl=http://localhost:9000
 serverVersion=6.7.1.35068
-dashboardUrl=http://localhost:9000/dashboard/index/fundoo_express_Graphql
-ceTaskId=AWrfuHLrlcvLErbzIXDR
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AWrfuHLrlcvLErbzIXDR
+dashboardUrl=http://localhost:9000/dashboard/index/Fundoo_Graphql
+ceTaskId=AWscFsICWXPP7-xe5bMl
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AWscFsICWXPP7-xe5bMl
