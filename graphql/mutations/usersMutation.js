@@ -26,7 +26,10 @@ var bcrypt = require('bcrypt')
 var sendMail = require('../../sendMailer/sendMail')
 var tokenVerify = require('../../Authentication/authenticationUser')
 const redis = require("async-redis");
-const client = redis.createClient()
+const client = redis.createClient({
+    host:'redis',
+    port:6379
+})
 var saltRounds = 10;
 
 //create a empty function

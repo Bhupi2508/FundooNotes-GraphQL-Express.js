@@ -14,4 +14,4 @@ COPY --chown=node:node . .
 
 EXPOSE 4000
 
-CMD npm run dev
+CMD node server.js

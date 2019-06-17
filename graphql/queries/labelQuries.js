@@ -26,7 +26,10 @@ var notesModel = require('../../model/noteSchema')
 var userModel = require('../../model/schema')
 var tokenVerify = require('../../Authentication/authenticationUser')
 const redis = require("async-redis");
-const client = redis.createClient()
+const client = redis.createClient({
+    host:'redis',
+    port:6379
+})
 
 
 //create a empty function

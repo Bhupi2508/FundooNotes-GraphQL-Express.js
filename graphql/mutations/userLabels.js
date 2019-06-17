@@ -16,7 +16,10 @@
  * @requires files
  */
 const redis = require("async-redis");
-const client = redis.createClient()
+const client = redis.createClient({
+    host:'redis',
+    port:6379
+})
 const { GraphQLString, GraphQLID } = require('graphql');
 var authUser = require('../types/labelType').labelauthType
 var labelModel = require('../../model/labelSchema')
