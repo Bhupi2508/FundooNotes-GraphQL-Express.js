@@ -24,7 +24,8 @@ const db = mongoose()
 const graphqlExpress = require('express-graphql')
 var expressValidator = require('express-validator')
 var upload = require('./services/aws-s3Services')
-const userSchema = require('./graphql/types/index').userSchema
+const c = require('./graphql/types/index').userSchema
+
 
 //bodyparser parse the req
 app.use(bodyParser.json())
